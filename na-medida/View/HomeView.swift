@@ -16,7 +16,7 @@ struct HomeView: View {
                     RecipeView()
                 }
             }
-            .navigationTitle("Home")
+            .navigationTitle("Inicial")
         }
     }
 }

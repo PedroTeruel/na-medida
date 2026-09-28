@@ -10,8 +10,10 @@ import SwiftUI
 struct RecipeView: View {
     var body: some View {
         
-        VStack {
-            Text("Recipes")
+        VStack {            
+            NavigationLink("Abrir Scanner") {
+                ScannerView()
+            }
         }
         .navigationTitle("Nova receita")
         .navigationBarTitleDisplayMode(.inline)
