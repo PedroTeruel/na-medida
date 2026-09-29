@@ -18,7 +18,7 @@ final class OpenFoodFactsService{
         components?.queryItems = [
             URLQueryItem(
                 name: "fields",
-                value: "code,product_name,brands,ingredients_text,nutriments"
+                value: "code,product_name,brands,ingredients_text,nutriments,image_url"
             )
         ]
 
@@ -29,7 +29,7 @@ final class OpenFoodFactsService{
         var request = URLRequest(url: url)
 
         request.setValue(
-            "Na-Medida",
+            "NaMedida - IOS - Version 1.0",
             forHTTPHeaderField: "User-Agent"
         )
 
