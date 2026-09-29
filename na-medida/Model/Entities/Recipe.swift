@@ -17,16 +17,16 @@ final class Recipe{
     @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
     var ingredients: [RecipeIngredient] = []
     
-    init(name: String, creationDate: Date = .now) {
+    init(name: String, creationDate: Date = .now, tag: RecipeTag) {
         self.name = name
         self.creationDate = creationDate
         self.tag = tag
     }
 }
-enum RecipeTag: String{
+enum RecipeTag: String, Codable, CaseIterable{
     case breakfast
     case lauch
     case dinner
     case snack
-    case desert
+    case dessert
 }
