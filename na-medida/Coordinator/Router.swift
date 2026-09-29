@@ -9,13 +9,13 @@ import SwiftUI
 import Observation
 
 enum AppRoute: Hashable {
-    case recipe
+    case recipesinfo
     case scanner
 }
 
 @Observable
 class Router {
-    var selectedTab: AppTab = .homeview
+    var selectedTab: AppTab = .tabrecipesview
     var path = [AppRoute]()
     
     func navigate(to route: AppRoute) {
@@ -35,8 +35,8 @@ class Router {
     @ViewBuilder
     func build(route: AppRoute) -> some View {
         switch route {
-        case .recipe:
-            RecipeView()
+        case .recipesinfo:
+            RecipesInfoView()
         case .scanner:
             BarcodeAPIView()
         }
