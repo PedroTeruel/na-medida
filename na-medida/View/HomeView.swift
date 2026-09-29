@@ -8,19 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(Router.self) private var router
+    
     var body: some View {
+        @Bindable var routerBindable = router
         
-        NavigationStack {
+        NavigationStack(path: $routerBindable.path) {
             VStack {
-                NavigationLink("Criar Receita") {
-                    RecipeView()
+                Button("Criar Receita") {
+                    router.navigate(to: .recipe)
                 }
             }
-            .navigationTitle("Home")
+            .navigationTitle("Inicial")
+            .navigationDestination(for: AppRoute.self) { route in
+                router.build(route: route)
+            }
         }
     }
 }
 
 #Preview {
     HomeView()
+        .environment(Router())
 }
