@@ -8,6 +8,7 @@
 import Foundation
 
 enum AppTab: Hashable {
-    case homeview
-    case settingsview
+    case tabrecipesview
+    case tabsettingsview
+    case tabsearchview
 }

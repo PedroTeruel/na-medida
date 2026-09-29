@@ -13,17 +13,19 @@ struct ContentView: View {
     var body: some View {
         
         TabView(selection: $router.selectedTab) {
-            HomeView()
-                .tabItem {
-                    Label("Inicial" , systemImage: "house")
-                }
-                .tag(AppTab.homeview)
             
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
-                .tag(AppTab.settingsview)
+            
+            Tab("Receitas", systemImage: "book.pages.fill", value: AppTab.tabrecipesview) {
+                RecipesView()
+            }
+            
+            Tab("Ajustes", systemImage: "gearshape.fill", value: AppTab.tabsettingsview) {
+                SettingsView()
+            }
+            
+            Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .prominent) {
+                SearchingTabView()
+            }
         }
         .environment(router)
     }
