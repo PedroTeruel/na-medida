@@ -70,7 +70,3 @@ enum OpenFoodFactsError: Error {
     case productNotFound
     case serverError(statusCode: Int)
 }
-
-
-
-
