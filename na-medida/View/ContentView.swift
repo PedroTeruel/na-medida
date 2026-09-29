@@ -17,11 +17,13 @@ struct ContentView: View {
                 .tabItem {
                     Label("Inicial" , systemImage: "house")
                 }
+                .tag(AppTab.homeview)
             
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
+                .tag(AppTab.settingsview)
         }
         .environment(router)
     }

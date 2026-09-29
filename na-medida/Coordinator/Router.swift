@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Foundation
 import Observation
 
 enum AppRoute: Hashable {
@@ -39,7 +38,7 @@ class Router {
         case .recipe:
             RecipeView()
         case .scanner:
-            ScannerView()
+            BarcodeAPIView()
         }
     }
 }
