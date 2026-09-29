@@ -43,7 +43,7 @@ final class OpenFoodFactsService{
 
         case 200:
             let responseDTO = try JSONDecoder().decode(
-                ProductResponseDTO.self,
+                BarcodeResponseDTO.self,
                 from: data
             )
 
@@ -62,6 +62,46 @@ final class OpenFoodFactsService{
             )
         }
     }
+    
+    //função de pesquisa por texto
+    func searchProducts(query: String) async throws -> [ProductOpenFoodFactsDTO] {
+            var components = URLComponents(string: "https://world.openfoodfacts.org/cgi/search.pl")
+            
+            components?.queryItems = [
+                URLQueryItem(name: "search_terms", value: query),
+                URLQueryItem(name: "search_simple", value: "1"),
+                URLQueryItem(name: "action", value: "process"),
+                URLQueryItem(name: "json", value: "1"),
+                URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url")
+            ]
+
+            guard let url = components?.url else {
+                throw OpenFoodFactsError.invalidURL
+            }
+
+            var request = URLRequest(url: url)
+            request.setValue(
+                "Na-Medida - iOS - Version 1.0 - contato@namedida.com",
+                forHTTPHeaderField: "User-Agent"
+            )
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            guard let webResponse = response as? HTTPURLResponse else {
+                throw OpenFoodFactsError.invalidResponse
+            }
+
+            guard webResponse.statusCode == 200 else {
+                throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
+            }
+
+            let responseDTO = try JSONDecoder().decode(
+                SearchResponseDTO.self,
+                from: data
+            )
+
+            return responseDTO.products ?? []
+        }
 }
 
 enum OpenFoodFactsError: Error {
