@@ -8,15 +8,22 @@
 import SwiftUI
 
 struct RecipeView: View {
+    @Environment(Router.self) private var router
+    
     var body: some View {
         
         VStack {            
-            NavigationLink("Abrir Scanner") {
-                ScannerView()
+            Button("Abrir Scanner") {
+                router.navigate(to: .scanner)
             }
         }
         .navigationTitle("Nova receita")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
     }
+}
+
+#Preview {
+    RecipeView()
+        .environment(Router())
 }
