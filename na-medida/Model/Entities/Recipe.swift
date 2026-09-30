@@ -27,6 +27,27 @@ enum RecipeTag: String, Codable, CaseIterable{
     case breakfast
     case lunch
     case dinner
-    case snack
+    case morningSnack
+    case afternoonSnack
+    case nightSnack
     case dessert
+}
+
+extension Recipe {
+    
+    var totalRecipeCalories: Double {
+        ingredients.reduce(0) { $0 + $1.totalIngredientCalories }
+    }
+    
+    var totalRecipeProteins: Double {
+        ingredients.reduce(0) { $0 + $1.totalIngredientProteins }
+    }
+    
+    var totalRecipeCarbs: Double {
+        ingredients.reduce(0) { $0 + $1.totalIngredientCarbs }
+    }
+    
+    var totalRecipeFats: Double {
+        ingredients.reduce(0) { $0 + $1.totalIngredientFats }
+    }
 }
