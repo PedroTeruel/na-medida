@@ -50,7 +50,7 @@ final class Ingredient {
         proteinsPer100g: Double = 0.0,
         carbsPer100g: Double = 0.0,
         fatsPer100g: Double = 0.0,
-        userQuantity: Double
+//        userQuantity: Double
 //        , selectedUnit: MeasuringUnit = .grams
     ) {
         self.barcode = barcode
