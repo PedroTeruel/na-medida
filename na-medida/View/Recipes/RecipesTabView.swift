@@ -5,11 +5,13 @@
 //  Created by Vitor Silva Souza on 28/09/26.
 //
 
+import SwiftData
 import SwiftUI
 
 struct RecipesTabView: View {
     @State private var showNewRecipeSheet = false
     @Environment(Router.self) private var router
+    @Environment(\.modelContext) private var mc
     
     var body: some View {
         @Bindable var routerBindable = router
@@ -29,7 +31,15 @@ struct RecipesTabView: View {
             .sheet(isPresented: $showNewRecipeSheet) {
                 NavigationStack {
                     NewRecipeSheet { title, tag in
+                        
+                        let newRecipe = Recipe(
+                            name: title,
+                            tag: tag
+                        )
+                        
                         showNewRecipeSheet = false
+                        
+                        mc.insert(newRecipe)
                         
                         router.navigate(to: .recipesinfo)
                     }

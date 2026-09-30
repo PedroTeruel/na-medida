@@ -18,13 +18,20 @@ struct NewRecipeSheet: View {
     
     var body: some View {
         VStack{
+            Spacer()
             Text("Titulo")
+                .font(.title3)
+                .fontWeight(.semibold)
             TextField("Minha receita", text: $title)
                 .textFieldStyle(.roundedBorder)
+            Spacer()
             Text("Vamos Organizar?")
                 .font(.title3)
-                .bold()
+                .fontWeight(.semibold)
             Text("Selecione uma categoria para guardar sua receita")
+                .font(.body)
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
             HStack {
                     TagButton(
