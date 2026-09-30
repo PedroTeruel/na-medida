@@ -16,6 +16,7 @@ struct BarcodeAPIView: View {
     @State private var scannerCode: String?
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var showErrorAlert = false
     
     private let apiService = OpenFoodFactsService()
     
@@ -24,7 +25,21 @@ struct BarcodeAPIView: View {
             DataScanner(scannerCode: $scannerCode)
                 .ignoresSafeArea()
             
-            VStack {
+            if isLoading {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                
+                VStack {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(1.5)
+                    Text("Buscando produto...")
+                        .foregroundStyle(.white)
+                        .fontWeight(.bold)
+                }
+                .padding()
+                .background(Color.black.opacity(0.7))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
             
         }
@@ -62,6 +77,13 @@ struct BarcodeAPIView: View {
                 .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                 .interactiveDismissDisabled()
         }
+        .alert("Atenção", isPresented: $showErrorAlert) {
+            Button("Ok", role: .cancel) {
+                scannerCode = nil
+            }
+        } message: {
+            Text(errorMessage ?? "Erro")
+        }
     }
     
     private func fetchProduct(barcode: String) {
@@ -71,26 +93,31 @@ struct BarcodeAPIView: View {
         Task {
             do {
                 let product = try await apiService.fetchProd(barcode: barcode)
-                isLoading = false
                 
-                router.navigate(to: .ingredientinfo(product))
+                await MainActor.run {
+                    isLoading = false
+                    showSheet = false
+                }
+                try? await Task.sleep(for: .milliseconds(200))
+                
+                await MainActor.run {
+                    router.navigate(to: .ingredientinfo(product))
+                }
             } catch OpenFoodFactsError.productNotFound {
-                showError("Produto não encontrado")
+                print("Produto não encontrado no banco de dados.")
+                showError("Produto não encontrado. Tente novamente ou pequise na barra de busca")
             } catch {
-                showError("Erro na conexão.")
+                print("Detalhes do Erro: \(error)")
+                showError("Erro: \(error.localizedDescription)")
             }
         }
     }
-
+    
+    @MainActor
     private func showError(_ message: String) {
         isLoading = false
         errorMessage = message
-        
-        Task {
-            try? await Task.sleep(for: .seconds(3))
-            scannerCode = nil
-            errorMessage = nil
-        }
+        showErrorAlert = true
     }
 }
 
@@ -98,3 +125,4 @@ struct BarcodeAPIView: View {
     BarcodeAPIView()
         .environment(Router())
 }
+

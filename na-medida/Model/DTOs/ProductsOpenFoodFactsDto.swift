@@ -11,7 +11,7 @@ import Foundation
 struct BarcodeResponseDTO: Decodable {
     let code: String? //guarda o numero do codigo de barras
     let product: ProductOpenFoodFactsDTO?
-    let status: Int?
+    let status: String?
 }
 
 //recebe pesquisa por texto
@@ -21,7 +21,7 @@ struct SearchResponseDTO: Decodable {
 }
 
 // objeto do produto utilizado pelo barcode e search
-struct ProductOpenFoodFactsDTO: Decodable, Hashable{
+struct ProductOpenFoodFactsDTO: Decodable, Hashable {
     let productName: String?
     let brands: String?
     let nutriments: NutrimentsDTO? //guarda macronitrientes da tabela nutricional
