@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import SwiftData
+
+@Model
+final class User{
+    var username: String = ""
+
+    init(username: String) {
+        self.username = username
+    }
+}

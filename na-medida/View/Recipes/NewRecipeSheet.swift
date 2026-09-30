@@ -57,9 +57,9 @@ struct NewRecipeSheet: View {
 
                     TagButton(
                         title: "Lanche",
-                        isSelected: tag == .snack
+                        isSelected: tag == .morningSnack
                     ) {
-                        tag = .snack
+                        tag = .morningSnack
                     }
                 }
             Spacer()

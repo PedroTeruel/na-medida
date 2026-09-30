@@ -6,3 +6,18 @@
 //
 
 import Foundation
+import SwiftData
+
+final class UserRepository {
+    private let mc: ModelContext
+
+    init(mc: ModelContext) {
+        self.mc = mc
+    }
+
+    func createUser(username: String) {
+        let user = User(username: username)
+
+        mc.insert(user)
+    }
+}
