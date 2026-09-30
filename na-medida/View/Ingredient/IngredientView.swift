@@ -19,8 +19,8 @@ struct IngredientView: View {
         self.ingredientBrands = ingredientBrands
         
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.systemBackground], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.label], for: .normal)
     }
     
     var body: some View {
@@ -44,14 +44,15 @@ struct IngredientView: View {
                     
                     VStack {
                         Text(ingredientTitle)//Com API produtoDaApi.productName
+                            .foregroundStyle(.primary)
                             .font(.title3)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.center)
                             .padding(.top, 10)
                         
                         Text(ingredientBrands)//Com API produtoDaApi.brands
-                            .fontWeight(.semibold)
                             .foregroundStyle(.secondary)
+                            .fontWeight(.semibold)
                         
                         Picker("Informações", selection: $segmentedControl) {
                             Text("Informação nutricional").tag(0)
@@ -69,7 +70,7 @@ struct IngredientView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.white)
+                    .background(.background)
                     .clipShape(.rect(topLeadingRadius: 16, topTrailingRadius: 16))
                 }
             }
@@ -81,7 +82,7 @@ struct IngredientView: View {
             }
             .ignoresSafeArea(edges: .top)
         }
-        .background(Color.white)
+        .background(.background)
     }
 }
 #Preview {
