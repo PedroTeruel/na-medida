@@ -62,7 +62,7 @@ final class Ingredient {
         self.proteinsPer100g = proteinsPer100g
         self.carbsPer100g = carbsPer100g
         self.fatsPer100g = fatsPer100g
-        self.userQuantity = userQuantity
+//        self.userQuantity = userQuantity
 //        self.selectedUnit = selectedUnit
     }
 }
