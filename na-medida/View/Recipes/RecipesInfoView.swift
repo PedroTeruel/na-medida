@@ -32,7 +32,7 @@ struct RecipesInfoView: View {
             .buttonStyle(.bordered)
             
             Button {
-                router.navigate(to: .ingredientinfo)
+                router.navigate(to: .ingredientinfo(nil))
             } label: {
                 Image(systemName: "info.circle")
                 Text("Informações dos Ingredientes")
