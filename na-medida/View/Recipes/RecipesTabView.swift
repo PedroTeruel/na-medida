@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct RecipesView: View {
+struct RecipesTabView: View {
+    @State private var showNewRecipeSheet = false
     @Environment(Router.self) private var router
     
     var body: some View {
@@ -19,6 +20,21 @@ struct RecipesView: View {
                 Text("Nenhuma receita criada")
                 
             }
+//            .sheet(isPresented: $showNewRecipeSheet) {
+//                NewRecipeSheet { title, tag in
+//                    print(title)
+//                    print(tag)
+//                }
+//            }
+            .sheet(isPresented: $showNewRecipeSheet) {
+                NavigationStack {
+                    NewRecipeSheet { title, tag in
+                        showNewRecipeSheet = false
+                        
+                        router.navigate(to: .recipesinfo)
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
@@ -27,7 +43,8 @@ struct RecipesView: View {
                         Image(systemName: "line.3.horizontal.decrease")
                     }
                     Button {
-                        router.navigate(to: .recipesinfo)
+                        showNewRecipeSheet = true
+//                       router.navigate(to: .recipesinfo)
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -44,6 +61,6 @@ struct RecipesView: View {
 }
 
 #Preview {
-    RecipesView()
+    RecipesTabView()
         .environment(Router())
 }
