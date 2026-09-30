@@ -37,7 +37,7 @@ final class Ingredient {
     var proteinsPer100g: Double
     var carbsPer100g: Double
     var fatsPer100g: Double
-    var userQuantity: Double
+//    var userQuantity: Double
 //    var selectedUnit: MeasuringUnit
 
     init(
@@ -62,7 +62,7 @@ final class Ingredient {
         self.proteinsPer100g = proteinsPer100g
         self.carbsPer100g = carbsPer100g
         self.fatsPer100g = fatsPer100g
-        self.userQuantity = userQuantity
+//        self.userQuantity = userQuantity
 //        self.selectedUnit = selectedUnit
     }
 }

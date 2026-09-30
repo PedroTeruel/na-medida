@@ -25,7 +25,7 @@ final class Recipe{
 }
 enum RecipeTag: String, Codable, CaseIterable{
     case breakfast
-    case lauch
+    case lunch
     case dinner
     case snack
     case dessert
