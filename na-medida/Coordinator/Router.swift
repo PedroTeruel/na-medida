@@ -44,7 +44,8 @@ class Router {
             if let product {
                 IngredientView(
                     ingredientTitle: product.productName ?? "Produto Desconhecido",
-                    ingredientBrands: product.brands ?? "Marca não identificada"
+                    ingredientBrands: product.brands ?? "Marca não identificada",
+                    ingredientImageURL: product.fotoProdutoURL
                 )
             } else {
                 IngredientView()

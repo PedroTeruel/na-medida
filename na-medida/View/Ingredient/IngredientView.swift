@@ -9,14 +9,20 @@ import SwiftUI
 
 struct IngredientView: View {
     @Environment(Router.self) private var router
-
-    @State private var segmentedControl = 0
-    var ingredientTitle: String = "Titulo do Ingrediente"
-    var ingredientBrands: String = "Marca"
     
-    init(ingredientTitle: String = "Titulo do Ingrediente", ingredientBrands: String = "Marca") {
+    @State private var segmentedControl = 0
+    var ingredientTitle: String
+    var ingredientBrands: String
+    var ingredientImageURL: String?
+    
+    init(
+        ingredientTitle: String = "Titulo do Ingrediente",
+        ingredientBrands: String = "Marca",
+        ingredientImageURL: String? = nil
+    ) {
         self.ingredientTitle = ingredientTitle
         self.ingredientBrands = ingredientBrands
+        self.ingredientImageURL = ingredientImageURL
         
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.systemBackground], for: .selected)
@@ -27,9 +33,20 @@ struct IngredientView: View {
         ZStack(alignment: .top) {
             
             ZStack {
-                Image("Nescau")
-                    .resizable()
-                    .scaledToFill()
+                if let imageURLString = ingredientImageURL, let url = URL(string: imageURLString) {
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    
+                } else {
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFill()
+                }
                 Color.black.opacity(0.3)
             }
             .frame(height: 300)
@@ -85,6 +102,7 @@ struct IngredientView: View {
         .background(.background)
     }
 }
+
 #Preview {
     IngredientView(
         ingredientTitle: "Chocolate Nescau - 350g",
