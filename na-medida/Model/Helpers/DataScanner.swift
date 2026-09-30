@@ -39,8 +39,9 @@ struct DataScanner: UIViewControllerRepresentable {
             self.parent = parent
         }
         
-        func dataScanner(_dataScanner: DataScannerViewController, didAdd addedItems: [RecognizedItem], allItems: [RecognizedItem]) {
+        func dataScanner(_ dataScanner: DataScannerViewController, didAdd addedItems: [RecognizedItem], allItems: [RecognizedItem]) {
             if let item = addedItems.first, case .barcode(let barcode) = item {
+                print("Código lido: \(barcode.payloadStringValue ?? "Nulo")")
                 parent.scannerCode = barcode.payloadStringValue
             }
         }
