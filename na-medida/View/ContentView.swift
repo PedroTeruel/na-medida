@@ -16,7 +16,7 @@ struct ContentView: View {
             
             
             Tab("Receitas", systemImage: "book.pages.fill", value: AppTab.tabrecipesview) {
-                RecipesView()
+                RecipesTabView()
             }
             
             Tab("Ajustes", systemImage: "gearshape.fill", value: AppTab.tabsettingsview) {
