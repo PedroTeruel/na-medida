@@ -29,7 +29,7 @@ final class OpenFoodFactsService{
         var request = URLRequest(url: url)
 
         request.setValue(
-            "NaMedida - IOS - Version 1.0",
+            "NaMedida - IOS - Version 1.0 - pedrohteruel@gmail.com",
             forHTTPHeaderField: "User-Agent"
         )
 
