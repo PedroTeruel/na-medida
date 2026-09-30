@@ -11,6 +11,7 @@ import Observation
 enum AppRoute: Hashable {
     case recipesinfo
     case scanner
+    case ingredientinfo
 }
 
 @Observable
@@ -39,6 +40,8 @@ class Router {
             RecipesInfoView()
         case .scanner:
             BarcodeAPIView()
+        case .ingredientinfo:
+            IngredientView()
         }
     }
 }
