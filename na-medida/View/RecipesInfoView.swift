@@ -13,7 +13,7 @@ struct RecipesInfoView: View {
     
     var body: some View {
         
-        VStack {
+        VStack(spacing: 60) {
             
             Button {
                 showTagSheet = true
@@ -30,6 +30,15 @@ struct RecipesInfoView: View {
                 Text("Adicionar Ingrediente")
             }
             .buttonStyle(.bordered)
+            
+            Button {
+                router.navigate(to: .ingredientinfo)
+            } label: {
+                Image(systemName: "info.circle")
+                Text("Informações dos Ingredientes")
+            }
+            .buttonStyle(.bordered)
+            
         }
         .navigationTitle("Nova receita")
         .navigationBarTitleDisplayMode(.inline)
