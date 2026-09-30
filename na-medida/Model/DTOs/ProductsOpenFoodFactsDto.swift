@@ -21,7 +21,7 @@ struct SearchResponseDTO: Decodable {
 }
 
 // objeto do produto utilizado pelo barcode e search
-struct ProductOpenFoodFactsDTO: Decodable {
+struct ProductOpenFoodFactsDTO: Decodable, Hashable{
     let productName: String?
     let brands: String?
     let nutriments: NutrimentsDTO? //guarda macronitrientes da tabela nutricional
@@ -38,7 +38,7 @@ struct ProductOpenFoodFactsDTO: Decodable {
 }
 
 //tabela nutricional do produto
-struct NutrimentsDTO: Decodable {
+struct NutrimentsDTO: Decodable, Hashable {
     let energyKcal100g: Double? //calorias
     let proteins100g: Double? //proteinas
     let carbohydrates100g: Double? //carboidratos
