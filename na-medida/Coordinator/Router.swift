@@ -18,6 +18,7 @@ enum AppRoute: Hashable {
 class Router {
     var selectedTab: AppTab = .tabrecipesview
     var path = [AppRoute]()
+    var recipeSaveIngredient: [ProductOpenFoodFactsDTO] = []
     
     func navigate(to route: AppRoute) {
         path.append(route)

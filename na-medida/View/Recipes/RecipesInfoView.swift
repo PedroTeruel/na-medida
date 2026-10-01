@@ -13,32 +13,47 @@ struct RecipesInfoView: View {
     
     var body: some View {
         
-        VStack(spacing: 60) {
-            
-            Button {
-                showTagSheet = true
-            } label: {
-                Image(systemName: "plus")
-                Text("Tags")
+        ScrollView {
+            VStack(spacing: 60) {
+                
+                Button {
+                    showTagSheet = true
+                } label: {
+                    Image(systemName: "plus")
+                    Text("Tags")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    router.navigate(to: .scanner)
+                } label: {
+                    AddIngredientButton()
+                }
+                .buttonStyle(.plain)
+                
+                Button {
+                    router.navigate(to: .ingredientinfo(nil))
+                } label: {
+                    Image(systemName: "info.circle")
+                    Text("Informações dos Ingredientes")
+                }
+                .buttonStyle(.bordered)
+
+                
+                VStack {
+                    if router.recipeSaveIngredient.isEmpty {
+                        Text("")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(router.recipeSaveIngredient, id: \.self) { product in
+                            CardRecipeIngredient(
+                                productName: product.productName,
+                                imageURL: product.fotoProdutoURL,
+                                brands: product.brands)
+                        }
+                    }
+                }
             }
-            .buttonStyle(.borderedProminent)
-            
-            Button {
-                router.navigate(to: .scanner)
-            } label: {
-                Image(systemName: "plus")
-                Text("Adicionar Ingrediente")
-            }
-            .buttonStyle(.bordered)
-            
-            Button {
-                router.navigate(to: .ingredientinfo(nil))
-            } label: {
-                Image(systemName: "info.circle")
-                Text("Informações dos Ingredientes")
-            }
-            .buttonStyle(.bordered)
-            
         }
         .navigationTitle("Nova receita")
         .navigationBarTitleDisplayMode(.inline)
