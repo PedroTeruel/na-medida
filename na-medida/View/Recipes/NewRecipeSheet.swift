@@ -18,50 +18,61 @@ struct NewRecipeSheet: View {
     
     var body: some View {
         VStack{
-            Spacer()
-            Text("Titulo")
-                .font(.title3)
-                .fontWeight(.semibold)
-            TextField("Minha receita", text: $title)
-                .textFieldStyle(.roundedBorder)
-            Spacer()
-            Text("Vamos Organizar?")
-                .font(.title3)
-                .fontWeight(.semibold)
-            Text("Selecione uma categoria para guardar sua receita")
-                .font(.body)
-                .frame(maxWidth: .infinity)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-            HStack {
-                    TagButton(
-                        title: "Café da manhã",
-                        isSelected: tag == .breakfast
-                    ) {
-                        tag = .breakfast
-                    }
-
-                    TagButton(
-                        title: "Almoço",
-                        isSelected: tag == .lunch
-                    ) {
-                        tag = .lunch
-                    }
-
-                    TagButton(
-                        title: "Jantar",
-                        isSelected: tag == .dinner
-                    ) {
-                        tag = .dinner
-                    }
-
-                    TagButton(
-                        title: "Lanche",
-                        isSelected: tag == .morningSnack
-                    ) {
-                        tag = .morningSnack
-                    }
+            VStack(spacing: 58){
+                VStack(spacing: 8){
+                    Text("Titulo")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    TextField("Minha receita", text: $title)
+                        .multilineTextAlignment(.center)
+                        .font(.title)
+                        .frame(width: 180)
                 }
+                VStack(spacing: 8){
+                    Text("Vamos Organizar?")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    Text("Selecione uma categoria para guardar sua receita")
+                        .font(.body)
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            
+            LazyVGrid(
+                columns: [
+                    GridItem(.adaptive(minimum:110))
+                ]
+            ) {
+                TagButton(
+                    title: "Café da manhã",
+                    isSelected: tag == .breakfast
+                ) {
+                    tag = .breakfast
+                }
+
+                TagButton(
+                    title: "Almoço",
+                    isSelected: tag == .lunch
+                ) {
+                    tag = .lunch
+                }
+
+                TagButton(
+                    title: "Jantar",
+                    isSelected: tag == .dinner
+                ) {
+                    tag = .dinner
+                }
+
+                TagButton(
+                    title: "Lanche",
+                    isSelected: tag == .morningSnack
+                ) {
+                    tag = .morningSnack
+                }
+            }
             Spacer()
         }
         .padding()
@@ -90,8 +101,10 @@ struct NewRecipeSheet: View {
 
 
 #Preview {
-    NewRecipeSheet { title, tag in
-        print("Título: \(title)")
-        print("Tag: \(tag)")
+    NavigationStack{
+        NewRecipeSheet { title, tag in
+            print("Título: \(title)")
+            print("Tag: \(tag)")
+        }
     }
 }
