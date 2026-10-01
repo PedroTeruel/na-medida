@@ -11,6 +11,7 @@ struct CardIngredient: View {
     var productName: String
     var imageURL: String?
     var showActions: Bool
+    var onAdd: (() -> Void)?
     
     @State private var selectionQuantity = "Defina a quantidade"
     let measures = ["Unidade", "Gramas", "Kilogramas", "Litros"]
@@ -18,16 +19,18 @@ struct CardIngredient: View {
     init(
         productName: String = "Achocolatado",
         imageURL: String? = nil,
-        showActions: Bool = true
+        showActions: Bool = true,
+        onAdd: (() -> Void)? = nil
     ) {
         self.productName = productName
         self.imageURL = imageURL
         self.showActions = showActions
+        self.onAdd = onAdd
     }
     
     var body: some View {
         HStack {
-            
+
             if let imageURLString = imageURL, let url = URL(string: imageURLString) {
                 AsyncImage(url: url) { phase in
                     
@@ -86,7 +89,7 @@ struct CardIngredient: View {
             Spacer()
             
             Button {
-                print("Adicionar ingrediente na RecipeInfoView")
+                onAdd?()
             } label: {
                 Image(systemName: "plus")
             }
@@ -98,12 +101,13 @@ struct CardIngredient: View {
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(.primary, lineWidth: 0.3))
+        .padding(.horizontal)
     }
 }
 
 #Preview {
     VStack {
-        CardIngredient(productName: "Achocolatado Nescau", showActions: true)
+        CardIngredient(productName: "Achocolatado Nescau", showActions: true, onAdd: nil)
         CardIngredient(productName: "Leite Integral", showActions: false)
     }
     .padding()

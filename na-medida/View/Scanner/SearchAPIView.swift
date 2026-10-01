@@ -11,6 +11,9 @@ struct SearchAPIView: View {
     @Binding var currentDetent: PresentationDetent
     @Environment(\.isSearching) private var isSearching
     
+    @Environment(Router.self) private var router
+    @Environment(\.dismiss) private var dismiss
+    
     var searchResults: [ProductOpenFoodFactsDTO]
     var isLoading: Bool
     
@@ -32,7 +35,13 @@ struct SearchAPIView: View {
                     CardIngredient(
                         productName: product.productName ?? "Produto sem nome",
                         imageURL: product.fotoProdutoURL,
-                        showActions: false)
+                        showActions: false,
+                        onAdd: {
+                            router.recipeSaveIngredient.append(product)
+                            dismiss()
+                            router.pop()
+                        }
+                    )
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                 }
@@ -64,4 +73,5 @@ struct SearchAPIView: View {
         }
     }
     return PreviewContainer()
+        .environment(Router())
 }
