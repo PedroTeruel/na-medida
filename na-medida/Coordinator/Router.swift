@@ -12,6 +12,7 @@ enum AppRoute: Hashable {
     case recipesinfo
     case newrecipe
     case scanner
+    case main(username: String)
     case ingredientinfo(ProductOpenFoodFactsDTO?)
 }
 
@@ -38,6 +39,8 @@ class Router {
     @ViewBuilder
     func build(route: AppRoute) -> some View {
         switch route {
+        case .main(let username):
+            RecipesTabView(username: username)
         case .recipesinfo:
             RecipesInfoView()
         case .newrecipe:

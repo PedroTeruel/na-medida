@@ -20,3 +20,35 @@ struct na_medidaApp: App {
         ])
     }
 }
+
+
+//import SwiftUI
+//import SwiftData
+//
+//@main
+//struct na_medidaApp: App {
+//
+//    @State private var router = Router()
+//
+//    var body: some Scene {
+//        WindowGroup {
+//            @Bindable var routerBindable = router
+//
+//            NavigationStack(path: $routerBindable.path) {
+//
+//                OnBoardView { username in
+//                    print("Nome:", username)
+//                }
+//                .navigationDestination(for: AppRoute.self) { route in
+//                    router.build(route: route)
+//                }
+//            }
+//            .environment(router)
+//        }
+//        .modelContainer(for: [
+//            Recipe.self,
+//            RecipeIngredient.self,
+//            Ingredient.self
+//        ])
+//    }
+//}

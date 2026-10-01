@@ -9,6 +9,8 @@ import SwiftUI
 
 struct OnBoardView: View {
     
+    @Environment(Router.self) private var router
+    
     @State private var username = ""
     let onContinue: (String) -> Void
     
@@ -18,6 +20,7 @@ struct OnBoardView: View {
         
         Button(username) {
             onContinue(username)
+            router.navigate(to: .main(username: username))
         }
         .buttonStyle(.bordered)
     }

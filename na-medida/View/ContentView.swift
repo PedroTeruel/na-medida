@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var router = Router()
+    let username: String
     
     var body: some View {
         
@@ -16,7 +17,7 @@ struct ContentView: View {
             
             
             Tab("Receitas", systemImage: "book.pages.fill", value: AppTab.tabrecipesview) {
-                RecipesTabView()
+                RecipesTabView(username: username)
             }
             
             Tab("Ajustes", systemImage: "gearshape.fill", value: AppTab.tabsettingsview) {
@@ -32,5 +33,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(username: "Will")
 }

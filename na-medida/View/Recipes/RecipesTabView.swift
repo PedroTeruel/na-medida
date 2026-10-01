@@ -13,6 +13,8 @@ struct RecipesTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
     
+    let username: String
+    
     var body: some View {
         @Bindable var routerBindable = router
         
@@ -62,7 +64,7 @@ struct RecipesTabView: View {
                     .tint(.button)
                 }
             }
-            .navigationTitle("Olá, William!")
+            .navigationTitle("Olá, \(username)!")
             .navigationDestination(for: AppRoute.self) { route in
                 router.build(route: route)
             }
@@ -71,6 +73,6 @@ struct RecipesTabView: View {
 }
 
 #Preview {
-    RecipesTabView()
+    RecipesTabView(username: "Will")
         .environment(Router())
 }
