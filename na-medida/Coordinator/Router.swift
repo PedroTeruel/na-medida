@@ -10,6 +10,7 @@ import Observation
 
 enum AppRoute: Hashable {
     case recipesinfo
+    case newrecipe
     case scanner
     case ingredientinfo(ProductOpenFoodFactsDTO?)
 }
@@ -39,6 +40,11 @@ class Router {
         switch route {
         case .recipesinfo:
             RecipesInfoView()
+        case .newrecipe:
+            NewRecipeView { title, tag in
+                print(title)
+                print(tag)
+            }
         case .scanner:
             BarcodeAPIView()
         case .ingredientinfo(let product):

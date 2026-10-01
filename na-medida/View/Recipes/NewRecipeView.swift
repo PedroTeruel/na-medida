@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct NewRecipeSheet: View {
+struct NewRecipeView: View {
     
+    @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     
     @State private var title = ""
@@ -74,37 +75,28 @@ struct NewRecipeSheet: View {
                 }
             }
             Spacer()
+            Button {
+                router.navigate(to: .scanner)
+                guard let tag else { return }
+                onContinue(title, tag)
+            } label: {
+                Image(systemName: "checkmark")
+            }
         }
         .padding()
+        .toolbar(.hidden, for: .tabBar)
         .navigationTitle("Criar Receita")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                }
-            }
-
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    guard let tag else { return }
-                    onContinue(title, tag)
-                } label: {
-                    Image(systemName: "checkmark")
-                }
-            }
-        }
     }
 }
 
 
 #Preview {
     NavigationStack{
-        NewRecipeSheet { title, tag in
+        NewRecipeView { title, tag in
             print("Título: \(title)")
             print("Tag: \(tag)")
         }
+        .environment(Router())
     }
 }
