@@ -43,7 +43,7 @@ struct BarcodeAPIView: View {
             }
             
         }
-        .navigationTitle("Scanner")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -65,7 +65,16 @@ struct BarcodeAPIView: View {
                     }
                 }
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    print("confirmar pressionado")
+                } label: {
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.glassProminent)
+            }
         }
+        .toolbarBackground(.hidden, for: .navigationBar)
         .onChange(of: scannerCode) { _, newCode in
             if let code = newCode, !isLoading {
                 fetchProduct(barcode: code)
