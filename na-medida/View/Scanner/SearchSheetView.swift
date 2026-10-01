@@ -56,15 +56,3 @@ struct SearchSheetView: View {
         }
     }
 }
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var detent: PresentationDetent = .medium
-        
-        var body: some View {
-            SearchSheetView(currentDetent: $detent)
-        }
-    }
-    
-    return PreviewContainer()
-}
