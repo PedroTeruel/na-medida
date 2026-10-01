@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct RecipesTabView: View {
-    @State private var showNewRecipeSheet = false
+//    @State private var showNewRecipeSheet = false
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
     
@@ -28,23 +28,23 @@ struct RecipesTabView: View {
 //                    print(tag)
 //                }
 //            }
-            .sheet(isPresented: $showNewRecipeSheet) {
-                NavigationStack {
-                    NewRecipeSheet { title, tag in
-                        
-                        let newRecipe = Recipe(
-                            name: title,
-                            tag: tag
-                        )
-                        
-                        showNewRecipeSheet = false
-                        
-                        mc.insert(newRecipe)
-                        
-                        router.navigate(to: .recipesinfo)
-                    }
-                }
-            }
+//            .sheet(isPresented: $showNewRecipeSheet) {
+//                NavigationStack {
+//                    NewRecipeView { title, tag in
+//                        
+//                        let newRecipe = Recipe(
+//                            name: title,
+//                            tag: tag
+//                        )
+//                        
+//                        showNewRecipeSheet = false
+//                        
+//                        mc.insert(newRecipe)
+//                        
+//                        router.navigate(to: .recipesinfo)
+//                    }
+//                }
+//            }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
@@ -53,8 +53,8 @@ struct RecipesTabView: View {
                         Image(systemName: "line.3.horizontal.decrease")
                     }
                     Button {
-                        showNewRecipeSheet = true
-//                       router.navigate(to: .recipesinfo)
+//                        showNewRecipeSheet = true
+                       router.navigate(to: .newrecipe)
                     } label: {
                         Image(systemName: "plus")
                     }
