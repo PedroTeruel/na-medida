@@ -19,3 +19,8 @@ struct TagButton: View {
         .buttonStyle(.bordered)
     }
 }
+
+#Preview {
+    TagButton(title: "Example", isSelected: false) {
+    }
+}
