@@ -9,20 +9,11 @@ import SwiftUI
 
 struct RecipesInfoView: View {
     @Environment(Router.self) private var router
-    @State private var showTagSheet = false
     
     var body: some View {
         
         ScrollView {
             VStack(spacing: 60) {
-                
-                Button {
-                    showTagSheet = true
-                } label: {
-                    Image(systemName: "plus")
-                    Text("Tags")
-                }
-                .buttonStyle(.borderedProminent)
                 
                 Button {
                     router.navigate(to: .scanner)
@@ -31,18 +22,9 @@ struct RecipesInfoView: View {
                 }
                 .buttonStyle(.plain)
                 
-                Button {
-                    router.navigate(to: .ingredientinfo(nil))
-                } label: {
-                    Image(systemName: "info.circle")
-                    Text("Informações dos Ingredientes")
-                }
-                .buttonStyle(.bordered)
-
-                
                 VStack {
                     if router.recipeSaveIngredient.isEmpty {
-                        Text("")
+                        Text("Nenhum ingrediente adicionado")
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(router.recipeSaveIngredient, id: \.self) { product in
@@ -54,24 +36,29 @@ struct RecipesInfoView: View {
                     }
                 }
             }
+            .padding(.top, 20)
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .tabBar)
         .navigationTitle("Nova receita")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
-        .sheet(isPresented: $showTagSheet) {
-            TagSheetView(
-                cancelAction: {
-                    showTagSheet = false
-                },
-                confirmAction: {
-                    showTagSheet = false
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    router.popToRoot()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                    }
                 }
-            )
+            }
         }
     }
 }
 
 #Preview {
-    RecipesInfoView()
-        .environment(Router())
+    NavigationStack {
+        RecipesInfoView()
+            .environment(Router())
+    }
 }
