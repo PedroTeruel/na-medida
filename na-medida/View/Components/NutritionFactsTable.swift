@@ -154,7 +154,7 @@ struct NutritionFactsTable: View {
                 Divider()
                     .background(Color.primary)
                 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 8) {
                     if let servings = servingsPerContainer {
                         Text("Porções por embalagem: \(servings)")
                             .font(.system(.subheadline))
@@ -166,7 +166,7 @@ struct NutritionFactsTable: View {
                             .foregroundColor(.primary)
                     }
                 }
-                .padding(.vertical, 6)
+                .padding(.vertical, 12)
             }
             
             Divider()
@@ -183,14 +183,14 @@ struct NutritionFactsTable: View {
                 rowView(for: item)
                 
                 Divider()
-                    .opacity(0.5)
+                    .opacity(0.9)
             }
             
             // Rodapé
             HStack {
                 Text("* % Valores Diários com base em uma dieta de 2.000 kcal.")
-                    .font(.system(size: 10))
-                    .foregroundColor(.primary)
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
                 Spacer()
             }
             .padding(.top, 8)
@@ -207,9 +207,9 @@ struct NutritionFactsTable: View {
     // MARK: - Subviews
     private var headerView: some View {
         Text("Tabela Nutricional")
-            .font(.system(.headline, weight: .bold))
+            .font(.system(.title, weight: .bold))
             .foregroundColor(Color("buttonColor"))
-            .padding(.bottom, 6)
+            .padding(.bottom, 12)
     }
     
     private var subHeaderView: some View {
@@ -218,22 +218,22 @@ struct NutritionFactsTable: View {
             
             HStack(spacing: 16) {
                 Text("100 g")
-                    .font(.system(.caption, weight: .bold))
+                    .font(.system(.subheadline, weight: .bold))
                     .foregroundColor(.primary)
                     .frame(width: 50, alignment: .trailing)
                 
                 Text(servingText)
-                    .font(.system(.caption, weight: .bold))
+                    .font(.system(.subheadline, weight: .bold))
                     .foregroundColor(.primary)
-                    .frame(width: 50, alignment: .trailing)
+                    .frame(width: 60, alignment: .trailing)
                 
                 Text("%VD*")
-                    .font(.system(.caption, weight: .bold))
+                    .font(.system(.subheadline, weight: .bold))
                     .foregroundColor(.primary)
-                    .frame(width: 40, alignment: .trailing)
+                    .frame(width: 50, alignment: .trailing)
             }
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 8)
     }
     
     private func rowView(for item: NutritionalFactsItem) -> some View {
@@ -247,22 +247,22 @@ struct NutritionFactsTable: View {
             
             HStack(spacing: 16) {
                 Text(item.value100g)
-                    .font(.system(.subheadline, weight: item.isBold ? .bold : .regular))
+                    .font(.system(.subheadline, weight: item.isBold ? .semibold : .regular))
                     .foregroundColor(.primary)
                     .frame(width: 50, alignment: .trailing)
                 
                 Text(item.valuePortion)
-                    .font(.system(.subheadline, weight: item.isBold ? .bold : .regular))
+                    .font(.system(.subheadline, weight: item.isBold ? .semibold : .regular))
                     .foregroundColor(.primary)
-                    .frame(width: 50, alignment: .trailing)
+                    .frame(width: 60, alignment: .trailing)
                 
                 Text(item.dailyValue.isEmpty ? "-" : "\(item.dailyValue)%")
-                    .font(.system(.subheadline, weight: item.isBold ? .bold : .regular))
+                    .font(.system(.subheadline, weight: item.isBold ? .semibold : .regular))
                     .foregroundColor(.primary)
-                    .frame(width: 40, alignment: .trailing)
+                    .frame(width: 50, alignment: .trailing)
             }
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 4)
     }
 }
 
