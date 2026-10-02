@@ -25,43 +25,44 @@ struct RecipesTabView: View {
                         Text("Nenhuma receita criada")
                     } else {
                         ForEach(recipes) { recipe in
-                            CardRecipe(recipe: recipe)
+                            Button {
+                                router.navigate(to: .recipesinfo(recipe))
+                            } label: {
+                                CardRecipe(recipe: recipe)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
                 .frame(maxWidth: .infinity)
             }
-                .navigationTitle("Olá, \(username)")
-                .navigationBarTitleDisplayMode(.large)
-
-                .toolbar {
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        Button {
-                            print("Filtro pressionado")
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease")
-                        }
-                        Button {
-                            router.navigate(to: .newrecipe)
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                        .buttonStyle(.glassProminent)
-                        .tint(.button)
+            .navigationTitle("Olá, \(username)")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button {
+                        print("Filtro pressionado")
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease")
                     }
-                }
-                .navigationDestination(for: AppRoute.self) { route in
-                    router.build(route: route)
+                    Button {
+                        router.navigate(to: .newrecipe)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(.button)
                 }
             }
-            .navigationTitle("Olá, \(username)!")
             .navigationDestination(for: AppRoute.self) { route in
                 router.build(route: route)
             }
         }
     }
+}
 
 #Preview {
     RecipesTabView(username: "Will")
         .environment(Router())
+        .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
 }

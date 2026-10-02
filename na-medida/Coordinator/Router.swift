@@ -9,7 +9,7 @@ import SwiftUI
 import Observation
 
 enum AppRoute: Hashable {
-    case recipesinfo
+    case recipesinfo(Recipe)
     case newrecipe
     case scanner
     case main(username: String)
@@ -24,22 +24,27 @@ class Router {
     var settingsPath = [AppRoute]()
     var searchPath = [AppRoute]()
     
+    var draftTitle: String = ""
+    var draftTag: RecipeTag = .breakfast
     var recipeSaveIngredient: [ProductOpenFoodFactsDTO] = []
+    
+    func clearDraft() {
+        draftTitle = ""
+        draftTag = .breakfast
+        recipeSaveIngredient.removeAll()
+    }
     
     func navigate(to route: AppRoute) {
         switch selectedTab {
         case .tabrecipesview:
-            
-            if route == .recipesinfo {
-                if let index = recipesPath.firstIndex(of: route) {
-                    recipesPath.removeSubrange((index + 1)...)
-                } else {
-                    recipesPath = [.recipesinfo]
-                }
+            if case .recipesinfo = route {
+                recipesPath = [route]
                 return
             }
+            
             guard recipesPath.last != route else { return }
             recipesPath.append(route)
+            
         case .tabsettingsview:
             guard settingsPath.last != route else { return }
             settingsPath.append(route)
@@ -73,17 +78,20 @@ class Router {
     
     @ViewBuilder
     func build(route: AppRoute) -> some View {
+        
         switch route {
         case .main(let username):
             RecipesTabView(username: username)
-        case .recipesinfo:
             
-            RecipesInfoView()
+        case .recipesinfo(let recipe):
+            RecipesInfoView(recipe: recipe)
+            
         case .newrecipe:
             NewRecipeView { title, tag in
-                print(title)
-                print(tag)
+                self.draftTitle = title
+                self.draftTag = tag
             }
+            
         case .scanner:
             BarcodeAPIView()
         case .ingredientinfo(let product):

@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct BarcodeAPIView: View {
     @Environment(Router.self) private var router
+    @Environment(\.modelContext) private var mc
+    
     @State private var showSheet = true
     @State private var sheetDetent: PresentationDetent = .fraction(0.4)
     
@@ -69,21 +72,12 @@ struct BarcodeAPIView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if showSheet {
-                        showSheet = false
-                        Task {
-                            try? await Task.sleep(for: .milliseconds(250))
-                            await MainActor.run {
-                                router.navigate(to: .recipesinfo)
-                            }
-                        }
-                    } else {
-                        router.navigate(to: .recipesinfo)
-                    }
+                    saveRecipeNavigate()
                 } label: {
                     Image(systemName: "checkmark")
                 }
                 .buttonStyle(.glassProminent)
+                .disabled(router.recipeSaveIngredient.isEmpty)
             }
         }
         .toolbarBackground(.hidden, for: .navigationBar)
@@ -106,6 +100,32 @@ struct BarcodeAPIView: View {
             Text(errorMessage ?? "Erro")
         }
     }
+    
+    
+    private func saveRecipeNavigate() {
+        let repository = RecipeRepository(mc: mc)
+        
+        let newRecipe = repository.saveRecipe(
+            title: router.draftTitle,
+            tag: router.draftTag,
+            dtoIngredients: router.recipeSaveIngredient)
+        
+        router.clearDraft()
+        
+        if showSheet {
+            showSheet = false
+            Task {
+                try? await Task.sleep(for: .milliseconds(250))
+                await MainActor.run {
+                    router.navigate(to: .recipesinfo(newRecipe))
+                }
+            }
+        } else {
+            router.navigate(to: .recipesinfo(newRecipe))
+        }
+    }
+    
+    
     
     private func fetchProduct(barcode: String) {
         isLoading = true
@@ -145,5 +165,6 @@ struct BarcodeAPIView: View {
 #Preview {
     BarcodeAPIView()
         .environment(Router())
+        .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
 }
 
