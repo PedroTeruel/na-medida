@@ -20,6 +20,7 @@ enum AppRoute: Hashable {
 class Router {
     var selectedTab: AppTab = .tabrecipesview
     
+    var onBoardPath = [AppRoute]()
     var recipesPath = [AppRoute]()
     var settingsPath = [AppRoute]()
     var searchPath = [AppRoute]()
