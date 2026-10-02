@@ -80,8 +80,13 @@ struct NewRecipeView: View {
                 guard let tag else { return }
                 onContinue(title, tag)
             } label: {
-                Image(systemName: "checkmark")
+                Text("Proximo passo")
+                    .foregroundStyle(.primary)
+                    .fontWeight(.bold)
+                
             }
+            .buttonStyle(.bordered)
+            .tint(.button)
         }
         .padding()
         .toolbar(.hidden, for: .tabBar)

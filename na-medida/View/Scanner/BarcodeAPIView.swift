@@ -43,9 +43,10 @@ struct BarcodeAPIView: View {
             }
             
         }
-        .navigationTitle("Scanner")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
+        
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -65,7 +66,27 @@ struct BarcodeAPIView: View {
                     }
                 }
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    if showSheet {
+                        showSheet = false
+                        Task {
+                            try? await Task.sleep(for: .milliseconds(250))
+                            await MainActor.run {
+                                router.navigate(to: .recipesinfo)
+                            }
+                        }
+                    } else {
+                        router.navigate(to: .recipesinfo)
+                    }
+                } label: {
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.glassProminent)
+            }
         }
+        .toolbarBackground(.hidden, for: .navigationBar)
         .onChange(of: scannerCode) { _, newCode in
             if let code = newCode, !isLoading {
                 fetchProduct(barcode: code)
