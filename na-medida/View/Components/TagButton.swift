@@ -11,12 +11,20 @@ struct TagButton: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
-
+    
     var body: some View {
-        Button(title) {
+        Button(action: {
             action()
+        }) {
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity)
+                .background(isSelected ? Color.button : Color.gray.opacity(0.2))
+                .foregroundStyle(isSelected ? .white : .primary)
+                .cornerRadius(10)
         }
-        .buttonStyle(.bordered)
+        .buttonStyle(.plain)
     }
 }
 
