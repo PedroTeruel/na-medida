@@ -46,6 +46,7 @@ struct BarcodeAPIView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
+        
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -65,9 +66,20 @@ struct BarcodeAPIView: View {
                     }
                 }
             }
+            
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    print("confirmar pressionado")
+                    if showSheet {
+                        showSheet = false
+                        Task {
+                            try? await Task.sleep(for: .milliseconds(250))
+                            await MainActor.run {
+                                router.navigate(to: .recipesinfo)
+                            }
+                        }
+                    } else {
+                        router.navigate(to: .recipesinfo)
+                    }
                 } label: {
                     Image(systemName: "checkmark")
                 }

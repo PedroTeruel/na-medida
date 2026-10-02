@@ -14,7 +14,7 @@ struct SettingsView: View {
         @Bindable var routerBindable = router
         
         
-        NavigationStack(path: $routerBindable.path) {
+        NavigationStack(path: $routerBindable.settingsPath) {
             VStack {
                 Text("Settings")
             }
