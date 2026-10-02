@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct RecipesInfoView: View {
     @Environment(Router.self) private var router
+    @Environment(\.modelContext) private var mc
+    
+    var recipe: Recipe
     
     var body: some View {
         
         ScrollView {
             VStack(spacing: 60) {
-                
                 Button {
                     router.navigate(to: .scanner)
                 } label: {
@@ -23,15 +26,15 @@ struct RecipesInfoView: View {
                 .buttonStyle(.plain)
                 
                 VStack {
-                    if router.recipeSaveIngredient.isEmpty {
+                    if recipe.ingredients.isEmpty {
                         Text("Nenhum ingrediente adicionado")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(router.recipeSaveIngredient, id: \.self) { product in
+                        ForEach(recipe.ingredients) { recipeIng in
                             CardRecipeIngredient(
-                                productName: product.productName,
-                                imageURL: product.fotoProdutoURL,
-                                brands: product.brands)
+                                productName: recipeIng.ingredient?.name,
+                                imageURL: recipeIng.ingredient?.photoURL,
+                                brands: recipeIng.ingredient?.brand)
                         }
                     }
                 }
@@ -40,7 +43,7 @@ struct RecipesInfoView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
-        .navigationTitle("Nova receita")
+        .navigationTitle(recipe.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -54,11 +57,24 @@ struct RecipesInfoView: View {
             }
         }
     }
-}
-
-#Preview {
-    NavigationStack {
-        RecipesInfoView()
-            .environment(Router())
+    
+    private func saveRecipeSwiftData() {
+        let repository = RecipeRepository(mc: mc)
+        
+        let newRecipe = repository.saveRecipe(
+            title: router.draftTitle,
+            tag: router.draftTag,
+            dtoIngredients: router.recipeSaveIngredient)
+        
+        router.clearDraft()
+        router.navigate(to: .recipesinfo(newRecipe))
     }
 }
+
+//#Preview {
+//    NavigationStack {
+//        RecipesInfoView(recipe: Recipe)
+//            .environment(Router())
+//            .modelContainer()
+//    }
+//}

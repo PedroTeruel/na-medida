@@ -17,7 +17,20 @@ final class UserRepository {
 
     func createUser(username: String) {
         let user = User(username: username)
-
         mc.insert(user)
+        do{
+            try mc.save()
+        } catch{
+            print("Erro em criar username: \(error)")
+        }
+    }
+    
+    func editUsername(user: User, newUsername: String) {
+        user.username = newUsername
+        do{
+            try mc.save()
+        } catch{
+            print("Erro ao atualizar username: \(error)")
+        }
     }
 }
