@@ -11,8 +11,9 @@ import SwiftUI
 struct RecipesTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
-    
     @Query private var recipes: [Recipe]
+    
+    let username: String
     
     var body: some View {
         @Bindable var routerBindable = router
@@ -30,7 +31,7 @@ struct RecipesTabView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-                .navigationTitle("Olá, William!")
+                .navigationTitle("Olá, \(username)")
                 .navigationBarTitleDisplayMode(.large)
 
                 .toolbar {
@@ -53,10 +54,14 @@ struct RecipesTabView: View {
                     router.build(route: route)
                 }
             }
+            .navigationTitle("Olá, \(username)!")
+            .navigationDestination(for: AppRoute.self) { route in
+                router.build(route: route)
+            }
         }
     }
 
 #Preview {
-    RecipesTabView()
+    RecipesTabView(username: "Will")
         .environment(Router())
 }
