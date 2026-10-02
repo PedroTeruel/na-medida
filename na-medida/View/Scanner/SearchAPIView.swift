@@ -38,8 +38,6 @@ struct SearchAPIView: View {
                         showActions: false,
                         onAdd: {
                             router.recipeSaveIngredient.append(product)
-                            dismiss()
-                            router.pop()
                         }
                     )
                     .listRowSeparator(.hidden)
