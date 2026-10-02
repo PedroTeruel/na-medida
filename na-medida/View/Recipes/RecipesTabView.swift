@@ -11,6 +11,7 @@ import SwiftUI
 struct RecipesTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
+    @Query private var recipes: [Recipe]
     
     let username: String
     
@@ -30,7 +31,7 @@ struct RecipesTabView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-                .navigationTitle("Olá, William!")
+                .navigationTitle("Olá, \(username)")
                 .navigationBarTitleDisplayMode(.large)
 
                 .toolbar {
