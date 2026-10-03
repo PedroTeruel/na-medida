@@ -13,6 +13,7 @@ struct CardIngredient: View {
     var quantity: String?
     var imageURL: String?
     var onAdd: (() -> Void)?
+    var onRemove: (() -> Void)?
     
     private var formattedProductName: String {
         let separators = CharacterSet(charactersIn: "-–—")
@@ -29,13 +30,15 @@ struct CardIngredient: View {
         brand: String? = nil,
         quantity: String? = nil,
         imageURL: String? = nil,
-        onAdd: (() -> Void)? = nil
+        onAdd: (() -> Void)? = nil,
+        onRemove: (() -> Void)? = nil
     ) {
         self.productName = productName
         self.brand = brand
         self.quantity = quantity
         self.imageURL = imageURL
         self.onAdd = onAdd
+        self.onRemove = onRemove
     }
     
     var body: some View {
@@ -96,14 +99,27 @@ struct CardIngredient: View {
             
             Spacer()
             
-            Button {
-                onAdd?()
-            } label: {
-                Image(systemName: "plus")
-                    .fontWeight(.bold)
+            if let onRemove = onRemove {
+                Button {
+                    onRemove()
+                } label: {
+                    Image(systemName: "trash")
+                        .fontWeight(.bold)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
+                .clipShape(Circle())
+                
+            } else if let onAdd = onAdd {
+                Button {
+                    onAdd()
+                } label: {
+                    Image(systemName: "plus")
+                        .fontWeight(.bold)
+                }
+                .buttonStyle(.borderedProminent)
+                .clipShape(Circle())
             }
-            .buttonStyle(.borderedProminent)
-            .clipShape(Circle())
         }
         .padding(8)
         .frame(maxWidth: .infinity, minHeight: 60)
@@ -120,6 +136,13 @@ struct CardIngredient: View {
         CardIngredient(
             productName: "Cioccolato Fondente Deciso – Lindt – 100g",
             brand: "Lindt",
-            quantity: "100g")
+            quantity: "100g",
+            onAdd: {})
+        
+        CardIngredient(
+            productName: "Cioccolato Fondente Deciso – Lindt – 100g",
+            brand: "Lindt",
+            quantity: "100g",
+            onRemove: {})
     }
 }

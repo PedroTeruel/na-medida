@@ -23,6 +23,7 @@ struct BarcodeAPIView: View {
     
     private let apiService = OpenFoodFactsService()
     
+    
     var body: some View {
         ZStack {
             DataScanner(scannerCode: $scannerCode)

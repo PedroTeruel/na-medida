@@ -14,10 +14,12 @@ struct SearchAPIView: View {
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     
+    var searchText: String
     var searchResults: [ProductOpenFoodFactsDTO]
     var isLoading: Bool
     
     var body: some View {
+        
         List {
             if isLoading {
                 HStack {
@@ -26,28 +28,76 @@ struct SearchAPIView: View {
                     Spacer()
                 }
                 listRowSeparator(.hidden)
-            } else if searchResults.isEmpty {
-                Text("Busque um ingrediente")
-                    .foregroundStyle(.secondary)
+                
+            } else if !searchText.isEmpty {
+                
+                if searchResults.isEmpty {
+                    Text("Nenhum produto encontrado para \"\(searchText)\".")
+                        .foregroundStyle(.secondary)
+                        .listRowSeparator(.hidden)
+                    
+                } else {
+                    Text("Resultados")
+                    ForEach(searchResults, id: \.self) { product in
+                        CardIngredient(
+                            productName: product.productName ?? "Produto sem nome",
+                            brand: product.brands,
+                            quantity: product.servingSize,
+                            imageURL: product.fotoProdutoURL,
+                            onAdd: {
+                                if !router.recipeSaveIngredient.contains(product) {
+                                    router.recipeSaveIngredient.append(product)
+                                }
+                            }
+                        )
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    }
+                }
+                
+            } else {
+                if router.recipeSaveIngredient.isEmpty {
+                    HStack {
+                        Spacer()
+                        SearchIconComponent()
+                        Spacer()
+                    }
                     .listRowSeparator(.hidden)
-            } else  {
-                ForEach(searchResults, id: \.self) { product in
-                    CardIngredient(
-                        productName: product.productName ?? "Produto sem nome",
-                        brand: product.brands,
-                        quantity: product.servingSize,
-                        imageURL: product.fotoProdutoURL,
-                        onAdd: {
-                            router.recipeSaveIngredient.append(product)
+                    
+                } else {
+                    Text("Ingredientes adicionados")
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                    
+                    ForEach(router.recipeSaveIngredient, id: \.self) { product in
+                        CardIngredient(
+                            productName: product.productName ?? "Produto sem nome",
+                            brand: product.brands,
+                            quantity: product.servingSize,
+                            imageURL: product.fotoProdutoURL,
+                            onRemove: {
+                                if let index = router.recipeSaveIngredient.firstIndex(of: product) {
+                                    router.recipeSaveIngredient.remove(at: index)
+                                }
+                            }
+                        )
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                if let index = router.recipeSaveIngredient.firstIndex(of: product) {
+                                    router.recipeSaveIngredient.remove(at: index)
+                                }
+                            } label: {
+                                Label("Remover", systemImage: "trash")
+                            }
                         }
-                    )
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    }
                 }
             }
         }
         .listStyle(.plain)
-        .navigationTitle("Busque um ingrediente")
+        .navigationTitle("Buscar")
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: isSearching) { _, isFocused in
             if isFocused {
@@ -65,6 +115,7 @@ struct SearchAPIView: View {
             NavigationStack {
                 SearchAPIView(
                     currentDetent: $detent,
+                    searchText: "",
                     searchResults: [],
                     isLoading: false
                 )
