@@ -7,10 +7,11 @@
 
 import Foundation
 
-final class OpenFoodFactsService{
+//busca por código de barras
+final class OpenFoodFactsService {
     private let baseURL = "https://world.openfoodfacts.org/api/v3/product"
     
-    func fetchProd(barcode: String) async throws -> ProductOpenFoodFactsDTO{
+    func fetchProd(barcode: String) async throws -> ProductOpenFoodFactsDTO {
         var components = URLComponents(
             string:"\(baseURL)/\(barcode)"
         )
@@ -26,45 +27,74 @@ final class OpenFoodFactsService{
             throw OpenFoodFactsError.invalidURL
         }
         
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, timeoutInterval: 10.0)
         
         request.setValue(
             "NaMedida - IOS - Version 1.0 - pedrohteruel@gmail.com",
             forHTTPHeaderField: "User-Agent"
         )
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let maxRetries = 3
+        var currentAttempt = 0
         
-        if let jsonPuro = String(data: data, encoding: .utf8) {
-            print("Dados da API: \(jsonPuro)")
-        }
-        
-        guard let webResponse = response as? HTTPURLResponse else {
-            throw OpenFoodFactsError.invalidResponse
-        }
-        
-        switch webResponse.statusCode {
-            
-        case 200:
-            let responseDTO = try JSONDecoder().decode(
-                BarcodeResponseDTO.self,
-                from: data
-            )
-            
-            guard let product = responseDTO.product else {
-                throw OpenFoodFactsError.productNotFound
+        while currentAttempt < maxRetries {
+            do
+            {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                
+                if let jsonPuro = String(data: data, encoding: .utf8) {
+                    print("Dados da API (Tentativa \(currentAttempt + 1)): \(jsonPuro)")
+                }
+                
+                guard let webResponse = response as? HTTPURLResponse else {
+                    throw OpenFoodFactsError.invalidResponse
+                }
+                
+                switch webResponse.statusCode {
+                case 200:
+                    let responseDTO = try JSONDecoder().decode(
+                        BarcodeResponseDTO.self,
+                        from: data
+                    )
+                    
+                    guard let product = responseDTO.product else {
+                        throw OpenFoodFactsError.productNotFound
+                    }
+                    
+                    return product
+                    
+                case 404:
+                    throw OpenFoodFactsError.productNotFound
+                    
+                case 400...499:
+                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
+                    
+                default:
+                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
+                }
+                
+            } catch {
+                currentAttempt += 1
+                
+                let isNetworkError = (error as? URLError) != nil
+                let isServerError: Bool
+                
+                if case OpenFoodFactsError.serverError(let statusCode) = error, statusCode >= 500 {
+                    isServerError = true
+                } else {
+                    isServerError = false
+                }
+                
+                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) {
+                    throw error
+                }
+                
+                let delay = UInt64(currentAttempt) * 1_000_000_000
+                try? await Task.sleep(nanoseconds: delay)
             }
-            
-            return product
-            
-        case 404:
-            throw OpenFoodFactsError.productNotFound
-            
-        default:
-            throw OpenFoodFactsError.serverError(
-                statusCode: webResponse.statusCode
-            )
         }
+        
+        throw OpenFoodFactsError.invalidResponse
     }
     
     //função de pesquisa por texto
@@ -83,28 +113,63 @@ final class OpenFoodFactsService{
             throw OpenFoodFactsError.invalidURL
         }
         
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, timeoutInterval: 10.0)
         request.setValue(
             "Na-Medida - iOS - Version 1.0 - pedrohteruel@gmail.com",
             forHTTPHeaderField: "User-Agent"
         )
         
-        let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let webResponse = response as? HTTPURLResponse else {
-            throw OpenFoodFactsError.invalidResponse
+        let maxRetries = 3
+        var currentAttempt = 0
+        
+        while currentAttempt < maxRetries {
+            do
+            {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                guard let webResponse = response as? HTTPURLResponse else {
+                    throw OpenFoodFactsError.invalidResponse
+                }
+                
+                switch webResponse.statusCode {
+                case 200:
+                    let responseDTO = try JSONDecoder().decode(
+                        SearchResponseDTO.self,
+                        from: data)
+                    return responseDTO.products ?? []
+                    
+                case 404:
+                    return []
+                    
+                case 400...499:
+                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
+                    
+                default:
+                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
+                }
+            } catch {
+                currentAttempt += 1
+                
+                let isNetworkError = (error as? URLError) != nil
+                let isServerError: Bool
+                
+                if case OpenFoodFactsError.serverError(let statusCode) = error, statusCode >= 500 {
+                    isServerError = true
+                } else {
+                    isServerError = false
+                }
+                
+                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) {
+                    throw error
+                }
+                
+                let delay = UInt64(currentAttempt) * 1_000_000_000
+                try? await Task.sleep(nanoseconds: delay)
+                
+            }
         }
         
-        guard webResponse.statusCode == 200 else {
-            throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
-        }
-        
-        let responseDTO = try JSONDecoder().decode(
-            SearchResponseDTO.self,
-            from: data
-        )
-        
-        return responseDTO.products ?? []
+        return []
     }
 }
 
