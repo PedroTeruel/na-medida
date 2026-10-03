@@ -14,12 +14,13 @@ struct SearchIconComponent: View {
             Image("IconeSearch")
                 .resizable()
                 .scaledToFill()
-                .frame(width: 70, height: 70)
+                .frame(width: 60, height: 60)
             Text("Escaneie ou busque para adicionar um ingrediente")
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .frame(width: 200)
+        .padding(.top, 16)
     }
 }
 

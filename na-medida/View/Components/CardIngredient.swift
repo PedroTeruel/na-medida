@@ -118,6 +118,7 @@ struct CardIngredient: View {
                         .fontWeight(.bold)
                 }
                 .buttonStyle(.borderedProminent)
+                .tint(.button)
                 .clipShape(Circle())
             }
         }
