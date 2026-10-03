@@ -34,8 +34,9 @@ struct SearchAPIView: View {
                 ForEach(searchResults, id: \.self) { product in
                     CardIngredient(
                         productName: product.productName ?? "Produto sem nome",
+                        brand: product.brands,
+                        quantity: product.servingSize,
                         imageURL: product.fotoProdutoURL,
-                        showActions: false,
                         onAdd: {
                             router.recipeSaveIngredient.append(product)
                         }

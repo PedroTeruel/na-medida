@@ -18,7 +18,7 @@ final class OpenFoodFactsService{
         components?.queryItems = [
             URLQueryItem(
                 name: "fields",
-                value: "code,product_name,brands,ingredients_text,nutriments,image_url"
+                value: "code,product_name,brands,ingredients_text,nutriments,image_url,serving_size"
             )
         ]
         
@@ -76,7 +76,7 @@ final class OpenFoodFactsService{
             URLQueryItem(name: "search_simple", value: "1"),
             URLQueryItem(name: "action", value: "process"),
             URLQueryItem(name: "json", value: "1"),
-            URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url")
+            URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url,serving_size")
         ]
         
         guard let url = components?.url else {

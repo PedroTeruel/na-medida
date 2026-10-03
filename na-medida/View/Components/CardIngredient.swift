@@ -9,28 +9,37 @@ import SwiftUI
 
 struct CardIngredient: View {
     var productName: String
+    var brand: String?
+    var quantity: String?
     var imageURL: String?
-    var showActions: Bool
     var onAdd: (() -> Void)?
     
-    @State private var selectionQuantity = "Defina a quantidade"
-    let measures = ["Unidade", "Gramas", "Kilogramas", "Litros"]
+    private var formattedProductName: String {
+        let separators = CharacterSet(charactersIn: "-–—")
+        let components = productName.components(separatedBy: separators)
+        return components.first?.trimmingCharacters(in: .whitespaces) ?? productName
+    }
+    
+    private var hasBrandOrQuantity: Bool {
+        return (brand != nil && !brand!.isEmpty) || (quantity != nil && !quantity!.isEmpty)
+    }
     
     init(
         productName: String = "Achocolatado",
+        brand: String? = nil,
+        quantity: String? = nil,
         imageURL: String? = nil,
-        showActions: Bool = true,
         onAdd: (() -> Void)? = nil
     ) {
         self.productName = productName
+        self.brand = brand
+        self.quantity = quantity
         self.imageURL = imageURL
-        self.showActions = showActions
         self.onAdd = onAdd
     }
     
     var body: some View {
         HStack {
-
             if let imageURLString = imageURL, let url = URL(string: imageURLString) {
                 AsyncImage(url: url) { phase in
                     
@@ -57,34 +66,33 @@ struct CardIngredient: View {
             }
             
             VStack (alignment: .leading) {
-                Text(productName)
+                Text(formattedProductName)
                     .foregroundStyle(.primary)
                     .font(.callout)
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
+                    .fontWeight(.regular)
+                    .lineLimit(1)
+                //.minimumScaleFactor(0.8)
                 
-                if showActions {
-                    Menu {
-                        ForEach(measures, id: \.self) { measure in
-                            Button(measure) {
-                                selectionQuantity = measure
-                            }
+                if hasBrandOrQuantity {
+                    HStack {
+                        if let brand = brand, !brand.isEmpty {
+                            Text(brand)
                         }
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(selectionQuantity)
-                                .font(.subheadline)
-                                .foregroundStyle(.primary)
-                            
-                            Image(systemName: "chevron.up.chevron.down")
-                                .font(.caption2)
-                                .foregroundStyle(.primary)
+                        
+                        if let brand = brand, !brand.isEmpty, let quantity = quantity, !quantity.isEmpty {
+                            Text("•")
+                        }
+                        
+                        if let quantity = quantity, !quantity.isEmpty {
+                            Text(quantity)
                         }
                     }
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                    .lineLimit(1)
                 }
             }
-            .padding()
+            .padding(8)
             
             Spacer()
             
@@ -92,23 +100,26 @@ struct CardIngredient: View {
                 onAdd?()
             } label: {
                 Image(systemName: "plus")
+                    .fontWeight(.bold)
             }
             .buttonStyle(.borderedProminent)
             .clipShape(Circle())
         }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 74)
+        .padding(8)
+        .frame(maxWidth: .infinity, minHeight: 60)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(.primary, lineWidth: 0.3))
-        .padding(.horizontal)
+                .stroke(.primary, lineWidth: 0.1))
     }
 }
 
 #Preview {
     VStack {
-        CardIngredient(productName: "Achocolatado Nescau", showActions: true, onAdd: nil)
-        CardIngredient(productName: "Leite Integral", showActions: false)
+        CardIngredient(productName: "Cioccolato Fondente Deciso – Lindt – 100g")
+        
+        CardIngredient(
+            productName: "Cioccolato Fondente Deciso – Lindt – 100g",
+            brand: "Lindt",
+            quantity: "100g")
     }
-    .padding()
 }
