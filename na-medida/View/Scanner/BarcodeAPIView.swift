@@ -13,7 +13,7 @@ struct BarcodeAPIView: View {
     @Environment(\.modelContext) private var mc
     
     @State private var showSheet = true
-    @State private var sheetDetent: PresentationDetent = .fraction(0.4)
+    @State private var sheetDetent: PresentationDetent = .fraction(0.3)
     
     //API
     @State private var scannerCode: String?
@@ -22,6 +22,7 @@ struct BarcodeAPIView: View {
     @State private var showErrorAlert = false
     
     private let apiService = OpenFoodFactsService()
+    
     
     var body: some View {
         ZStack {
@@ -88,9 +89,10 @@ struct BarcodeAPIView: View {
         }
         .sheet(isPresented: $showSheet) {
             SearchSheetView(currentDetent: $sheetDetent)
-                .presentationDetents([.fraction(0.4), .medium, .large], selection: $sheetDetent)
+                .presentationDetents([.fraction(0.3), .medium, .large], selection: $sheetDetent)
                 .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                 .interactiveDismissDisabled()
+                .presentationBackground(.background)
         }
         .alert("Atenção", isPresented: $showErrorAlert) {
             Button("Ok", role: .cancel) {
@@ -124,8 +126,6 @@ struct BarcodeAPIView: View {
             router.navigate(to: .recipesinfo(newRecipe))
         }
     }
-    
-    
     
     private func fetchProduct(barcode: String) {
         isLoading = true

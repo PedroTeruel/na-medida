@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchSheetView: View {
+    
     @State private var searchField = ""
     @Binding var currentDetent: PresentationDetent
     
@@ -17,31 +18,13 @@ struct SearchSheetView: View {
     private let apiService = OpenFoodFactsService()
     //
     
-    var body: some View {
-        NavigationStack {
-            SearchAPIView(
-                currentDetent: $currentDetent,
-                searchResults: searchResults,
-                isLoading: isLoading
-            )
-            .searchable(
-                text: $searchField,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Pesquisar ingrediente"
-            )
-            .onSubmit(of: .search) {
-                performSearch()
-            }
-        }
-    }
-    
-    private func performSearch() {
-        guard !searchField.isEmpty else { return }
+    private func performSearch(query: String) {
+        guard !query.isEmpty else { return }
         
         isLoading = true
         Task {
             do {
-                let results = try await apiService.searchProducts(query: searchField)
+                let results = try await apiService.searchProducts(query: query)
                 
                 await MainActor.run {
                     self.searchResults = results
@@ -52,6 +35,23 @@ struct SearchSheetView: View {
                 await MainActor.run {
                     self.isLoading = false
                 }
+            }
+        }
+    }
+    
+    var body: some View {
+        SearchAPIView(
+            currentDetent: $currentDetent,
+            searchText: $searchField,
+            searchResults: searchResults,
+            isLoading: isLoading,
+            onSearchSubmit: { query in
+                performSearch(query: query)
+            }
+        )
+        .onChange(of: searchField) { _, newValue in
+            if newValue.isEmpty {
+                searchResults.removeAll()
             }
         }
     }
