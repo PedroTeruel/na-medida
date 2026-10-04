@@ -17,7 +17,7 @@ struct RecipesInfoView: View {
     var body: some View {
         
         ScrollView {
-            VStack(spacing: 60) {
+            VStack {
                 Button {
                     router.navigate(to: .scanner)
                 } label: {
@@ -31,10 +31,18 @@ struct RecipesInfoView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(recipe.ingredients) { recipeIng in
-                            CardRecipeIngredient(
-                                productName: recipeIng.ingredient?.name,
-                                imageURL: recipeIng.ingredient?.photoURL,
-                                brands: recipeIng.ingredient?.brand)
+                            Button {
+                                if let ingredient = recipeIng.ingredient{
+                                    router.navigate(to: .savedIngredient(ingredient))
+                                }
+                            } label: {
+                                
+                                CardRecipeIngredient(
+                                    productName: recipeIng.ingredient?.name,
+                                    imageURL: recipeIng.ingredient?.photoURL,
+                                    brands: recipeIng.ingredient?.brand)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -44,7 +52,7 @@ struct RecipesInfoView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
         .navigationTitle(recipe.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -53,6 +61,13 @@ struct RecipesInfoView: View {
                     HStack {
                         Image(systemName: "chevron.left")
                     }
+                }
+            }
+            ToolbarItem {
+                Button {
+                    print("Menu")
+                } label: {
+                    Image(systemName: "ellipsis")
                 }
             }
         }
@@ -71,10 +86,10 @@ struct RecipesInfoView: View {
     }
 }
 
-//#Preview {
-//    NavigationStack {
-//        RecipesInfoView(recipe: Recipe)
-//            .environment(Router())
-//            .modelContainer()
-//    }
-//}
+#Preview {
+    NavigationStack {
+        RecipesInfoView(recipe: Recipe(name: "Minha Receita", tag: .lunch))
+    }
+    .environment(Router())
+    .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
+}

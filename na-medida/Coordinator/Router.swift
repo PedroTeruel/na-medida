@@ -14,6 +14,7 @@ enum AppRoute: Hashable {
     case scanner
     case main(username: String)
     case ingredientinfo(ProductOpenFoodFactsDTO?)
+    case savedIngredient(Ingredient)
 }
 
 @Observable
@@ -95,16 +96,16 @@ class Router {
             
         case .scanner:
             BarcodeAPIView()
+            
         case .ingredientinfo(let product):
             if let product {
-                IngredientView(
-                    ingredientTitle: product.productName ?? "Produto Desconhecido",
-                    ingredientBrands: product.brands ?? "Marca não identificada",
-                    ingredientImageURL: product.fotoProdutoURL
-                )
+                IngredientView(productDTO: product)
             } else {
                 IngredientView()
             }
+            
+        case .savedIngredient(let ingredient):
+            IngredientView(ingredient: ingredient)
         }
     }
 }
