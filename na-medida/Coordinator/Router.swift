@@ -17,6 +17,8 @@ enum AppRoute: Hashable {
     case savedIngredient(Ingredient)
     case aboutNutrients
     case aboutMeasures
+    case aboutUs
+    case termsOfUse
 }
 
 @Observable
@@ -108,6 +110,13 @@ class Router {
             
         case .aboutMeasures:
             AboutMeasuresView()
+            
+        case .aboutUs:
+            AboutView()
+            
+        case .termsOfUse:
+            TermsOfUseView()
+            
         }
     }
 }
