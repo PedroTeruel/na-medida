@@ -39,16 +39,15 @@ struct NewRecipeView: View {
                 }
             }
             
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum:110))]
-            ) {
+            FlowLayout(spacing: 12, rowSpacing: 12) {
                 ForEach(RecipeTag.allCases, id: \.self) { tag in
-                    TagButton(title: tag.rawValue, isSelected: draft.tag == tag) {
+                    TagButton(tag: tag, title: tag.rawValue, isSelected: draft.tag == tag) {
                         draft.tag = tag
-                        
                     }
                 }
             }
+            .padding(.horizontal)
+    
             
             Spacer()
             

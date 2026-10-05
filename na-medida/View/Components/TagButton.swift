@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TagButton: View {
+    let tag: RecipeTag
     let title: String
     let isSelected: Bool
     let action: () -> Void
@@ -17,12 +18,17 @@ struct TagButton: View {
             action()
         }) {
             Text(title)
+                .fixedSize(horizontal: false, vertical: true)
                 .font(.subheadline)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(isSelected ? Color.button : Color.gray.opacity(0.2))
-                .foregroundStyle(isSelected ? .white : .primary)
+                .background(
+                    (isSelected ? tag.color.opacity(0.9) : tag.color.opacity(0.4))
+                        .clipShape(Capsule())
+                )
+                .foregroundStyle(tag.foregroundColor)
                 .cornerRadius(24)
+                .minimumScaleFactor(0.8)
                 .lineLimit(1)
         }
         .buttonStyle(.plain)
@@ -46,10 +52,5 @@ struct TagStatic: View {
 }
 
 #Preview {
-    TagButton(title: "Example", isSelected: false) {
-    }
-}
-
-#Preview {
-    TagStatic(title: "Categoria")
+    TagStatic(title: "Lanche da manhã")
 }

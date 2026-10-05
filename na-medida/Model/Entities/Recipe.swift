@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 final class Recipe{
@@ -31,6 +32,33 @@ enum RecipeTag: String, Codable, CaseIterable{
     case afternoonSnack = "Lanche da tarde"
     case nightSnack = "Lanche da noite"
     case dessert = "Sobremesa"
+}
+
+extension RecipeTag {
+    var color: Color {
+        switch self {
+        case .breakfast: return Color.tagCardOrange
+        case .lunch: return Color.tagCardGreen
+        case .dinner: return Color.tagCardPurple
+        case .morningSnack: return Color.tagColorRed
+        case .afternoonSnack: return Color.tagColorPink
+        case .nightSnack: return Color.tagColorBlue
+        case .dessert: return Color.tagCardYellow
+        }
+    }
+
+    // Useful when you need readable text over the tag color
+    var foregroundColor: Color {
+        switch self {
+        case .breakfast: return Color.tagTextOrange
+        case .lunch: return Color.tagTextGreen
+        case .dinner: return Color.tagTextPurple
+        case .morningSnack: return Color.tagTextRed
+        case .afternoonSnack: return Color.tagTextPink
+        case .nightSnack: return Color.tagTextBlue
+        case .dessert: return Color.tagTextYellow
+        }
+    }
 }
 
 extension Recipe {
