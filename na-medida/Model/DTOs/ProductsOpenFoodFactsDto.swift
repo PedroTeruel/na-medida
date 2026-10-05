@@ -25,17 +25,21 @@ struct ProductOpenFoodFactsDTO: Decodable, Hashable {
     let productName: String?
     let brands: String?
     let nutriments: NutrimentsDTO? //guarda macronitrientes da tabela nutricional
-    let composicaoProduto: String? //guarda ingredientes do produto
+    let composicaoProduto: String?
+    let allergens: String? //guarda ingredientes do produto
     let fotoProdutoURL: String?
     let servingSize: String? // ADICIONADO: guarda a descrição da porção (ex: "20 g (2 colheres de sopa)")
+    let countries_tags: String
 
     enum CodingKeys: String, CodingKey {
         case productName = "product_name"
         case brands
         case nutriments
         case composicaoProduto = "ingredients_text"
+        case allergens
         case fotoProdutoURL = "image_url"
-        case servingSize = "serving_size" //chave da api por porção
+        case servingSize = "serving_size"
+        case countries_tags//chave da api por porção
     }
 }
 

@@ -15,11 +15,30 @@ struct RecipesInfoView: View {
     var recipe: Recipe
     
     var body: some View {
-        
         ScrollView {
+            Text(recipe.name)
+                .font(.title)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding(.top)
+            
+            TagStatic(title: recipe.tag.rawValue)
+            
+            Text("Informações nutricionais")
+                .foregroundStyle(.secondary)
+                .padding(.top, 32)
+            
             VStack(spacing: 60) {
+                Text("Carrossel aqui")
+                    .font(.largeTitle)
+            }
+            .frame(maxWidth: .infinity, minHeight: 300)
+            .background(Color(.systemGray3))
+            .cornerRadius(16)
+            
+            VStack {
                 Button {
-                    router.navigate(to: .scanner)
+                    router.navigate(to: .scanner(recipe))
                 } label: {
                     AddIngredientButton()
                 }
@@ -31,10 +50,18 @@ struct RecipesInfoView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(recipe.ingredients) { recipeIng in
-                            CardRecipeIngredient(
-                                productName: recipeIng.ingredient?.name,
-                                imageURL: recipeIng.ingredient?.photoURL,
-                                brands: recipeIng.ingredient?.brand)
+                            Button {
+                                if let ingredient = recipeIng.ingredient{
+                                    router.navigate(to: .savedIngredient(ingredient))
+                                }
+                            } label: {
+                                
+                                CardRecipeIngredient(
+                                    productName: recipeIng.ingredient?.name,
+                                    imageURL: recipeIng.ingredient?.photoURL,
+                                    brands: recipeIng.ingredient?.brand)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -43,7 +70,7 @@ struct RecipesInfoView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
-        .navigationTitle(recipe.name)
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -55,26 +82,21 @@ struct RecipesInfoView: View {
                     }
                 }
             }
+            ToolbarItem {
+                Button {
+                    print("Menu")
+                } label: {
+                    Image(systemName: "ellipsis")
+                }
+            }
         }
-    }
-    
-    private func saveRecipeSwiftData() {
-        let repository = RecipeRepository(mc: mc)
-        
-        let newRecipe = repository.saveRecipe(
-            title: router.draftTitle,
-            tag: router.draftTag,
-            dtoIngredients: router.recipeSaveIngredient)
-        
-        router.clearDraft()
-        router.navigate(to: .recipesinfo(newRecipe))
     }
 }
 
-//#Preview {
-//    NavigationStack {
-//        RecipesInfoView(recipe: Recipe)
-//            .environment(Router())
-//            .modelContainer()
-//    }
-//}
+#Preview {
+    NavigationStack {
+        RecipesInfoView(recipe: Recipe(name: "Minha Receita", tag: .lunch))
+    }
+    .environment(Router())
+    .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
+}

@@ -11,22 +11,29 @@ struct AboutNutrientsCard: View {
     var cardTitle: String = "Definição dos nutrientes"
     var cardBody: String = "Entenda melhor sobre os ingredientes das suas receitas"
     var cardImg: String = "book"
+    
     var body: some View {
+        
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 8) {
+                
                 Text(cardTitle)
-                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(cardBody)
-                    .foregroundStyle(.gray)
-            }
+                    .fontWeight(.regular)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
 
+            }
             Spacer()
 
             Image(cardImg)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 80)
+                .frame(height: 70)
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -44,7 +51,6 @@ struct AboutNutrientsCard: View {
             RoundedRectangle(cornerRadius: 24)
                 .stroke(.gray.opacity(0.5), lineWidth: 1)
         }
-    
     }
 }
 

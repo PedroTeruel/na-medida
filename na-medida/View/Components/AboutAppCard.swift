@@ -10,20 +10,23 @@ import SwiftUI
 struct AboutAppCard: View {
     
     var iconCard: String = "info.circle"
-    var aboutTitle: String = "Termos de uso"
+    var aboutTitle: String = "Sobre nós"
     
     var body: some View {
-        HStack(spacing: 8) {
+        
+        HStack(spacing: 16) {
             Image(systemName: iconCard)
                 .resizable()
                 .scaledToFit()
                 .frame(height: 26)
+            
             Text(aboutTitle)
                 .font(.headline)
+                .lineLimit(1)
         }
-        .frame(width: 160)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 22)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 24)
         .background {
             RoundedRectangle(cornerRadius: 24)
                 .fill(.white)
@@ -41,6 +44,8 @@ struct AboutAppCard: View {
     }
 }
 
+
 #Preview {
     AboutAppCard()
 }
+

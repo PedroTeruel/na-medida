@@ -11,9 +11,14 @@ import Observation
 enum AppRoute: Hashable {
     case recipesinfo(Recipe)
     case newrecipe
-    case scanner
+    case scanner(Recipe?)
     case main(username: String)
-    case ingredientinfo(ProductOpenFoodFactsDTO?)
+    case ingredientinfo(ProductOpenFoodFactsDTO)
+    case savedIngredient(Ingredient)
+    case aboutNutrients
+    case aboutMeasures
+    case aboutUs
+    case termsOfUse
 }
 
 @Observable
@@ -25,30 +30,22 @@ class Router {
     var settingsPath = [AppRoute]()
     var searchPath = [AppRoute]()
     
-    var draftTitle: String = ""
-    var draftTag: RecipeTag = .breakfast
-    var recipeSaveIngredient: [ProductOpenFoodFactsDTO] = []
-    
-    func clearDraft() {
-        draftTitle = ""
-        draftTag = .breakfast
-        recipeSaveIngredient.removeAll()
-    }
-    
     func navigate(to route: AppRoute) {
+        
         switch selectedTab {
+            
         case .tabrecipesview:
             if case .recipesinfo = route {
                 recipesPath = [route]
                 return
             }
-            
             guard recipesPath.last != route else { return }
             recipesPath.append(route)
             
         case .tabsettingsview:
             guard settingsPath.last != route else { return }
             settingsPath.append(route)
+            
         case .tabsearchview:
             guard searchPath.last != route else { return }
             searchPath.append(route)
@@ -56,22 +53,30 @@ class Router {
     }
     
     func pop() {
+        
         switch selectedTab {
+            
         case .tabrecipesview:
             if !recipesPath.isEmpty { recipesPath.removeLast() }
+            
         case .tabsettingsview:
             if !settingsPath.isEmpty { settingsPath.removeLast() }
+            
         case .tabsearchview:
             if !searchPath.isEmpty { searchPath.removeLast() }
         }
     }
     
     func popToRoot() {
+        
         switch selectedTab {
+            
         case .tabrecipesview:
             recipesPath.removeAll()
+            
         case .tabsettingsview:
             settingsPath.removeAll()
+            
         case .tabsearchview:
             searchPath.removeAll()
         }
@@ -81,6 +86,7 @@ class Router {
     func build(route: AppRoute) -> some View {
         
         switch route {
+            
         case .main(let username):
             RecipesTabView(username: username)
             
@@ -88,23 +94,29 @@ class Router {
             RecipesInfoView(recipe: recipe)
             
         case .newrecipe:
-            NewRecipeView { title, tag in
-                self.draftTitle = title
-                self.draftTag = tag
-            }
+            NewRecipeView()
             
-        case .scanner:
-            BarcodeAPIView()
+        case .scanner(let recipe):
+            BarcodeAPIView(recipe: recipe)
+            
         case .ingredientinfo(let product):
-            if let product {
-                IngredientView(
-                    ingredientTitle: product.productName ?? "Produto Desconhecido",
-                    ingredientBrands: product.brands ?? "Marca não identificada",
-                    ingredientImageURL: product.fotoProdutoURL
-                )
-            } else {
-                IngredientView()
-            }
+            IngredientView(productDTO: product)
+            
+        case .savedIngredient(let ingredient):
+            IngredientView(ingredient: ingredient)
+            
+        case .aboutNutrients:
+            AboutNutrientsView()
+            
+        case .aboutMeasures:
+            AboutMeasuresView()
+            
+        case .aboutUs:
+            AboutView()
+            
+        case .termsOfUse:
+            TermsOfUseView()
+            
         }
     }
 }

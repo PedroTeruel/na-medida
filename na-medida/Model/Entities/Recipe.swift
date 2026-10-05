@@ -24,13 +24,13 @@ final class Recipe{
     }
 }
 enum RecipeTag: String, Codable, CaseIterable{
-    case breakfast
-    case lunch
-    case dinner
-    case morningSnack
-    case afternoonSnack
-    case nightSnack
-    case dessert
+    case breakfast = "Café da manhã"
+    case lunch = "Almoço"
+    case dinner = "Jantar"
+    case morningSnack = "Lanche da manhã"
+    case afternoonSnack = "Lanche da tarde"
+    case nightSnack = "Lanche da noite"
+    case dessert = "Sobremesa"
 }
 
 extension Recipe {
