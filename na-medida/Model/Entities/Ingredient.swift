@@ -18,6 +18,8 @@ final class Ingredient {
     var proteinsPer100g: Double
     var carbsPer100g: Double
     var fatsPer100g: Double
+    var ingredientsText: String?
+    var allergensText: String?
 
     init(
         barcode: String?,
@@ -29,6 +31,9 @@ final class Ingredient {
         proteinsPer100g: Double = 0.0,
         carbsPer100g: Double = 0.0,
         fatsPer100g: Double = 0.0,
+        ingredientsText: String? = nil,
+        allergensText: String? = nil
+        
 
     ) {
         self.barcode = barcode
@@ -40,6 +45,8 @@ final class Ingredient {
         self.proteinsPer100g = proteinsPer100g
         self.carbsPer100g = carbsPer100g
         self.fatsPer100g = fatsPer100g
+        self.ingredientsText = ingredientsText
+        self.allergensText = allergensText
     }
 }
 

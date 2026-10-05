@@ -52,21 +52,21 @@ struct NewRecipeView: View {
                 ) {
                     tag = .breakfast
                 }
-
+                
                 TagButton(
                     title: "Almoço",
                     isSelected: tag == .lunch
                 ) {
                     tag = .lunch
                 }
-
+                
                 TagButton(
                     title: "Jantar",
                     isSelected: tag == .dinner
                 ) {
                     tag = .dinner
                 }
-
+                
                 TagButton(
                     title: "Lanche",
                     isSelected: tag == .morningSnack
@@ -75,10 +75,13 @@ struct NewRecipeView: View {
                 }
             }
             Spacer()
+            
             Button {
-                router.navigate(to: .scanner)
-                guard let tag else { return }
+                guard let tag else {
+                    return
+                }
                 onContinue(title, tag)
+                router.navigate(to: .scanner(nil))
             } label: {
                 Text("Proximo passo")
                     .foregroundStyle(.primary)
@@ -87,6 +90,7 @@ struct NewRecipeView: View {
             }
             .buttonStyle(.bordered)
             .tint(.button)
+            .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || tag == nil)
         }
         .padding()
         .toolbar(.hidden, for: .tabBar)

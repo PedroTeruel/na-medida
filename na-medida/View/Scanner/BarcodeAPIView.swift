@@ -15,14 +15,13 @@ struct BarcodeAPIView: View {
     @State private var showSheet = true
     @State private var sheetDetent: PresentationDetent = .fraction(0.3)
     
-    //API
     @State private var scannerCode: String?
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var showErrorAlert = false
     
     private let apiService = OpenFoodFactsService()
-    
+    var recipe: Recipe? = nil
     
     var body: some View {
         ZStack {
@@ -45,12 +44,10 @@ struct BarcodeAPIView: View {
                 .background(Color.black.opacity(0.7))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
-            
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -103,27 +100,43 @@ struct BarcodeAPIView: View {
         }
     }
     
-    
     private func saveRecipeNavigate() {
         let repository = RecipeRepository(mc: mc)
         
-        let newRecipe = repository.saveRecipe(
-            title: router.draftTitle,
-            tag: router.draftTag,
-            dtoIngredients: router.recipeSaveIngredient)
-        
-        router.clearDraft()
-        
-        if showSheet {
-            showSheet = false
-            Task {
-                try? await Task.sleep(for: .milliseconds(250))
-                await MainActor.run {
-                    router.navigate(to: .recipesinfo(newRecipe))
+        if let existingRecipe = recipe {
+            repository.addIngredients(to: existingRecipe, dtoIngredients: router.recipeSaveIngredient)
+            router.clearDraft()
+            
+            if showSheet {
+                showSheet = false
+                Task {
+                    try? await Task.sleep(for: .milliseconds(250))
+                    await MainActor.run {
+                        router.pop()
+                    }
                 }
+            } else {
+                router.pop()
             }
         } else {
-            router.navigate(to: .recipesinfo(newRecipe))
+            let newRecipe = repository.saveRecipe(
+                title: router.draftTitle,
+                tag: router.draftTag,
+                dtoIngredients: router.recipeSaveIngredient)
+            
+            router.clearDraft()
+            
+            if showSheet {
+                showSheet = false
+                Task {
+                    try? await Task.sleep(for: .milliseconds(250))
+                    await MainActor.run {
+                        router.navigate(to: .recipesinfo(newRecipe))
+                    }
+                }
+            } else {
+                router.navigate(to: .recipesinfo(newRecipe))
+            }
         }
     }
     
@@ -167,4 +180,3 @@ struct BarcodeAPIView: View {
         .environment(Router())
         .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
 }
-

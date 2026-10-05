@@ -17,34 +17,65 @@ final class RecipeRepository {
     }
     
     func saveRecipe(title: String, tag: RecipeTag, dtoIngredients: [ProductOpenFoodFactsDTO]) -> Recipe {
-            let safeTitle = title.isEmpty ? "Nova Receita" : title
-            let newRecipe = Recipe(name: safeTitle, tag: tag)
+        let safeTitle = title.isEmpty ? "Nova Receita" : title
+        let newRecipe = Recipe(name: safeTitle, tag: tag)
+        
+        for dto in dtoIngredients {
+            let newIngredient = Ingredient(
+                barcode: nil,
+                name: dto.productName ?? "Sem Nome",
+                brand: dto.brands,
+                photoURL: dto.fotoProdutoURL,
+                caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
+                proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,
+                carbsPer100g: dto.nutriments?.carbohydrates100g ?? 0.0,
+                fatsPer100g: dto.nutriments?.fat100g ?? 0.0,
+                ingredientsText: dto.composicaoProduto,
+                allergensText: dto.allergens
+            )
             
-            for dto in dtoIngredients {
-                let newIngredient = Ingredient(
-                    barcode: nil,
-                    name: dto.productName ?? "Sem Nome",
-                    brand: dto.brands,
-                    photoURL: dto.fotoProdutoURL,
-                    caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
-                    proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,
-                    carbsPer100g: dto.nutriments?.carbohydrates100g ?? 0.0,
-                    fatsPer100g: dto.nutriments?.fat100g ?? 0.0
-                )
-                
-                let recipeIngredient = RecipeIngredient(
-                    userQuantity: 100.0,
-                    unity: .g,
-                    ingredient: newIngredient,
-                    recipe: newRecipe
-                )
-                
-                newRecipe.ingredients.append(recipeIngredient)
-            }
+            let recipeIngredient = RecipeIngredient(
+                userQuantity: 100.0,
+                unity: .g,
+                ingredient: newIngredient,
+                recipe: newRecipe
+            )
             
-            mc.insert(newRecipe)
-            try? mc.save()
-            
-            return newRecipe
+            newRecipe.ingredients.append(recipeIngredient)
         }
+        
+        mc.insert(newRecipe)
+        try? mc.save()
+        
+        return newRecipe
     }
+    
+    //Adicionar produtos em uma receita ja existente
+    func addIngredients(to recipe: Recipe, dtoIngredients: [ProductOpenFoodFactsDTO]) {
+        for dto in dtoIngredients {
+            let newIngredient = Ingredient(
+                barcode: nil,
+                name: dto.productName ?? "Sem Nome",
+                brand: dto.brands,
+                photoURL: dto.fotoProdutoURL,
+                caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
+                proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,
+                carbsPer100g: dto.nutriments?.carbohydrates100g ?? 0.0,
+                fatsPer100g: dto.nutriments?.fat100g ?? 0.0,
+                ingredientsText: dto.composicaoProduto,
+                allergensText: dto.allergens
+            )
+            
+            let recipeIngredient = RecipeIngredient(
+                userQuantity: 100.0,
+                unity: .g,
+                ingredient: newIngredient,
+                recipe: recipe
+            )
+            
+            recipe.ingredients.append(recipeIngredient)
+        }
+        
+        try? mc.save()
+    }
+}

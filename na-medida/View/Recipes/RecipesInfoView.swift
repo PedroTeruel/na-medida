@@ -17,9 +17,30 @@ struct RecipesInfoView: View {
     var body: some View {
         
         ScrollView {
+            
+            Text(recipe.name)
+                .font(.title)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding(.top)
+            
+            TagStatic(title: "Jantar")
+            
+            Text("Informações nutricionais")
+                .foregroundStyle(.secondary)
+                .padding(.top, 32)
+            
+            VStack(spacing: 60) {
+                Text("Carrossel aqui")
+                    .font(.largeTitle)
+            }
+            .frame(maxWidth: .infinity, minHeight: 300)
+            .background(Color(.systemGray3))
+            .cornerRadius(16)
+            
             VStack {
                 Button {
-                    router.navigate(to: .scanner)
+                    router.navigate(to: .scanner(recipe))
                 } label: {
                     AddIngredientButton()
                 }
@@ -29,7 +50,7 @@ struct RecipesInfoView: View {
                     if recipe.ingredients.isEmpty {
                         Text("Nenhum ingrediente adicionado")
                             .foregroundStyle(.secondary)
-                    } else {
+                      } else {
                         ForEach(recipe.ingredients) { recipeIng in
                             Button {
                                 if let ingredient = recipeIng.ingredient{
@@ -51,8 +72,8 @@ struct RecipesInfoView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
-        .navigationTitle(recipe.name)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {

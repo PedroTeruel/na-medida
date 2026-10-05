@@ -12,6 +12,7 @@ struct CardIngredient: View {
     var brand: String?
     var quantity: String?
     var imageURL: String?
+    var isAdded: Bool
     var onAdd: (() -> Void)?
     var onRemove: (() -> Void)?
     
@@ -30,6 +31,7 @@ struct CardIngredient: View {
         brand: String? = nil,
         quantity: String? = nil,
         imageURL: String? = nil,
+        isAdded: Bool = false,
         onAdd: (() -> Void)? = nil,
         onRemove: (() -> Void)? = nil
     ) {
@@ -37,6 +39,7 @@ struct CardIngredient: View {
         self.brand = brand
         self.quantity = quantity
         self.imageURL = imageURL
+        self.isAdded = isAdded
         self.onAdd = onAdd
         self.onRemove = onRemove
     }
@@ -114,12 +117,14 @@ struct CardIngredient: View {
                 Button {
                     onAdd()
                 } label: {
-                    Image(systemName: "plus")
+                    Image(systemName: isAdded ? "checkmark" : "plus")
                         .fontWeight(.bold)
+                        .contentTransition(.symbolEffect(.replace))
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.button)
+                .tint(isAdded ? .green : .button)
                 .clipShape(Circle())
+                .disabled(isAdded)
             }
         }
         .padding(8)

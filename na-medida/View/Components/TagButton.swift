@@ -18,10 +18,12 @@ struct TagButton: View {
         }) {
             Text(title)
                 .font(.subheadline)
-                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
                 .background(isSelected ? Color.button : Color.gray.opacity(0.2))
                 .foregroundStyle(isSelected ? .white : .primary)
-                .cornerRadius(10)
+                .cornerRadius(24)
+                .lineLimit(1)
         }
         .buttonStyle(.plain)
     }

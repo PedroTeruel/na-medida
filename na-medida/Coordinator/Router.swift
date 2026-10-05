@@ -11,7 +11,7 @@ import Observation
 enum AppRoute: Hashable {
     case recipesinfo(Recipe)
     case newrecipe
-    case scanner
+    case scanner(Recipe?)
     case main(username: String)
     case ingredientinfo(ProductOpenFoodFactsDTO?)
     case savedIngredient(Ingredient)
@@ -29,11 +29,13 @@ class Router {
     var draftTitle: String = ""
     var draftTag: RecipeTag = .breakfast
     var recipeSaveIngredient: [ProductOpenFoodFactsDTO] = []
+    var editingRecipe: Recipe? = nil
     
     func clearDraft() {
         draftTitle = ""
         draftTag = .breakfast
         recipeSaveIngredient.removeAll()
+        editingRecipe = nil
     }
     
     func navigate(to route: AppRoute) {
@@ -94,8 +96,8 @@ class Router {
                 self.draftTag = tag
             }
             
-        case .scanner:
-            BarcodeAPIView()
+        case .scanner(let recipe):
+            BarcodeAPIView(recipe: recipe)
             
         case .ingredientinfo(let product):
             if let product {
