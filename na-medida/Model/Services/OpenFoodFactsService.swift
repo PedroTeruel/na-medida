@@ -24,8 +24,8 @@ final class OpenFoodFactsService {
         components?.queryItems = [
             URLQueryItem(
                 name: "fields",
-                value: "code,product_name,brands,ingredients_text,nutriments,image_url,serving_size, allergens"
-            )
+                value: "code, product_name, brands, ingredients_text, nutriments, image_url, serving_size, allergens, countries_tags"),
+            URLQueryItem(name: "lc", value: "pt")
         ]
         
         guard let url = components?.url else {
@@ -109,15 +109,20 @@ final class OpenFoodFactsService {
     
     //função de pesquisa por texto
     func searchProducts(query: String) async throws -> [ProductOpenFoodFactsDTO] {
-        var components = URLComponents(string: "https://br.openfoodfacts.org/cgi/search.pl")
+        var components = URLComponents(string: "https://world.openfoodfacts.org/cgi/search.pl")
         
         components?.queryItems = [
             URLQueryItem(name: "search_terms", value: query),
             URLQueryItem(name: "search_simple", value: "1"),
             URLQueryItem(name: "action", value: "process"),
             URLQueryItem(name: "json", value: "1"),
+            URLQueryItem(name: "tagtype_0", value: "countries"),
+            URLQueryItem(name: "tag_contains_0", value: "contains"),
+            URLQueryItem(name: "tag_0", value: "brazil"),
+            URLQueryItem(name: "page_size", value: "20"),
+            URLQueryItem(name: "lc", value: "pt"),
             URLQueryItem(name: "sort_by", value: "unique_scans_n"),
-            URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url,serving_size, allergens")
+            URLQueryItem(name: "fields", value: "product_name, brands, ingredients_text, nutriments, image_url, serving_size, allergens, countries_tags")
         ]
         
         guard let url = components?.url else {
