@@ -15,12 +15,23 @@ final class OpenFoodFactsService{
             string:"\(baseURL)/\(barcode)"
         )
         
+        //codigo antigo
+//        components?.queryItems = [
+//            URLQueryItem(
+//                name: "fields",
+//                value: "code,product_name,brands,ingredients_text,nutriments,image_url"
+//            )
+//        ]
+        
         components?.queryItems = [
-            URLQueryItem(
-                name: "fields",
-                value: "code,product_name,brands,ingredients_text,nutriments,image_url"
-            )
-        ]
+                    // Adicionado 'countries_tags' na lista de campos para garantir o retorno do país caso precise
+                    URLQueryItem(
+                        name: "fields",
+                        value: "code,product_name,brands,ingredients_text,nutriments,image_url,serving_size,countries_tags"
+                    ),
+                    // Define a preferência do idioma de retorno das informações
+                    URLQueryItem(name: "lc", value: "pt")
+                ]
         
         guard let url = components?.url else {
             throw OpenFoodFactsError.invalidURL
@@ -76,6 +87,14 @@ final class OpenFoodFactsService{
             URLQueryItem(name: "search_simple", value: "1"),
             URLQueryItem(name: "action", value: "process"),
             URLQueryItem(name: "json", value: "1"),
+            // Filtra a busca no banco de dados para a tag do Brasil
+            URLQueryItem(name: "tagtype_0", value: "countries"),
+            URLQueryItem(name: "tag_contains_0", value: "contains"),
+            URLQueryItem(name: "tag_0", value: "brazil"),
+            // Limit results
+                URLQueryItem(name: "page_size", value: "20"),
+            // Define o idioma das descrições retornadas para português (lc é language code)
+            URLQueryItem(name: "lc", value: "pt"),
             URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url")
         ]
         
