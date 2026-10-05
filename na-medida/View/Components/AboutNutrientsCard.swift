@@ -15,7 +15,6 @@ struct AboutNutrientsCard: View {
     var body: some View {
         
         HStack(spacing: 12) {
-            
             VStack(alignment: .leading, spacing: 8) {
                 
                 Text(cardTitle)
@@ -29,7 +28,6 @@ struct AboutNutrientsCard: View {
                     .fixedSize(horizontal: false, vertical: true)
 
             }
-
             Spacer()
 
             Image(cardImg)
@@ -53,7 +51,6 @@ struct AboutNutrientsCard: View {
             RoundedRectangle(cornerRadius: 24)
                 .stroke(.gray.opacity(0.5), lineWidth: 1)
         }
-    
     }
 }
 

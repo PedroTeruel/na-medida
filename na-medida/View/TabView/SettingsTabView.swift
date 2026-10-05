@@ -70,8 +70,19 @@ struct SettingsView: View {
                     .padding(.bottom, 8)
                 
                 HStack {
-                    AboutAppCard(iconCard: "info.circle", aboutTitle: "Sobre nós")
-                    AboutAppCard(iconCard: "clipboard", aboutTitle: "Termos de uso")
+                    Button {
+                        router.navigate(to: .aboutUs)
+                    } label: {
+                        AboutAppCard(iconCard: "info.circle", aboutTitle: "Sobre nós")
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Button {
+                        router.navigate(to: .termsOfUse)
+                    } label: {
+                        AboutAppCard(iconCard: "clipboard", aboutTitle: "Termos de uso")
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             .padding()
