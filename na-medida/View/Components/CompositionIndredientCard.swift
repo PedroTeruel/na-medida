@@ -4,12 +4,23 @@
 //
 //  Created by Rebeca Emanuela Calmon de Andrade Alves on 02/10/26.
 //
+
 import SwiftUI
 
 struct CompositionIngredientCard: View {
-    // String contendo a lista de ingredientes (vinda do DTO)
     let ingredientsText: String
+    let allergensText: String?
     
+    private var formattedAllergens: String? {
+        guard let allergens = allergensText, !allergens.isEmpty else {
+            return nil }
+        return allergens
+            .replacingOccurrences(of: "en", with: "")
+            .replacingOccurrences(of: "pt", with: "")
+            .replacingOccurrences(of: "fr", with: "")
+            .capitalized
+    }
+        
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
                 
@@ -17,12 +28,29 @@ struct CompositionIngredientCard: View {
                     .font(.system(.title, weight: .bold))
                     .foregroundColor(Color("buttonColor"))
             
-            // MARK: - Texto dos Ingredientes
-            Text(ingredientsText.isEmpty ? "Informação de composição não disponível." : ingredientsText)
+            Text(ingredientsText.isEmpty ? "Informação de composição não disponível para este produto" : ingredientsText)
                 .font(.system(.body))
                 .foregroundColor(.primary)
                 .lineSpacing(4)
                 .multilineTextAlignment(.leading)
+            
+            if let allergens = formattedAllergens {
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                        Text("Alergênicos")
+                    }
+                    .fontWeight(.regular)
+                    
+                    Text(allergens)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                        .lineSpacing(4)
+                }
+            }
+
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -32,12 +60,15 @@ struct CompositionIngredientCard: View {
     }
 }
 
-// MARK: - Preview (Xcode Canvas)
 #Preview {
-    let mockIngredients = "Farinha de trigo enriquecida com ferro e ácido fólico, açúcar, óleo vegetal, cacau, gordura vegetal, minerais cálcio e zinco (carbonato de cálcio e sulfato de zinco), chocolate, leite em pó integral, amido, sal, farinha de aveia, farinha de centeio, fermentos químicos (bicarbonato de amônio, fosfato monocálcico e bicarbonato de sódio), emulsificante (lecitina de soja) e aromatizantes."
+    let mockIngredients = "Farinha de trigo enriquecida com ferro, açúcar, cacau, leite em pó integral, sal."
+    let mockAllergens = "en:gluten, pt:leite, en:soybeans"
     
     ScrollView {
-        CompositionIngredientCard(ingredientsText: mockIngredients)
-            .padding()
+        CompositionIngredientCard(
+            ingredientsText: mockIngredients,
+            allergensText: mockAllergens
+        )
+        .padding()
     }
 }

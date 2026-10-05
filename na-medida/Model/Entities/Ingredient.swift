@@ -4,6 +4,7 @@
 //
 //  Created by Rebeca Emanuela Calmon de Andrade Alves on 29/09/26.
 //
+
 import Foundation
 import SwiftData
 
@@ -18,7 +19,9 @@ final class Ingredient {
     var proteinsPer100g: Double
     var carbsPer100g: Double
     var fatsPer100g: Double
-
+    var ingredientsText: String?
+    var allergensText: String?
+    
     init(
         barcode: String?,
         id: UUID = UUID(),
@@ -29,7 +32,10 @@ final class Ingredient {
         proteinsPer100g: Double = 0.0,
         carbsPer100g: Double = 0.0,
         fatsPer100g: Double = 0.0,
-
+        ingredientsText: String? = nil,
+        allergensText: String? = nil
+        
+        
     ) {
         self.barcode = barcode
         self.id = id
@@ -40,6 +46,8 @@ final class Ingredient {
         self.proteinsPer100g = proteinsPer100g
         self.carbsPer100g = carbsPer100g
         self.fatsPer100g = fatsPer100g
+        self.ingredientsText = ingredientsText
+        self.allergensText = allergensText
     }
 }
 
@@ -66,6 +74,21 @@ extension Ingredient {
                 value100g: String(format: "%.1f", fatsPer100g),
                 valuePortion: "-", dailyValue: "", isBold: true)
         ]
+    }
+    
+    convenience init(from dto: ProductOpenFoodFactsDTO) {
+        self.init(
+            barcode: nil,
+            name: dto.productName ?? "Sem Nome",
+            brand: dto.brands,
+            photoURL: dto.fotoProdutoURL,
+            caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
+            proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,
+            carbsPer100g: dto.nutriments?.carbohydrates100g ?? 0.0,
+            fatsPer100g: dto.nutriments?.fat100g ?? 0.0,
+            ingredientsText: dto.composicaoProduto,
+            allergensText: dto.allergens
+        )
     }
 }
 

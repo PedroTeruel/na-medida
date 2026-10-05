@@ -15,11 +15,30 @@ struct RecipesInfoView: View {
     var recipe: Recipe
     
     var body: some View {
-        
         ScrollView {
+            Text(recipe.name)
+                .font(.title)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding(.top)
+            
+            TagStatic(title: recipe.tag.rawValue.capitalized)
+            
+            Text("Informações nutricionais")
+                .foregroundStyle(.secondary)
+                .padding(.top, 32)
+            
+            VStack(spacing: 60) {
+                Text("Carrossel aqui")
+                    .font(.largeTitle)
+            }
+            .frame(maxWidth: .infinity, minHeight: 300)
+            .background(Color(.systemGray3))
+            .cornerRadius(16)
+            
             VStack {
                 Button {
-                    router.navigate(to: .scanner)
+                    router.navigate(to: .scanner(recipe))
                 } label: {
                     AddIngredientButton()
                 }
@@ -51,8 +70,8 @@ struct RecipesInfoView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
-        .navigationTitle(recipe.name)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -71,18 +90,6 @@ struct RecipesInfoView: View {
                 }
             }
         }
-    }
-    
-    private func saveRecipeSwiftData() {
-        let repository = RecipeRepository(mc: mc)
-        
-        let newRecipe = repository.saveRecipe(
-            title: router.draftTitle,
-            tag: router.draftTag,
-            dtoIngredients: router.recipeSaveIngredient)
-        
-        router.clearDraft()
-        router.navigate(to: .recipesinfo(newRecipe))
     }
 }
 

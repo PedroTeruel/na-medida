@@ -12,6 +12,7 @@ struct CardIngredient: View {
     var brand: String?
     var quantity: String?
     var imageURL: String?
+    var isAdded: Bool
     var onAdd: (() -> Void)?
     var onRemove: (() -> Void)?
     
@@ -30,6 +31,7 @@ struct CardIngredient: View {
         brand: String? = nil,
         quantity: String? = nil,
         imageURL: String? = nil,
+        isAdded: Bool = false,
         onAdd: (() -> Void)? = nil,
         onRemove: (() -> Void)? = nil
     ) {
@@ -37,36 +39,15 @@ struct CardIngredient: View {
         self.brand = brand
         self.quantity = quantity
         self.imageURL = imageURL
+        self.isAdded = isAdded
         self.onAdd = onAdd
         self.onRemove = onRemove
     }
     
     var body: some View {
         HStack {
-            if let imageURLString = imageURL, let url = URL(string: imageURLString) {
-                AsyncImage(url: url) { phase in
-                    
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    default:
-                        Color.gray
-                    }
-                }
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            } else {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .padding(16)
-                    .frame(width: 64, height: 64)
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundStyle(.gray)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
+            
+            AsyncProductImage(urlString: imageURL, size: 64, cornerRadius: 16)
             
             VStack (alignment: .leading) {
                 Text(formattedProductName)
@@ -114,12 +95,14 @@ struct CardIngredient: View {
                 Button {
                     onAdd()
                 } label: {
-                    Image(systemName: "plus")
+                    Image(systemName: isAdded ? "checkmark" : "plus")
                         .fontWeight(.bold)
+                        .contentTransition(.symbolEffect(.replace))
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.button)
+                .tint(isAdded ? .green : .button)
                 .clipShape(Circle())
+                .disabled(isAdded)
             }
         }
         .padding(8)

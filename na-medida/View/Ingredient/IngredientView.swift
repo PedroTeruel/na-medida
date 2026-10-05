@@ -19,6 +19,7 @@ struct IngredientView: View {
     var servingsPerContainer: String?
     var servingSizeText: String?
     var ingredientsText: String
+    var allergensText: String?
     
     init(
         ingredientTitle: String = "Titulo do Ingrediente",
@@ -27,7 +28,8 @@ struct IngredientView: View {
         items: [NutritionalFactsItem] = [],
         servingsPerContainer: String? = nil,
         servingSizeText: String? = nil,
-        ingredientsText: String = ""
+        ingredientsText: String = "",
+        allergensText: String? = nil
     ) {
         self.ingredientTitle = ingredientTitle
         self.ingredientBrands = ingredientBrands
@@ -36,6 +38,7 @@ struct IngredientView: View {
         self.servingsPerContainer = servingsPerContainer
         self.servingSizeText = servingSizeText
         self.ingredientsText = ingredientsText
+        self.allergensText = allergensText
         
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.systemBackground], for: .selected)
@@ -50,7 +53,8 @@ struct IngredientView: View {
             items: productDTO.nutritionalItems,
             servingsPerContainer: nil,
             servingSizeText: productDTO.servingSize,
-            ingredientsText: productDTO.composicaoProduto ?? ""
+            ingredientsText: productDTO.composicaoProduto ?? "",
+            allergensText: productDTO.allergens
         )
     }
     
@@ -62,7 +66,8 @@ struct IngredientView: View {
                 items: ingredient.nutritionalItems,
                 servingsPerContainer: nil,
                 servingSizeText: "100g",
-                ingredientsText: "Informação de composição"
+                ingredientsText: ingredient.ingredientsText ?? "Informação de composição",
+                allergensText: ingredient.allergensText
             )
         }
     
@@ -124,7 +129,8 @@ struct IngredientView: View {
                             )
                         } else {
                             CompositionIngredientCard(
-                                ingredientsText: ingredientsText
+                                ingredientsText: ingredientsText,
+                                allergensText: allergensText
                             )
                         }
                     }

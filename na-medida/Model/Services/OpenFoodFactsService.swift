@@ -6,10 +6,15 @@
 //
 
 import Foundation
+import Observation
+
+@Observable
 
 //busca por código de barras
 final class OpenFoodFactsService {
     private let baseURL = "https://world.openfoodfacts.org/api/v3/product"
+    
+    private let decoder = JSONDecoder()
     
     func fetchProd(barcode: String) async throws -> ProductOpenFoodFactsDTO {
         var components = URLComponents(
@@ -19,7 +24,7 @@ final class OpenFoodFactsService {
         components?.queryItems = [
             URLQueryItem(
                 name: "fields",
-                value: "code,product_name,brands,ingredients_text,nutriments,image_url,serving_size"
+                value: "code,product_name,brands,ingredients_text,nutriments,image_url,serving_size, allergens"
             )
         ]
         
@@ -38,6 +43,8 @@ final class OpenFoodFactsService {
         var currentAttempt = 0
         
         while currentAttempt < maxRetries {
+            
+            try Task.checkCancellation()
             do
             {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -75,22 +82,25 @@ final class OpenFoodFactsService {
                 
             } catch {
                 currentAttempt += 1
-                
                 let isNetworkError = (error as? URLError) != nil
-                let isServerError: Bool
+                let isServerError: Bool = {
+                    
+                    if case OpenFoodFactsError.serverError(let statusCode) = error {
+                        return statusCode >= 500
+                    }
+                    return false
+                }()
                 
-                if case OpenFoodFactsError.serverError(let statusCode) = error, statusCode >= 500 {
-                    isServerError = true
-                } else {
-                    isServerError = false
-                }
                 
-                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) {
+                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) ||  Task.isCancelled {
                     throw error
                 }
                 
-                let delay = UInt64(currentAttempt) * 1_000_000_000
-                try? await Task.sleep(nanoseconds: delay)
+                let baseDelay = pow(2.0, Double(currentAttempt - 1))
+                let jitter = Double.random(in: 0...0.5)
+                let totalDelay = UInt64((baseDelay + jitter) * 1_000_000_000)
+                
+                try? await Task.sleep(nanoseconds: totalDelay)
             }
         }
         
@@ -99,14 +109,15 @@ final class OpenFoodFactsService {
     
     //função de pesquisa por texto
     func searchProducts(query: String) async throws -> [ProductOpenFoodFactsDTO] {
-        var components = URLComponents(string: "https://world.openfoodfacts.org/cgi/search.pl")
+        var components = URLComponents(string: "https://br.openfoodfacts.org/cgi/search.pl")
         
         components?.queryItems = [
             URLQueryItem(name: "search_terms", value: query),
             URLQueryItem(name: "search_simple", value: "1"),
             URLQueryItem(name: "action", value: "process"),
             URLQueryItem(name: "json", value: "1"),
-            URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url,serving_size")
+            URLQueryItem(name: "sort_by", value: "unique_scans_n"),
+            URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_url,serving_size, allergens")
         ]
         
         guard let url = components?.url else {
@@ -119,13 +130,13 @@ final class OpenFoodFactsService {
             forHTTPHeaderField: "User-Agent"
         )
         
-        
         let maxRetries = 3
         var currentAttempt = 0
         
         while currentAttempt < maxRetries {
-            do
-            {
+            try Task.checkCancellation()
+            
+            do {
                 let (data, response) = try await URLSession.shared.data(for: request)
                 guard let webResponse = response as? HTTPURLResponse else {
                     throw OpenFoodFactsError.invalidResponse
@@ -133,42 +144,34 @@ final class OpenFoodFactsService {
                 
                 switch webResponse.statusCode {
                 case 200:
-                    let responseDTO = try JSONDecoder().decode(
-                        SearchResponseDTO.self,
-                        from: data)
+                    let responseDTO = try decoder.decode(SearchResponseDTO.self, from: data)
                     return responseDTO.products ?? []
-                    
                 case 404:
                     return []
-                    
-                case 400...499:
-                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
-                    
                 default:
                     throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
                 }
             } catch {
                 currentAttempt += 1
-                
                 let isNetworkError = (error as? URLError) != nil
-                let isServerError: Bool
+                let isServerError: Bool = {
+                    if case OpenFoodFactsError.serverError(let statusCode) = error {
+                        return statusCode >= 500
+                    }
+                    return false
+                }()
                 
-                if case OpenFoodFactsError.serverError(let statusCode) = error, statusCode >= 500 {
-                    isServerError = true
-                } else {
-                    isServerError = false
-                }
-                
-                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) {
+                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) || Task.isCancelled {
                     throw error
                 }
                 
-                let delay = UInt64(currentAttempt) * 1_000_000_000
-                try? await Task.sleep(nanoseconds: delay)
+                let baseDelay = pow(2.0, Double(currentAttempt - 1))
+                let jitter = Double.random(in: 0...0.5)
+                let totalDelay = UInt64((baseDelay + jitter) * 1_000_000_000)
                 
+                try? await Task.sleep(nanoseconds: totalDelay)
             }
         }
-        
         return []
     }
 }
