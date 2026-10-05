@@ -22,7 +22,7 @@ struct RecipesInfoView: View {
                 .multilineTextAlignment(.center)
                 .padding(.top)
             
-            TagStatic(title: recipe.tag.rawValue.capitalized)
+            TagStatic(title: recipe.tag.rawValue)
             
             Text("Informações nutricionais")
                 .foregroundStyle(.secondary)

@@ -42,10 +42,12 @@ struct NewRecipeView: View {
             LazyVGrid(
                 columns: [GridItem(.adaptive(minimum:110))]
             ) {
-                TagButton(title: "Café da manhã", isSelected: draft.tag == .breakfast) { draft.tag = .breakfast }
-                TagButton(title: "Almoço", isSelected: draft.tag == .lunch) { draft.tag = .lunch }
-                TagButton(title: "Jantar", isSelected: draft.tag == .dinner) { draft.tag = .dinner }
-                TagButton(title: "Lanche", isSelected: draft.tag == .morningSnack) { draft.tag = .morningSnack }
+                ForEach(RecipeTag.allCases, id: \.self) { tag in
+                    TagButton(title: tag.rawValue, isSelected: draft.tag == tag) {
+                        draft.tag = tag
+                        
+                    }
+                }
             }
             
             Spacer()
