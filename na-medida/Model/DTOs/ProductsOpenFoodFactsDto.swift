@@ -28,24 +28,33 @@ struct ProductOpenFoodFactsDTO: Decodable, Hashable {
     let composicaoProduto: String?
     let allergens: String? //guarda ingredientes do produto
     let fotoProdutoURL: String?
+    let imageUrl: String?
+    let imageSmallUrl: String?
     let servingSize: String? // ADICIONADO: guarda a descrição da porção (ex: "20 g (2 colheres de sopa)")
-    let countries_tags: String
-
+    let countries_tags: [String]?
+    
     enum CodingKeys: String, CodingKey {
         case productName = "product_name"
         case brands
         case nutriments
         case composicaoProduto = "ingredients_text"
         case allergens
-        case fotoProdutoURL = "image_url"
+        case fotoProdutoURL = "image_front_url"
+        case imageUrl = "image_url"
+        case imageSmallUrl = "image_small_url"
         case servingSize = "serving_size"
         case countries_tags//chave da api por porção
+    }
+    
+    var photoProduct: String? {
+        let bestUrl = fotoProdutoURL ?? imageUrl ?? imageSmallUrl
+        return bestUrl?.replacingOccurrences(of: "http://", with: "https://")
     }
 }
 
 //tabela nutricional do produto
 struct NutrimentsDTO: Decodable, Hashable {
-//valores por 100g
+    //valores por 100g
     let energyKcal100g: Double?
     let proteins100g: Double?
     let carbohydrates100g: Double?
@@ -57,7 +66,7 @@ struct NutrimentsDTO: Decodable, Hashable {
     let fiber100g: Double?
     let sodium100g: Double?
     
-//valores por porcao de produto
+    //valores por porcao de produto
     let energyKcalServing: Double?
     let proteinsServing: Double?
     let carbohydratesServing: Double?
@@ -68,7 +77,7 @@ struct NutrimentsDTO: Decodable, Hashable {
     let transFatServing: Double?
     let fiberServing: Double?
     let sodiumServing: Double?
-
+    
     enum CodingKeys: String, CodingKey {
         // para 100g
         case energyKcal100g = "energy-kcal_100g"
