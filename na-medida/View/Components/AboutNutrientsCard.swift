@@ -18,6 +18,7 @@ struct AboutNutrientsCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 
                 Text(cardTitle)
+                    .foregroundStyle(.primary)
                     .fontWeight(.semibold)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -39,7 +40,7 @@ struct AboutNutrientsCard: View {
         .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(.white)
+                .fill(.background)
                 .shadow(
                     color: .black.opacity(0.18),
                     radius: 6,

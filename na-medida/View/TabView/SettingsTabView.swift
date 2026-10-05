@@ -38,7 +38,7 @@ struct SettingsView: View {
             VStack(alignment: .leading) {
                 Text("Sobre nutrientes")
                     .fontWeight(.bold)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .padding(.bottom, 8)
                 
                 Button {
@@ -66,7 +66,7 @@ struct SettingsView: View {
             VStack(alignment: .leading) {
                 Text("Informações sobre o Na Medida")
                     .fontWeight(.bold)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .padding(.bottom, 8)
                 
                 HStack {

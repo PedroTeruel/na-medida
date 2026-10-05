@@ -18,9 +18,11 @@ struct AboutAppCard: View {
             Image(systemName: iconCard)
                 .resizable()
                 .scaledToFit()
+                .foregroundStyle(.primary)
                 .frame(height: 26)
             
             Text(aboutTitle)
+                .foregroundStyle(.primary)
                 .font(.headline)
                 .lineLimit(1)
         }
@@ -29,7 +31,7 @@ struct AboutAppCard: View {
         .padding(.vertical, 24)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(.white)
+                .fill(.background)
                 .shadow(
                     color: .black.opacity(0.18),
                     radius: 6,
