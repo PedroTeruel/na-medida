@@ -15,6 +15,8 @@ enum AppRoute: Hashable {
     case main(username: String)
     case ingredientinfo(ProductOpenFoodFactsDTO)
     case savedIngredient(Ingredient)
+    case aboutNutrients
+    case aboutMeasures
 }
 
 @Observable
@@ -27,19 +29,21 @@ class Router {
     var searchPath = [AppRoute]()
     
     func navigate(to route: AppRoute) {
+        
         switch selectedTab {
+            
         case .tabrecipesview:
             if case .recipesinfo = route {
                 recipesPath = [route]
                 return
             }
-            
             guard recipesPath.last != route else { return }
             recipesPath.append(route)
             
         case .tabsettingsview:
             guard settingsPath.last != route else { return }
             settingsPath.append(route)
+            
         case .tabsearchview:
             guard searchPath.last != route else { return }
             searchPath.append(route)
@@ -47,22 +51,30 @@ class Router {
     }
     
     func pop() {
+        
         switch selectedTab {
+            
         case .tabrecipesview:
             if !recipesPath.isEmpty { recipesPath.removeLast() }
+            
         case .tabsettingsview:
             if !settingsPath.isEmpty { settingsPath.removeLast() }
+            
         case .tabsearchview:
             if !searchPath.isEmpty { searchPath.removeLast() }
         }
     }
     
     func popToRoot() {
+        
         switch selectedTab {
+            
         case .tabrecipesview:
             recipesPath.removeAll()
+            
         case .tabsettingsview:
             settingsPath.removeAll()
+            
         case .tabsearchview:
             searchPath.removeAll()
         }
@@ -72,6 +84,7 @@ class Router {
     func build(route: AppRoute) -> some View {
         
         switch route {
+            
         case .main(let username):
             RecipesTabView(username: username)
             
@@ -89,6 +102,12 @@ class Router {
             
         case .savedIngredient(let ingredient):
             IngredientView(ingredient: ingredient)
+            
+        case .aboutNutrients:
+            AboutNutrientsView()
+            
+        case .aboutMeasures:
+            AboutMeasuresView()
         }
     }
 }

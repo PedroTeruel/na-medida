@@ -24,7 +24,7 @@ struct ContentView: View {
                 }
                 
                 Tab("Ajustes", systemImage: "gearshape.fill", value: AppTab.tabsettingsview) {
-                    SettingsView()
+                    SettingsView(user: currentUser)
                 }
                 
                 Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .prominent) {
