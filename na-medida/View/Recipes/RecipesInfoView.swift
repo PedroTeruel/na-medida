@@ -15,16 +15,14 @@ struct RecipesInfoView: View {
     var recipe: Recipe
     
     var body: some View {
-        
         ScrollView {
-            
             Text(recipe.name)
                 .font(.title)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .padding(.top)
             
-            TagStatic(title: "Jantar")
+            TagStatic(title: recipe.tag.rawValue.capitalized)
             
             Text("Informações nutricionais")
                 .foregroundStyle(.secondary)
@@ -50,7 +48,7 @@ struct RecipesInfoView: View {
                     if recipe.ingredients.isEmpty {
                         Text("Nenhum ingrediente adicionado")
                             .foregroundStyle(.secondary)
-                      } else {
+                    } else {
                         ForEach(recipe.ingredients) { recipeIng in
                             Button {
                                 if let ingredient = recipeIng.ingredient{
@@ -92,18 +90,6 @@ struct RecipesInfoView: View {
                 }
             }
         }
-    }
-    
-    private func saveRecipeSwiftData() {
-        let repository = RecipeRepository(mc: mc)
-        
-        let newRecipe = repository.saveRecipe(
-            title: router.draftTitle,
-            tag: router.draftTag,
-            dtoIngredients: router.recipeSaveIngredient)
-        
-        router.clearDraft()
-        router.navigate(to: .recipesinfo(newRecipe))
     }
 }
 

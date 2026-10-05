@@ -8,7 +8,6 @@
 import SwiftData
 import Foundation
 
-@Observable
 final class RecipeRepository {
     private let mc: ModelContext
     
@@ -16,23 +15,26 @@ final class RecipeRepository {
         self.mc = mc
     }
     
-    func saveRecipe(title: String, tag: RecipeTag, dtoIngredients: [ProductOpenFoodFactsDTO]) -> Recipe {
-        let safeTitle = title.isEmpty ? "Nova Receita" : title
-        let newRecipe = Recipe(name: safeTitle, tag: tag)
+    private func getOrCreateIngredient(from dto: ProductOpenFoodFactsDTO) -> Ingredient {
+        let nameToSearch = dto.productName ?? "Sem Nome"
         
-        for dto in dtoIngredients {
-            let newIngredient = Ingredient(
-                barcode: nil,
-                name: dto.productName ?? "Sem Nome",
-                brand: dto.brands,
-                photoURL: dto.fotoProdutoURL,
-                caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
-                proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,
-                carbsPer100g: dto.nutriments?.carbohydrates100g ?? 0.0,
-                fatsPer100g: dto.nutriments?.fat100g ?? 0.0,
-                ingredientsText: dto.composicaoProduto,
-                allergensText: dto.allergens
-            )
+        let descriptor = FetchDescriptor<Ingredient>(
+            predicate: #Predicate { $0.name == nameToSearch }
+        )
+        
+        if let existingIngredient = try? mc.fetch(descriptor).first {
+            return existingIngredient
+        }
+        
+        return Ingredient(from: dto)
+    }
+    
+    func saveRecipe(draft: RecipeDraft) -> Recipe {
+        let safeTitle = draft.title.isEmpty ? "Nova Receita" : draft.title
+        let newRecipe = Recipe(name: safeTitle, tag: draft.tag)
+        
+        for dto in draft.ingredients {
+            let newIngredient = getOrCreateIngredient(from: dto)
             
             let recipeIngredient = RecipeIngredient(
                 userQuantity: 100.0,
@@ -50,21 +52,9 @@ final class RecipeRepository {
         return newRecipe
     }
     
-    //Adicionar produtos em uma receita ja existente
-    func addIngredients(to recipe: Recipe, dtoIngredients: [ProductOpenFoodFactsDTO]) {
-        for dto in dtoIngredients {
-            let newIngredient = Ingredient(
-                barcode: nil,
-                name: dto.productName ?? "Sem Nome",
-                brand: dto.brands,
-                photoURL: dto.fotoProdutoURL,
-                caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
-                proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,
-                carbsPer100g: dto.nutriments?.carbohydrates100g ?? 0.0,
-                fatsPer100g: dto.nutriments?.fat100g ?? 0.0,
-                ingredientsText: dto.composicaoProduto,
-                allergensText: dto.allergens
-            )
+    func addIngredients(to recipe: Recipe, dtos: [ProductOpenFoodFactsDTO]) {
+        for dto in dtos {
+            let newIngredient = getOrCreateIngredient(from: dto)
             
             let recipeIngredient = RecipeIngredient(
                 userQuantity: 100.0,

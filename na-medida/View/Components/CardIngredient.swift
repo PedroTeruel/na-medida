@@ -46,30 +46,8 @@ struct CardIngredient: View {
     
     var body: some View {
         HStack {
-            if let imageURLString = imageURL, let url = URL(string: imageURLString) {
-                AsyncImage(url: url) { phase in
-                    
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    default:
-                        Color.gray
-                    }
-                }
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            } else {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .padding(16)
-                    .frame(width: 64, height: 64)
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundStyle(.gray)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
+            
+            AsyncProductImage(urlString: imageURL, size: 64, cornerRadius: 16)
             
             VStack (alignment: .leading) {
                 Text(formattedProductName)

@@ -8,28 +8,26 @@
 import SwiftUI
 
 struct NewRecipeView: View {
-    
     @Environment(Router.self) private var router
-    @Environment(\.dismiss) private var dismiss
-    
-    @State private var title = ""
-    @State private var tag: RecipeTag?
-    
-    let onContinue: (String, RecipeTag) -> Void
+    @Environment(RecipeDraft.self) private var draft
     
     var body: some View {
-        VStack{
-            VStack(spacing: 58){
-                VStack(spacing: 8){
+        @Bindable var draftBindable = draft
+        
+        VStack {
+            VStack(spacing: 58) {
+                VStack(spacing: 8) {
                     Text("Titulo")
                         .font(.title3)
                         .fontWeight(.semibold)
-                    TextField("Minha receita", text: $title)
+                    
+                    TextField("Minha receita", text: $draftBindable.title)
                         .multilineTextAlignment(.center)
                         .font(.title)
                         .frame(width: 180)
                 }
-                VStack(spacing: 8){
+                
+                VStack(spacing: 8) {
                     Text("Vamos Organizar?")
                         .font(.title3)
                         .fontWeight(.semibold)
@@ -42,55 +40,28 @@ struct NewRecipeView: View {
             }
             
             LazyVGrid(
-                columns: [
-                    GridItem(.adaptive(minimum:110))
-                ]
+                columns: [GridItem(.adaptive(minimum:110))]
             ) {
-                TagButton(
-                    title: "Café da manhã",
-                    isSelected: tag == .breakfast
-                ) {
-                    tag = .breakfast
-                }
-                
-                TagButton(
-                    title: "Almoço",
-                    isSelected: tag == .lunch
-                ) {
-                    tag = .lunch
-                }
-                
-                TagButton(
-                    title: "Jantar",
-                    isSelected: tag == .dinner
-                ) {
-                    tag = .dinner
-                }
-                
-                TagButton(
-                    title: "Lanche",
-                    isSelected: tag == .morningSnack
-                ) {
-                    tag = .morningSnack
-                }
+                TagButton(title: "Café da manhã", isSelected: draft.tag == .breakfast) { draft.tag = .breakfast }
+                TagButton(title: "Almoço", isSelected: draft.tag == .lunch) { draft.tag = .lunch }
+                TagButton(title: "Jantar", isSelected: draft.tag == .dinner) { draft.tag = .dinner }
+                TagButton(title: "Lanche", isSelected: draft.tag == .morningSnack) { draft.tag = .morningSnack }
             }
+            
             Spacer()
             
             Button {
-                guard let tag else {
-                    return
-                }
-                onContinue(title, tag)
                 router.navigate(to: .scanner(nil))
             } label: {
-                Text("Proximo passo")
-                    .foregroundStyle(.primary)
+                Text("Próximo passo")
+                    .foregroundStyle(.white)
                     .fontWeight(.bold)
-                
+                    .padding(.horizontal, 30)
+                    .padding(.vertical, 10)
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.borderedProminent)
             .tint(.button)
-            .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || tag == nil)
+            .disabled(draft.title.trimmingCharacters(in: .whitespaces).isEmpty)
         }
         .padding()
         .toolbar(.hidden, for: .tabBar)
@@ -99,13 +70,10 @@ struct NewRecipeView: View {
     }
 }
 
-
 #Preview {
-    NavigationStack{
-        NewRecipeView { title, tag in
-            print("Título: \(title)")
-            print("Tag: \(tag)")
-        }
-        .environment(Router())
+    NavigationStack {
+        NewRecipeView()
+            .environment(Router())
+            .environment(RecipeDraft())
     }
 }

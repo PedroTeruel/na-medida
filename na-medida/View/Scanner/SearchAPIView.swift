@@ -12,7 +12,7 @@ struct SearchAPIView: View {
     @Binding var searchText: String
     
     @Environment(Router.self) private var router
-    @Environment(\.dismiss) private var dismiss
+    @Environment(RecipeDraft.self) private var draft
     
     @FocusState private var isSearchFocused: Bool
     @State private var hasSearched: Bool = false
@@ -71,8 +71,6 @@ struct SearchAPIView: View {
                                     .listRowSeparator(.hidden)
                             }
                             
-                            
-                            
                         } else {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("Resultado da pesquisa '\(searchText)'")
@@ -85,7 +83,7 @@ struct SearchAPIView: View {
                             .listRowSeparator(.hidden)
                             
                             ForEach(searchResults, id: \.self) { product in
-                                let isAlreadyAdd = router.recipeSaveIngredient.contains(product)
+                                let isAlreadyAdd = draft.ingredients.contains(product)
                                 
                                 CardIngredient(
                                     productName: product.productName ?? "Produto sem nome",
@@ -96,7 +94,7 @@ struct SearchAPIView: View {
                                     onAdd: {
                                         if !isAlreadyAdd {
                                             withAnimation(.spring()) {
-                                                router.recipeSaveIngredient.append(product)
+                                                draft.addIngredient(product)
                                             }
                                             showFeedbackToast(productName: product.productName)
                                         }
@@ -108,7 +106,7 @@ struct SearchAPIView: View {
                         }
                         
                     } else {
-                        if router.recipeSaveIngredient.isEmpty {
+                        if draft.ingredients.isEmpty {
                             HStack {
                                 Spacer()
                                 SearchIconComponent()
@@ -122,25 +120,21 @@ struct SearchAPIView: View {
                                 .multilineTextAlignment(.center)
                                 .listRowSeparator(.hidden)
                             
-                            ForEach(router.recipeSaveIngredient, id: \.self) { product in
+                            ForEach(draft.ingredients, id: \.self) { product in
                                 CardIngredient(
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
                                     quantity: product.servingSize,
                                     imageURL: product.fotoProdutoURL,
                                     onRemove: {
-                                        if let index = router.recipeSaveIngredient.firstIndex(of: product) {
-                                            router.recipeSaveIngredient.remove(at: index)
-                                        }
+                                        draft.removeIngredient(product)
                                     }
                                 )
                                 .listRowSeparator(.hidden)
                                 .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button(role: .destructive) {
-                                        if let index = router.recipeSaveIngredient.firstIndex(of: product) {
-                                            router.recipeSaveIngredient.remove(at: index)
-                                        }
+                                        draft.removeIngredient(product)
                                     } label: {
                                         Label("Remover", systemImage: "trash")
                                     }
@@ -177,23 +171,4 @@ struct SearchAPIView: View {
             hasSearched = false
         }
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var detent: PresentationDetent = .medium
-        @State private var text = ""
-        
-        var body: some View {
-            SearchAPIView(
-                currentDetent: $detent,
-                searchText: $text,
-                searchResults: [],
-                isLoading: false,
-                onSearchSubmit: { _ in }
-            )
-        }
-    }
-    return PreviewContainer()
-        .environment(Router())
 }

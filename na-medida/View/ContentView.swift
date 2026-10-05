@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @State private var router = Router()
+    @State private var draft = RecipeDraft()
     @Environment(\.modelContext) private var mc
     @Query private var users: [User]
     
@@ -30,8 +31,9 @@ struct ContentView: View {
                     SearchingTabView()
                 }
             }
-            
             .environment(router)
+            .environment(draft)
+            
         } else {
             OnBoardView { newUsername in
                 let repository = UserRepository(mc: mc)
