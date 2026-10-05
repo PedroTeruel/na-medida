@@ -40,9 +40,9 @@ extension RecipeTag {
         case .breakfast: return Color.tagCardOrange
         case .lunch: return Color.tagCardGreen
         case .dinner: return Color.tagCardPurple
-        case .morningSnack: return Color.tagColorRed
-        case .afternoonSnack: return Color.tagColorPink
-        case .nightSnack: return Color.tagColorBlue
+        case .morningSnack: return Color.tagCardRed
+        case .afternoonSnack: return Color.tagCardPink
+        case .nightSnack: return Color.tagCardBlue
         case .dessert: return Color.tagCardYellow
         }
     }

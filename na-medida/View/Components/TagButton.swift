@@ -23,7 +23,7 @@ struct TagButton: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(
-                    (isSelected ? tag.color.opacity(0.9) : tag.color.opacity(0.4))
+                    (isSelected ? tag.color.opacity(1) : tag.color.opacity(0.3))
                         .clipShape(Capsule())
                 )
                 .foregroundStyle(tag.foregroundColor)
