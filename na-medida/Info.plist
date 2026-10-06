@@ -4,8 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Atma-Regular.ttf</string>
 		<string>Atma-Bold.ttf</string>
+		<string>Atma-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

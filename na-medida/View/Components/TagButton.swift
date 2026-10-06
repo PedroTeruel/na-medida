@@ -36,21 +36,38 @@ struct TagButton: View {
 }
 
 struct TagStatic: View {
-    var title: String
+    
+    var tag: RecipeTag
+
     var body: some View {
         
         HStack {
-            Text(title)
+            Text(tag.rawValue)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
         }
-        .background(Color(.systemGray4))
+        .background(tag.color)
+        .foregroundStyle(tag.foregroundColor)
         .cornerRadius(24)
     }
 }
 
+extension RecipeTag {
+    var carouselImageBaseName: String {
+        switch self {
+        case .breakfast: return "Wave1"
+        case .lunch: return "Wave3"
+        case .dinner: return "Wave2"
+        case .morningSnack: return "FundoCarouselRed"
+        case .afternoonSnack: return "FundoCarouselPink"
+        case .nightSnack: return "FundoCarouselBlue"
+        case .dessert: return "Wave4"
+        }
+    }
+}
+
 #Preview {
-    TagStatic(title: "Lanche da manhã")
+    TagStatic(tag: .morningSnack)
 }

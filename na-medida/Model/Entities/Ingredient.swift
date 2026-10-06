@@ -56,22 +56,22 @@ extension Ingredient {
         return [
             NutritionalFactsItem(
                 name: "Valor energético (kcal)",
-                value100g: String(format: "%.1f", caloriesPer100g),
+                value100g: AnvisaNutritionFormatter.formatEnergy(caloriesPer100g),
                 valuePortion: "-", dailyValue: "", isBold: true),
             
             NutritionalFactsItem(
                 name: "Carboidratos (g)",
-                value100g: String(format: "%.1f", carbsPer100g),
+                value100g: AnvisaNutritionFormatter.formatNutrient(carbsPer100g),
                 valuePortion: "-", dailyValue: "", isBold: true),
             
             NutritionalFactsItem(
                 name: "Proteínas (g)",
-                value100g: String(format: "%.1f", proteinsPer100g),
+                value100g: AnvisaNutritionFormatter.formatNutrient(proteinsPer100g),
                 valuePortion: "-", dailyValue: "", isBold: true),
             
             NutritionalFactsItem(
                 name: "Gorduras (g)",
-                value100g: String(format: "%.1f", fatsPer100g),
+                value100g: AnvisaNutritionFormatter.formatNutrient(fatsPer100g),
                 valuePortion: "-", dailyValue: "", isBold: true)
         ]
     }

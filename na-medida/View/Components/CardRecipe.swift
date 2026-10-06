@@ -23,8 +23,8 @@ struct CardRecipe: View {
                 Image(systemName: "fork.knife")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 70, height: 70)
-                    .foregroundColor(.gray.opacity(0.5))
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.primary.opacity(0.5))
             } else {
                 HStack(spacing: -18) {
                     
@@ -43,11 +43,11 @@ struct CardRecipe: View {
                             RecipeIngredientImageView(urlString: ingredientPhotoURLs[3])
                             
                             Circle()
-                                .fill(Color.black.opacity(0.65))
-                                .frame(width: 70, height: 70)
+                                .fill(Color.secondary.opacity(0.65))
+                                .frame(width: 65, height: 65)
                             
                             Text("+\(extraCount)")
-                                .font(.system(size: 18, weight: .bold))
+                                .fontWeight(.bold)
                                 .foregroundColor(.white)
                         }
                         .overlay(Circle().stroke(Color.white, lineWidth: 3))
@@ -58,7 +58,7 @@ struct CardRecipe: View {
             }
             
             Text(recipe.name)
-                .font(.system(size: 19, weight: .semibold))
+                .fontWeight(.semibold)
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
             
@@ -83,14 +83,14 @@ struct CardRecipe: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 21)
-        .frame(maxWidth: 360)
-        .background(Color.white)
-        .cornerRadius(18)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 8)
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity)
+        .background(.background)
+        .cornerRadius(16)
+        .shadow(color: .primary.opacity(0.05), radius: 8, x: 0, y: 8)
         .overlay(
             RoundedRectangle(cornerRadius: 18)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                .stroke(Color.primary, lineWidth: 0.4)
         )
     }
 }
@@ -122,7 +122,6 @@ struct CardRecipe: View {
 
     return ScrollView {
         CardRecipe(recipe: sampleRecipe)
-            .padding()
     }
     .modelContainer(container)
 }
