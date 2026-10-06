@@ -17,19 +17,20 @@ struct CarouselItem: Identifiable, Hashable {
 struct CarouselView: View {
     @State private var scrollPosition: UUID?
     @State private var activeIndex: Int = 3
-    
-    let baseData = [
-        (1, "CarouselSodio", "9999"),
-        (2, "CarouselProteinas", "2000"),
-        (3, "CarouselCalorias", "150"),
-        (4, "CarouselCarbo", "220"),
-        (5, "CarouselGorduras", "65")
-    ]
-    
     @State private var items: [CarouselItem] = []
     
+    let recipe: Recipe
+    var baseData: [(Int, String, String)] {
+        [
+            (1, "CarouselSodio", "0"),
+            (2, "CarouselProteinas", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeProteins)),
+             (3, "CarouselCalorias", AnvisaNutritionFormatter.formatEnergy(recipe.totalRecipeCalories)),
+             (4, "CarouselCarbo", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeCarbs)),
+            (5, "CarouselGorduras", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeFats))
+        ]
+    }
+        
     var body: some View {
-            
         VStack(spacing: 20) {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 8) {
@@ -68,6 +69,9 @@ struct CarouselView: View {
             .onAppear {
                 setupInfiniteCarousel()
             }
+            .onChange(of: recipe.ingredients.count) { _, _ in
+                setupInfiniteCarousel()
+            }
             
             HStack(spacing: 8) {
                 ForEach(baseData, id: \.0) { data in
@@ -81,20 +85,10 @@ struct CarouselView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
-            ZStack {
-                Image("FundoCarouselRed")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .opacity(activeIndex % 2 != 0 ? 1.0 : 0.0)
-                
-                Image("FundoCarouselRed190")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .opacity(activeIndex % 2 == 0 ? 1.0 : 0.0)
-            }
-            .animation(.easeInOut(duration: 0.6), value: activeIndex)
+            Image(recipe.tag.carouselImageBaseName)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
         }
     }
     
@@ -119,5 +113,5 @@ struct CarouselView: View {
 }
 
 #Preview {
-    CarouselView()
+    CarouselView(recipe: Recipe(name: "Teste", tag: .lunch))
 }

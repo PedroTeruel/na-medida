@@ -15,20 +15,20 @@ struct MacroTagView: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.system(size: 14, weight: .semibold))
+                .fontWeight(.bold)
                 .foregroundColor(color)
 
             Text(text)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundColor(Color(red: 0.1, green: 0.12, blue: 0.2))
+                .fontWeight(.regular)
+                .foregroundStyle(.primary)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color.white)
+        .background(.background)
         .clipShape(Capsule())
         .overlay(
             Capsule()
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                .stroke(Color.primary.opacity(0.08), lineWidth: 1)
         )
     }
 }

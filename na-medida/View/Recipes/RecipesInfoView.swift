@@ -22,14 +22,14 @@ struct RecipesInfoView: View {
                 .multilineTextAlignment(.center)
                 .padding(.top)
             
-            TagStatic(title: recipe.tag.rawValue)
+            TagStatic(tag: recipe.tag)
             
             Text("Informações nutricionais")
                 .foregroundStyle(.secondary)
                 .padding(.top, 32)
             
             VStack(spacing: 60) {
-                CarouselView()
+                CarouselView(recipe: recipe)
             }
             
             VStack {

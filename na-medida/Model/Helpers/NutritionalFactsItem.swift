@@ -21,33 +21,9 @@ struct NutritionalFactsItem: Identifiable {
 // extension para mapeamento dados da api (dto)
 extension ProductOpenFoodFactsDTO {
     
-    // Converte os dados recebidos da DTO para ir para a View
     var nutritionalItems: [NutritionalFactsItem] {
-        // Conexão com o DTO via 'self': tenta acessar a propriedade opcional 'nutriments'.
-        // O 'guard' age como uma trava de segurança: se 'self.nutriments' for 'nil',
-        // interrompe a execução imediatamente e retorna um array vazio [].
         guard let nutriments = self.nutriments else { return [] }
         
-        // Helper para formatar valores numéricos com fallback para "-"
-        // - Desembrulha o 'Double?' com guard. Se for 'nil', retorna "-".
-        // - Usa 'truncatingRemainder' para verificar se é um número inteiro (ex: 10.0 vira "10").
-        // - Caso tenha decimais, usa o operador ternário para formatar fixando 1 casa decimal (ex: "10.5").
-        func format(_ value: Double?) -> String {
-            guard let val = value else { return "-" }
-            return val.truncatingRemainder(dividingBy: 1) == 0 ? "\(Int(val))" : String(format: "%.1f", val)
-        }
-        
-        // Helper para calcular o %VD (Valores Diários de Referência)
-        // - 'dailyReference': É inserido manualmente conforme os valores de referência da Anvisa (IN nº 75/2020),
-        //   pois a API do Open Food Facts não fornece os percentuais da legislação brasileira.
-        // - 'guard': Valida se o valor do nutriente existe e se a referência é maior que 0 (evita divisão por zero).
-        func calculateVD(value: Double?, dailyReference: Double) -> String {
-            guard let val = value, dailyReference > 0 else { return "" }
-            let vd = Int((val / dailyReference) * 100)
-            return "\(vd)"
-        }
-
-        // Variáveis locais com os valores por porção para facilitar a montagem da lista
         let energyServing = nutriments.energyKcalServing
         let carbServing = nutriments.carbohydratesServing
         let protServing = nutriments.proteinsServing
@@ -57,89 +33,125 @@ extension ProductOpenFoodFactsDTO {
         let fiberServing = nutriments.fiberServing
         let sodiumServing = nutriments.sodiumServing
         
-        // Retorna o array de itens mapeados para a View.
-        // Os valores de 'dailyReference' seguem a norma Anvisa (IN 75/2020) para dieta de 2000 kcal:
         return [
-            // Valor Energético: Referência Anvisa = 2000 kcal
+            // Valor Energético: Exceção sem decimais (Ref: 2000 kcal)
             NutritionalFactsItem(
                 name: "Valor energético (kcal)",
-                value100g: format(nutriments.energyKcal100g),
-                valuePortion: format(energyServing),
-                dailyValue: calculateVD(value: energyServing, dailyReference: 2000),
+                value100g: AnvisaNutritionFormatter.formatEnergy(nutriments.energyKcal100g),
+                valuePortion: AnvisaNutritionFormatter.formatEnergy(energyServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: energyServing, dailyReference: 2000),
                 isBold: true
             ),
-            // Carboidratos: Referência Anvisa = 300g
+            // Carboidratos (Ref: 300g)
             NutritionalFactsItem(
                 name: "Carboidratos (g)",
-                value100g: format(nutriments.carbohydrates100g),
-                valuePortion: format(carbServing),
-                dailyValue: calculateVD(value: carbServing, dailyReference: 300),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.carbohydrates100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(carbServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: carbServing, dailyReference: 300),
                 isBold: true
             ),
-            // Açúcares Totais: A Anvisa não estabelece %VD oficial, por isso dailyValue é ""
+            // Açúcares Totais (sem %VD oficial)
             NutritionalFactsItem(
                 name: "Açúcares totais (g)",
-                value100g: format(nutriments.sugars100g),
-                valuePortion: format(nutriments.sugarsServing),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.sugars100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(nutriments.sugarsServing),
                 dailyValue: "",
                 isIndent: true
             ),
-            // Açúcares Adicionados: Referência Anvisa = 50g
+            // Açúcares Adicionados (Ref: 50g)
             NutritionalFactsItem(
                 name: "Açúcares adicionados (g)",
-                value100g: format(nutriments.addedSugars100g),
-                valuePortion: format(nutriments.addedSugarsServing),
-                dailyValue: calculateVD(value: nutriments.addedSugarsServing, dailyReference: 50),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.addedSugars100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(nutriments.addedSugarsServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: nutriments.addedSugarsServing, dailyReference: 50),
                 isIndent: true
             ),
-            // Proteínas: Referência Anvisa = 50g
+            // Proteínas (Ref: 50g)
             NutritionalFactsItem(
                 name: "Proteínas (g)",
-                value100g: format(nutriments.proteins100g),
-                valuePortion: format(protServing),
-                dailyValue: calculateVD(value: protServing, dailyReference: 50),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.proteins100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(protServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: protServing, dailyReference: 50),
                 isBold: true
             ),
-            // Gorduras Totais: Referência Anvisa = 55g
+            // Gorduras Totais (Ref: 55g)
             NutritionalFactsItem(
                 name: "Gorduras totais (g)",
-                value100g: format(nutriments.fat100g),
-                valuePortion: format(fatServing),
-                dailyValue: calculateVD(value: fatServing, dailyReference: 55),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.fat100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(fatServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: fatServing, dailyReference: 55),
                 isBold: true
             ),
-            // Gorduras Saturadas: Referência Anvisa = 20g
+            // Gorduras Saturadas (Ref: 20g)
             NutritionalFactsItem(
                 name: "Gorduras saturadas (g)",
-                value100g: format(nutriments.saturatedFat100g),
-                valuePortion: format(satFatServing),
-                dailyValue: calculateVD(value: satFatServing, dailyReference: 20),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.saturatedFat100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(satFatServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: satFatServing, dailyReference: 20),
                 isIndent: true
             ),
-            // Gorduras Trans: Referência Anvisa = 2g
+            // Gorduras Trans (Ref: 2g)
             NutritionalFactsItem(
                 name: "Gorduras trans (g)",
-                value100g: format(nutriments.transFat100g),
-                valuePortion: format(transFatServing),
-                dailyValue: calculateVD(value: transFatServing, dailyReference: 2),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.transFat100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(transFatServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: transFatServing, dailyReference: 2),
                 isIndent: true
             ),
-            // Fibras Alimentares: Referência Anvisa = 25g
+            // Fibras Alimentares (Ref: 25g)
             NutritionalFactsItem(
                 name: "Fibras alimentares (g)",
-                value100g: format(nutriments.fiber100g),
-                valuePortion: format(fiberServing),
-                dailyValue: calculateVD(value: fiberServing, dailyReference: 25),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.fiber100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(fiberServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: fiberServing, dailyReference: 25),
                 isBold: true
             ),
-            // Sódio: Referência Anvisa = 2000mg
+            // Sódio (Ref: 2000mg)
             NutritionalFactsItem(
                 name: "Sódio (mg)",
-                value100g: format(nutriments.sodium100g),
-                valuePortion: format(sodiumServing),
-                dailyValue: calculateVD(value: sodiumServing, dailyReference: 2000),
+                value100g: AnvisaNutritionFormatter.formatNutrient(nutriments.sodium100g),
+                valuePortion: AnvisaNutritionFormatter.formatNutrient(sodiumServing),
+                dailyValue: AnvisaNutritionFormatter.formatDailyValue(value: sodiumServing, dailyReference: 2000),
                 isBold: true
             )
         ]
+    }
+}
+
+enum AnvisaNutritionFormatter {
+    
+    static func formatNutrient(_ value: Double?) -> String {
+        guard let val = value else { return "-" }
+        
+        //Inteiros obrigatórios (sem decimais)
+        if val >= 10 {
+            return "\(Int(val.rounded()))"
+        }
+        
+        //1 casa decimal (arredondamento padrão)
+        if val >= 1.0 {
+            let formatted = String(format: "%.1f", val)
+            return formatted.replacingOccurrences(of: ".", with: ",")
+        }
+        
+        //Permite mais casas decimais (comum para micronutrientes)
+        if val > 0 {
+            let decimals = val < 0.1 ? 2 : 1
+            let formatted = String(format: "%.\(decimals)f", val)
+            return formatted.replacingOccurrences(of: ".", with: ",")
+        }
+        
+        return "0"
+    }
+    
+    static func formatEnergy(_ value: Double?) -> String {
+        guard let val = value else { return "-" }
+        return "\(Int(val.rounded()))"
+    }
+    
+    static func formatDailyValue(value: Double?, dailyReference: Double) -> String {
+        guard let val = value, dailyReference > 0 else { return "" }
+        let vd = Int(((val / dailyReference) * 100.0).rounded())
+        return "\(vd)"
     }
 }
