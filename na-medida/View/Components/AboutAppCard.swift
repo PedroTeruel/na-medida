@@ -41,7 +41,7 @@ struct AboutAppCard: View {
         }
         .overlay {
             RoundedRectangle(cornerRadius: 24)
-                .stroke(.gray.opacity(0.5), lineWidth: 1)
+                .stroke(.secondary.opacity(0.2), lineWidth: 1.5)
         }
     }
 }
