@@ -24,12 +24,27 @@ final class RecipeIngredient {
     }
 }
 
+//enum QntUnity: String, Codable {
+//    case un // Unidade
+//    case g  // Grama
+//    case kg // Quilograma
+//    case ml // Mililitro
+//    case l  // Litro
+//}
+
 enum QntUnity: String, Codable {
-    case un // Unidade
-    case g  // Grama
-    case kg // Quilograma
-    case ml // Mililitro
-    case l  // Litro
+    case un, g, kg, ml, l
+    
+    var formatted: String {
+        switch self {
+        case .un: return "Un"
+        case .g: return "g"
+        case .kg: return "kg"
+        case .ml: return "mL"
+        case .l:  return "L"
+        default:  return self.rawValue
+        }
+    }
 }
 
 //extension com calculo dos macronutriente da receita
