@@ -15,15 +15,17 @@ struct MacroTagView: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: icon)
+                .font(.callout)
                 .fontWeight(.bold)
                 .foregroundColor(color)
 
             Text(text)
+                .font(.callout)
                 .fontWeight(.regular)
                 .foregroundStyle(.primary)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
         .background(.background)
         .clipShape(Capsule())
         .overlay(

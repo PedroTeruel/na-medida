@@ -58,6 +58,7 @@ struct CardRecipe: View {
             }
             
             Text(recipe.name)
+                .font(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
@@ -90,7 +91,7 @@ struct CardRecipe: View {
         .shadow(color: .primary.opacity(0.05), radius: 8, x: 0, y: 8)
         .overlay(
             RoundedRectangle(cornerRadius: 18)
-                .stroke(Color.primary, lineWidth: 0.4)
+                .stroke(Color.secondary.opacity(0.2), lineWidth: 1.5)
         )
     }
 }

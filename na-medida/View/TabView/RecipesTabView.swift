@@ -8,19 +8,39 @@
 import SwiftData
 import SwiftUI
 
+enum SortOrder {
+    case newest
+    case oldest
+}
+
 struct RecipesTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
     @Query private var recipes: [Recipe]
     @State private var selectedTag: RecipeTag? = nil
+    @State private var sortOrder: SortOrder = .newest
     
-    private var filteredRecipes: [Recipe]{
-        guard let selectedTag
-        else {
-            return recipes
+    private var filteredRecipes: [Recipe] {
+        let filtered: [Recipe]
+
+        if let selectedTag {
+            filtered = recipes.filter { recipe in
+                recipe.tag == selectedTag
+            }
+        } else {
+            filtered = recipes
         }
-        return recipes.filter { recipe in
-            recipe.tag == selectedTag
+
+        switch sortOrder {
+        case .newest:
+            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+                recipe1.creationDate > recipe2.creationDate
+            }
+
+        case .oldest:
+            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+                recipe1.creationDate < recipe2.creationDate
+            }
         }
     }
     
@@ -31,8 +51,8 @@ struct RecipesTabView: View {
         
         NavigationStack(path: $routerBindable.recipesPath) {
             VStack(alignment: .leading){
-                VStack(alignment: .leading, spacing: 22){
-                    Text("O que vamos preparar hoje?")
+                VStack(alignment: .leading, spacing: 36){
+                    Text("Pronto para registrar uma receita?")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                     Text("Suas Receitas")
@@ -43,51 +63,12 @@ struct RecipesTabView: View {
                 .padding(.horizontal, 16)
                 
                 if recipes.isEmpty {
-//                    VStack(alignment: .center){
-//                        Spacer()
-//                        Text("Nenhuma receita criada")
-//                        Spacer()
-//                    }
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    
-                    
-                    VStack(alignment: .leading){
-                        ScrollView(.horizontal, showsIndicators: false){
-                            HStack(spacing: 10){
-                                ForEach(RecipeTag.allCases, id:\.self) { tag in
-                                    TagButton(
-                                        tag: tag,
-                                        title: tag.rawValue,
-                                        isSelected: selectedTag == tag
-                                    ){
-                                        if selectedTag == tag {
-                                            selectedTag = nil
-                                        } else {
-                                            selectedTag = tag
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                        }
-                        ScrollView {
-                            VStack {
-                                ForEach(recipes) { recipe in
-                                    Button {
-                                        router.navigate(to: .recipesinfo(recipe))
-                                    } label: {
-                                        CardRecipe(recipe: recipe)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                        }
+                    VStack(alignment: .center){
+                        Spacer()
+                        Text(recipes.isEmpty ? "Nenhuma receita criada" : "Nenhuma receita nessa categoria")
+                        Spacer()
                     }
-                    
-                    
-                    
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     VStack(alignment: .leading){
                         ScrollView(.horizontal, showsIndicators: false){
@@ -106,19 +87,22 @@ struct RecipesTabView: View {
                                     }
                                 }
                             }
+                            .padding(.bottom, 8)
                             .padding(.horizontal, 16)
                         }
                         ScrollView {
                             VStack {
-                                ForEach(recipes) { recipe in
+                                ForEach(filteredRecipes) { recipe in
                                     Button {
                                         router.navigate(to: .recipesinfo(recipe))
                                     } label: {
                                         CardRecipe(recipe: recipe)
                                     }
                                     .buttonStyle(.plain)
+                                    .padding(.vertical, 4)
                                 }
                             }
+                            .padding(.horizontal, 16)
                             .frame(maxWidth: .infinity)
                         }
                     }
@@ -126,12 +110,18 @@ struct RecipesTabView: View {
 
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .navigationTitle("Olá, \(username)")
+            .navigationTitle("Olá, \(username)!")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
-                        print("Filtro pressionado")
+                    Menu {
+                        Picker("Ordenar por", selection: $sortOrder) {
+                            Text("Mais recentes")
+                                .tag(SortOrder.newest)
+
+                            Text("Mais antigas")
+                                .tag(SortOrder.oldest)
+                        }
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
                     }

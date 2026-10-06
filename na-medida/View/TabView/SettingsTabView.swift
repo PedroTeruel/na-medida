@@ -50,6 +50,7 @@ struct SettingsView: View {
                             cardImg: "book" )
                     }
                     .buttonStyle(.plain)
+                    .padding(.bottom, 6)
                 
                 Button {
                     router.navigate(to: .aboutMeasures)
@@ -102,6 +103,8 @@ struct SettingsView: View {
                     newUsername: newUsername
                 )
             }
+            .presentationDetents([.fraction(0.3)])
+            
         }
     }
 }
