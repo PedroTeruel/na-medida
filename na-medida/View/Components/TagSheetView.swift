@@ -6,29 +6,95 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TagSheetView: View {
+
+    @Environment(\.modelContext) private var mc
+
+    let recipe: Recipe
+
+    @State private var selectedTag: RecipeTag
+
     var cancelAction: () -> Void
     var confirmAction: () -> Void
-    
+
+    init(
+        recipe: Recipe,
+        cancelAction: @escaping () -> Void,
+        confirmAction: @escaping () -> Void
+    ) {
+        self.recipe = recipe
+        self.cancelAction = cancelAction
+        self.confirmAction = confirmAction
+
+        _selectedTag = State(initialValue: recipe.tag)
+    }
+
     var body: some View {
-        
         NavigationStack {
-            Text("teste")
-                .navigationTitle("Adicionar Categoria")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(action: cancelAction) {
-                            Image(systemName: "xmark")
-                        }
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(action: confirmAction) {
-                            Image(systemName: "checkmark")
+            VStack(spacing: 24) {
+
+                VStack(spacing: 8) {
+                    Text("Vamos Organizar?")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+
+                    Text("Selecione uma categoria para guardar sua receita")
+                        .font(.body)
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
+                }
+
+                FlowLayout(spacing: 12, rowSpacing: 12) {
+                    ForEach(RecipeTag.allCases, id: \.self) { tag in
+
+                        TagButton(
+                            tag: tag,
+                            title: tag.rawValue,
+                            isSelected: selectedTag == tag
+                        ) {
+                            selectedTag = tag
                         }
                     }
                 }
+                .padding(.horizontal)
+
+                Spacer()
+            }
+            .padding(.top, 24)
+            .navigationTitle("Adicionar Categoria")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: cancelAction) {
+                        Image(systemName: "xmark")
+                    }
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        saveTag()
+                    } label: {
+                        Image(systemName: "checkmark")
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(.button)
+                }
+            }
+        }
+    }
+
+    private func saveTag() {
+        recipe.tag = selectedTag
+
+        do {
+            try mc.save()
+            confirmAction()
+        } catch {
+            print("Erro ao alterar categoria: \(error)")
         }
     }
 }
