@@ -14,17 +14,63 @@ struct EditNameSheet: View {
     let onConfirm: (String) -> Void
 
     var body: some View {
-        VStack {
-            Text("Qual é o seu nome?")
-
-            TextField("Nome", text: $newUsername)
-
-            Button("Confirmar") {
+        
+        VStack(spacing: 16) {
+            Text("Como podemos te chamar?")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.primary)
+            
+            TextField("Digite seu nome", text: $newUsername)
+                .id("nameField")
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(25)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25)
+                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                )
+            
+            Button(action: {
                 onConfirm(newUsername)
                 dismiss()
+            }) {
+                Text("Continuar")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color("buttonColor"))
+                    .cornerRadius(25)
             }
-            .buttonStyle(.bordered)
+            .disabled(newUsername.trimmingCharacters(in: .whitespaces).isEmpty)
+            .opacity(newUsername.trimmingCharacters(in: .whitespaces).isEmpty ? 0.6 : 1.0)
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button{
+                    dismiss()
+                } label:{
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.glassProminent)
+            }
+        }
+        .padding(.horizontal, 42)
+        .padding(.top, 44)
+        
+        Spacer()
+        
+//        VStack {
+//            Text("Qual é o seu nome?")
+//
+//            TextField("Nome", text: $newUsername)
+//
+//            Button("Confirmar") {
+//                onConfirm(newUsername)
+//                dismiss()
+//            }
+//            .buttonStyle(.bordered)
+//        }
     }
 }
 

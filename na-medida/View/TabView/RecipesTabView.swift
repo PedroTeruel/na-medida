@@ -8,26 +8,39 @@
 import SwiftData
 import SwiftUI
 
+enum SortOrder {
+    case newest
+    case oldest
+}
+
 struct RecipesTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
     @Query private var recipes: [Recipe]
     @State private var selectedTag: RecipeTag? = nil
-    //@State private var anyRecipe: Recipe = nil
+    @State private var sortOrder: SortOrder = .newest
     
-//    private var hasRecipe: [Recipe]{
-//        guard let anyRecipe
-//                else{
-//            return bool
-//        }
-//    }
-    private var filteredRecipes: [Recipe]{
-        guard let selectedTag
-        else {
-            return recipes
+    private var filteredRecipes: [Recipe] {
+        let filtered: [Recipe]
+
+        if let selectedTag {
+            filtered = recipes.filter { recipe in
+                recipe.tag == selectedTag
+            }
+        } else {
+            filtered = recipes
         }
-        return recipes.filter { recipe in
-            recipe.tag == selectedTag
+
+        switch sortOrder {
+        case .newest:
+            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+                recipe1.creationDate > recipe2.creationDate
+            }
+
+        case .oldest:
+            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+                recipe1.creationDate < recipe2.creationDate
+            }
         }
     }
     
@@ -38,71 +51,91 @@ struct RecipesTabView: View {
         
         NavigationStack(path: $routerBindable.recipesPath) {
             VStack(alignment: .leading){
-                VStack(alignment: .leading, spacing: 22){
-                    Text("O que vamos preparar hoje?")
+                VStack(alignment: .leading, spacing: 36){
+                    Text("Pronto para registrar uma receita?")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                     Text("Suas Receitas")
                         .foregroundStyle(.primary)
                         .font(.title2)
                         .fontWeight(.semibold)
-                }.padding(.horizontal)
-                ScrollView(.horizontal, showsIndicators: false){
-                    HStack(spacing: 10){
-                        ForEach(RecipeTag.allCases, id:\.self) { tag in
-                            TagButton(
-                                tag: tag,
-                                title: tag.rawValue,
-                                isSelected: selectedTag == tag
-                            ){
-                                if selectedTag == tag {
-                                    selectedTag = nil
-                                } else {
-                                    selectedTag = tag
+                }
+                .padding(.horizontal, 16)
+                
+                if recipes.isEmpty {
+                    VStack(alignment: .center){
+                        Spacer()
+                        Text(recipes.isEmpty ? "Nenhuma receita criada" : "Nenhuma receita nessa categoria")
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    VStack(alignment: .leading){
+                        ScrollView(.horizontal, showsIndicators: false){
+                            HStack(spacing: 10){
+                                ForEach(RecipeTag.allCases, id:\.self) { tag in
+                                    TagButton(
+                                        tag: tag,
+                                        title: tag.rawValue,
+                                        isSelected: selectedTag == tag
+                                    ){
+                                        if selectedTag == tag {
+                                            selectedTag = nil
+                                        } else {
+                                            selectedTag = tag
+                                        }
+                                    }
                                 }
                             }
+                            .padding(.bottom, 8)
+                            .padding(.horizontal, 16)
                         }
-                    }
-                    .padding(.horizontal, 16)
-                }
-                ScrollView {
-                    VStack {
-                        if recipes.isEmpty {
-                            Text("Nenhuma receita criada")
-                        } else {
-                            ForEach(recipes) { recipe in
-                                Button {
-                                    router.navigate(to: .recipesinfo(recipe))
-                                } label: {
-                                    CardRecipe(recipe: recipe)
+                        ScrollView {
+                            VStack {
+                                ForEach(filteredRecipes) { recipe in
+                                    Button {
+                                        router.navigate(to: .recipesinfo(recipe))
+                                    } label: {
+                                        CardRecipe(recipe: recipe)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .padding(.vertical, 4)
                                 }
-                                .buttonStyle(.plain)
                             }
+                            .padding(.horizontal, 16)
+                            .frame(maxWidth: .infinity)
                         }
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .navigationTitle("Olá, \(username)")
-                .navigationBarTitleDisplayMode(.large)
-                .toolbar {
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        Button {
-                            print("Filtro pressionado")
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease")
+
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .navigationTitle("Olá, \(username)!")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Menu {
+                        Picker("Ordenar por", selection: $sortOrder) {
+                            Text("Mais recentes")
+                                .tag(SortOrder.newest)
+
+                            Text("Mais antigas")
+                                .tag(SortOrder.oldest)
                         }
-                        Button {
-                            router.navigate(to: .newrecipe)
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                        .buttonStyle(.glassProminent)
-                        .tint(.button)
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease")
                     }
+                    Button {
+                        router.navigate(to: .newrecipe)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(.button)
                 }
-                .navigationDestination(for: AppRoute.self) { route in
-                    router.build(route: route)
-                }
+            }
+            .navigationDestination(for: AppRoute.self) { route in
+                router.build(route: route)
             }
         }
     }

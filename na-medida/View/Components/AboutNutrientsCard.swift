@@ -23,6 +23,7 @@ struct AboutNutrientsCard: View {
                     .fixedSize(horizontal: false, vertical: true)
 
                 Text(cardBody)
+                    .font(.body)
                     .fontWeight(.regular)
                     .foregroundStyle(.secondary)
                     .lineLimit(nil)
@@ -50,7 +51,7 @@ struct AboutNutrientsCard: View {
         }
         .overlay {
             RoundedRectangle(cornerRadius: 24)
-                .stroke(.gray.opacity(0.5), lineWidth: 1)
+                .stroke(.secondary.opacity(0.2), lineWidth: 1.5)
         }
     }
 }
