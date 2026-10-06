@@ -8,21 +8,19 @@
 import SwiftUI
 
 struct NutritionFactsTable: View {
-    // Array de itens já formatados vindo do DTO
     let items: [NutritionalFactsItem]
-    
-    // MARK: - Informações de Porções (Anvisa)
-    // Inicializados como nil por padrão para receber os dados dinâmicos do DTO
     var servingsPerContainer: String? = nil
     var servingSizeText: String? = nil
     var servingText: String = "Porção"
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // MARK: - Cabeçalho da Tabela
-            headerView
+            Text("Tabela Nutricional")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .padding(.bottom, 12)
             
-            // Exibe a seção de porções apenas se houver dados
             if servingsPerContainer != nil || servingSizeText != nil {
                 Divider()
                     .background(Color.primary)
@@ -45,13 +43,31 @@ struct NutritionFactsTable: View {
             Divider()
                 .background(Color.primary)
             
-            // Sub-cabeçalho da tabela (100g / Porção / %VD)
-            subHeaderView
+            HStack {
+                Spacer()
+                
+                HStack(spacing: 16) {
+                    Text("100 g")
+                        .font(.system(.subheadline, weight: .bold))
+                        .foregroundColor(.primary)
+                        .frame(width: 50, alignment: .trailing)
+                    
+                    Text(servingText)
+                        .font(.system(.subheadline, weight: .bold))
+                        .foregroundColor(.primary)
+                        .frame(width: 60, alignment: .trailing)
+                    
+                    Text("%VD*")
+                        .font(.system(.subheadline, weight: .bold))
+                        .foregroundColor(.primary)
+                        .frame(width: 50, alignment: .trailing)
+                }
+            }
+            .padding(.vertical, 8)
             
             Divider()
                 .background(Color.primary)
             
-            // MARK: - Linhas de Nutrientes
             ForEach(items) { item in
                 rowView(for: item)
                 
@@ -59,7 +75,6 @@ struct NutritionFactsTable: View {
                     .opacity(0.9)
             }
             
-            // Rodapé
             HStack {
                 Text("* % Valores Diários com base em uma dieta de 2.000 kcal.")
                     .font(.system(size: 14))
@@ -71,9 +86,9 @@ struct NutritionFactsTable: View {
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(.white)
+                .fill(Color(.systemBackground))
                 .shadow(
-                    color: .black.opacity(0.18),
+                    color: .black.opacity(0.15),
                     radius: 6,
                     x: 0,
                     y: 4
@@ -81,40 +96,8 @@ struct NutritionFactsTable: View {
         }
         .overlay {
             RoundedRectangle(cornerRadius: 24)
-                .stroke(.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.primary.opacity(0.15), lineWidth: 1)
         }
-    }
-    
-    // MARK: - Subviews
-    private var headerView: some View {
-        Text("Tabela Nutricional")
-            .font(.system(.title, weight: .bold))
-            .foregroundColor(Color("buttonColor"))
-            .padding(.bottom, 12)
-    }
-    
-    private var subHeaderView: some View {
-        HStack {
-            Spacer()
-            
-            HStack(spacing: 16) {
-                Text("100 g")
-                    .font(.system(.subheadline, weight: .bold))
-                    .foregroundColor(.primary)
-                    .frame(width: 50, alignment: .trailing)
-                
-                Text(servingText)
-                    .font(.system(.subheadline, weight: .bold))
-                    .foregroundColor(.primary)
-                    .frame(width: 60, alignment: .trailing)
-                
-                Text("%VD*")
-                    .font(.system(.subheadline, weight: .bold))
-                    .foregroundColor(.primary)
-                    .frame(width: 50, alignment: .trailing)
-            }
-        }
-        .padding(.vertical, 8)
     }
     
     private func rowView(for item: NutritionalFactsItem) -> some View {
