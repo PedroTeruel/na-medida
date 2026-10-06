@@ -54,9 +54,20 @@ struct CompositionIngredientCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
+        .background {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.white)
+                .shadow(
+                    color: .black.opacity(0.18),
+                    radius: 6,
+                    x: 0,
+                    y: 4
+                )
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(.gray.opacity(0.5), lineWidth: 1)
+        }
     }
 }
 

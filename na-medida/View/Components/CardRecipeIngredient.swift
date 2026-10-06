@@ -17,13 +17,13 @@ struct CardRecipeIngredient: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(productName ?? "produto sem nome")
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .font(.title3)
                     .fontWeight(.bold)
                 
                 if let brands = brands, !brands.isEmpty {
                     Text(brands)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.primary)
                         .font(.subheadline)
                 }
             }
@@ -53,7 +53,7 @@ struct CardRecipeIngredient: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(.orange, in: RoundedRectangle(cornerRadius: 16))
+        .background(.quinary, in: RoundedRectangle(cornerRadius: 16))
         .padding(.horizontal)
         
     }
