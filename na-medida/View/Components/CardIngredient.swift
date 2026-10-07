@@ -19,7 +19,8 @@ struct CardIngredient: View {
     private var formattedProductName: String {
         let separators = CharacterSet(charactersIn: "-–—")
         let components = productName.components(separatedBy: separators)
-        return components.first?.trimmingCharacters(in: .whitespaces) ?? productName
+        let baseName = components.first?.trimmingCharacters(in: .whitespaces) ?? productName
+        return baseName.uppercased()
     }
     
     private var hasBrandOrQuantity: Bool {

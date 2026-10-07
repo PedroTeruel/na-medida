@@ -17,37 +17,58 @@ struct NutritionalFactsItem: Identifiable {
     var isBold: Bool = false
 }
 
+import Foundation
+
+enum NutrientScale {
+    case kcal
+    case g
+    case mg
+    case mcg
+    case percent
+    
+    var multiplier: Double {
+        switch self {
+        case .kcal, .g, .percent: return 1.0
+        case .mg: return 1_000.0
+        case .mcg: return 1_000_000.0
+        }
+    }
+}
+
 enum AnvisaNutritionFormatter {
     
-    static func formatNutrient(_ value: Double?) -> String {
-        guard let val = value else { return "-" }
+    static func format(_ apiValue: Double?, scale: NutrientScale) -> String {
+        guard let val = apiValue else { return "-" }
         
-        if val >= 10 {
-            return "\(Int(val.rounded()))"
+        let scaledValue = val * scale.multiplier
+        
+        if scaledValue <= 0 {
+            return "0"
         }
         
-        if val >= 1.0 {
-            let formatted = String(format: "%.1f", val)
-            return formatted.replacingOccurrences(of: ".", with: ",")
-        }
+        let locale = Locale(identifier: "pt_BR")
         
-        if val > 0 {
-            let decimals = val < 0.1 ? 2 : 1
-            let formatted = String(format: "%.\(decimals)f", val)
-            return formatted.replacingOccurrences(of: ".", with: ",")
+        switch scale {
+        case .kcal, .percent:
+            return scaledValue.formatted(.number.locale(locale).precision(.fractionLength(0)))
+            
+        case .g, .mg, .mcg:
+            if scaledValue >= 10 {
+                return scaledValue.formatted(.number.locale(locale).precision(.fractionLength(0)))
+            } else if scaledValue >= 1 {
+                return scaledValue.formatted(.number.locale(locale).precision(.fractionLength(0...1)))
+            } else {
+                return scaledValue.formatted(.number.locale(locale).precision(.fractionLength(0...2)))
+            }
         }
-        
-        return "0"
     }
     
-    static func formatEnergy(_ value: Double?) -> String {
-        guard let val = value else { return "-" }
-        return "\(Int(val.rounded()))"
-    }
-    
-    static func formatDailyValue(value: Double?, dailyReference: Double) -> String {
-        guard let val = value, dailyReference > 0 else { return "" }
-        let vd = Int(((val / dailyReference) * 100.0).rounded())
-        return "\(vd)"
+    static func formatDailyValue(apiValue: Double?, scale: NutrientScale, dailyReference: Double) -> String {
+        guard let val = apiValue, dailyReference > 0 else { return "" }
+        
+        let scaledValue = val * scale.multiplier
+        let vd = (scaledValue / dailyReference) * 100.0
+        
+        return format(vd, scale: .percent)
     }
 }

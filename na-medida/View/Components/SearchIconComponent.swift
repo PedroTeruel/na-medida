@@ -16,10 +16,18 @@ struct SearchIconComponent: View {
                 .scaledToFill()
                 .frame(width: 60, height: 60)
             Text("Escaneie ou busque para adicionar um ingrediente")
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)
+            
+            Text("Para melhores resultados, digite o nome exato do produto/marca.")
+                .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+                
+            
+            
         }
-        .frame(width: 200)
+        .frame(width: 220)
         .padding(.top, 16)
     }
 }
