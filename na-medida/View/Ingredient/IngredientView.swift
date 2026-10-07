@@ -79,7 +79,7 @@ struct IngredientView: View {
             VStack(spacing: 16) {
                 
                 VStack(spacing: 6) {
-                    Text(ingredientTitle)
+                    Text(ingredientTitle.uppercased())
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)

@@ -117,12 +117,19 @@ final class OpenFoodFactsService {
             URLQueryItem(name: "search_simple", value: "1"),
             URLQueryItem(name: "action", value: "process"),
             URLQueryItem(name: "json", value: "1"),
+            
             URLQueryItem(name: "tagtype_0", value: "countries"),
             URLQueryItem(name: "tag_contains_0", value: "contains"),
             URLQueryItem(name: "tag_0", value: "brazil"),
-            URLQueryItem(name: "page_size", value: "20"),
+            
+            URLQueryItem(name: "tagtype_1", value: "states"),
+            URLQueryItem(name: "tag_contains_1", value: "contains"),
+            URLQueryItem(name: "tag_1", value: "en:nutrition-facts-completed"),
+            
+            URLQueryItem(name: "page_size", value: "50"),
             URLQueryItem(name: "lc", value: "pt"),
             URLQueryItem(name: "sort_by", value: "unique_scans_n"),
+            
             URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_front_url,image_url,image_small_url,serving_size,allergens,countries_tags")
         ]
         
@@ -151,6 +158,12 @@ final class OpenFoodFactsService {
                 switch webResponse.statusCode {
                 case 200:
                     let responseDTO = try decoder.decode(SearchResponseDTO.self, from: data)
+                    
+                    if let primeiroProduto = responseDTO.products?.first {
+                        print("[VITAMINA E - BUSCA] 100g: \(String(describing: primeiroProduto.nutriments?.vitaminE100g))")
+                        print("[VITAMINA E - BUSCA] Porção: \(String(describing: primeiroProduto.nutriments?.vitaminEServing))")
+                    }
+                    
                     return responseDTO.products ?? []
                 case 404:
                     return []
