@@ -24,72 +24,79 @@ struct CarouselView: View {
         [
             (1, "CarouselSodio", "0"),
             (2, "CarouselProteinas", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeProteins)),
-             (3, "CarouselCalorias", AnvisaNutritionFormatter.formatEnergy(recipe.totalRecipeCalories)),
-             (4, "CarouselCarbo", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeCarbs)),
+            (3, "CarouselCalorias", AnvisaNutritionFormatter.formatEnergy(recipe.totalRecipeCalories)),
+            (4, "CarouselCarbo", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeCarbs)),
             (5, "CarouselGorduras", AnvisaNutritionFormatter.formatNutrient(recipe.totalRecipeFats))
         ]
     }
-        
+    
     var body: some View {
-        VStack(spacing: 20) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 8) {
-                    ForEach(items) { item in
-                        Image(item.imageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 270)
-                            .clipShape(RoundedRectangle(cornerRadius: 24))
-                            .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: -1)
-                            .overlay {
-                                Text(item.value)
-                                    .font(.custom("Atma-Bold", size: 36))
-                                    .foregroundColor(.white)
-                                    .padding(.top, 76)
-                            }
-                            .containerRelativeFrame(.horizontal)
-                            .id(item.id)
-                            
-                            .scrollTransition(axis: .horizontal) { content, phase in
-                                content
-                                    .scaleEffect(phase.isIdentity ? 1.0 : 0.50)
-                            }
+        GeometryReader { geometry in
+            let screenWidth = geometry.size.width
+            let spacing: CGFloat = 24
+            let cardWidth = (screenWidth / 2) - spacing
+            let cardHeight = cardWidth * 1.28
+            let horizontalPadding = (screenWidth - cardWidth) / 2
+            
+            VStack(spacing: 16) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: spacing) {
+                        ForEach(items) { item in
+                            Image(item.imageName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: cardWidth, height: cardHeight)
+                                .clipShape(RoundedRectangle(cornerRadius: 22))
+                                .shadow(color: .black.opacity(0.30), radius: 2, x: 0, y: 1)
+                                .overlay {
+                                    Text(item.value)
+                                        .font(.custom("Atma-Bold", size: 28))
+                                        .foregroundColor(.white)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.7)
+                                        .padding(.top, cardHeight * 0.25)
+                                }
+                                .id(item.id)
+                                .scrollTransition(axis: .horizontal) { content, phase in
+                                    content
+                                        .scaleEffect(phase.isIdentity ? 1.0 : 0.50)
+                                }
+                        }
+                    }
+                    .scrollTargetLayout()
+                }
+                .scrollTargetBehavior(.viewAligned)
+                .safeAreaPadding(.horizontal, horizontalPadding)
+                .scrollPosition(id: $scrollPosition)
+                .onChange(of: scrollPosition) { _, newValue in
+                    if let newValue, let currentItem = items.first(where: { $0.id == newValue }) {
+                        activeIndex = currentItem.originalId
                     }
                 }
-                .scrollTargetLayout()
-            }
-            .scrollTargetBehavior(.viewAligned)
-            .safeAreaPadding(.horizontal, 100)
-            .scrollPosition(id: $scrollPosition)
-            .onChange(of: scrollPosition) { _, newValue in
-                if let newValue, let currentItem = items.first(where: { $0.id == newValue }) {
-                    activeIndex = currentItem.originalId
+                .onAppear {
+                    setupInfiniteCarousel()
+                }
+                .onChange(of: recipe.ingredients.count) { _, _ in
+                    setupInfiniteCarousel()
+                }
+                
+                HStack(spacing: 12) {
+                    ForEach(baseData, id: \.0) { data in
+                        Circle()
+                            .fill(activeIndex == data.0 ? Color.primary : Color.secondary.opacity(0.6))
+                            .frame(width: 8, height: 8)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: activeIndex)
+                    }
                 }
             }
-            .onAppear {
-                setupInfiniteCarousel()
-            }
-            .onChange(of: recipe.ingredients.count) { _, _ in
-                setupInfiniteCarousel()
-            }
-            
-            HStack(spacing: 8) {
-                ForEach(baseData, id: \.0) { data in
-                    Circle()
-                        .fill(activeIndex == data.0 ? Color.primary : Color.secondary.opacity(0.6))
-                        .frame(width: 8, height: 8)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: activeIndex)
-                }
-            }
-            .padding(.top, 8)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(height: 260)
         .background {
             Image(recipe.tag.carouselImageBaseName)
                 .resizable()
                 .scaledToFill()
-                .ignoresSafeArea()
         }
+        .clipped()
     }
     
     private func setupInfiniteCarousel() {

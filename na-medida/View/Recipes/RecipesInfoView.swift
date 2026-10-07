@@ -28,7 +28,7 @@ struct RecipesInfoView: View {
                 .foregroundStyle(.secondary)
                 .padding(.top, 32)
             
-            VStack(spacing: 60) {
+            VStack(spacing: 40) {
                 CarouselView(recipe: recipe)
             }
             
@@ -39,6 +39,7 @@ struct RecipesInfoView: View {
                     AddIngredientButton()
                 }
                 .buttonStyle(.plain)
+                .padding(.top, 32)
                 
                 VStack {
                     if recipe.ingredients.isEmpty {
@@ -62,7 +63,6 @@ struct RecipesInfoView: View {
                     }
                 }
             }
-            .padding(.top, 20)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)

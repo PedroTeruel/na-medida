@@ -20,16 +20,17 @@ struct CompositionIngredientCard: View {
             .replacingOccurrences(of: "fr", with: "")
             .capitalized
     }
-        
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-                
-                Text("Composição")
-                    .font(.system(.title, weight: .bold))
-                    .foregroundColor(Color("buttonColor"))
+            
+            Text("Composição")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
             
             Text(ingredientsText.isEmpty ? "Informação de composição não disponível para este produto" : ingredientsText)
-                .font(.system(.body))
+                .font(.body)
                 .foregroundColor(.primary)
                 .lineSpacing(4)
                 .multilineTextAlignment(.leading)
@@ -50,15 +51,15 @@ struct CompositionIngredientCard: View {
                         .lineSpacing(4)
                 }
             }
-
+            
         }
-        .padding(16)
+        .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(.white)
+                .fill(Color(.systemBackground))
                 .shadow(
-                    color: .black.opacity(0.18),
+                    color: .black.opacity(0.15),
                     radius: 6,
                     x: 0,
                     y: 4
@@ -66,7 +67,7 @@ struct CompositionIngredientCard: View {
         }
         .overlay {
             RoundedRectangle(cornerRadius: 24)
-                .stroke(.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.primary.opacity(0.15), lineWidth: 1)
         }
     }
 }

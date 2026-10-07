@@ -10,9 +10,22 @@
 		0786173C306AECD100009687 /* na-medida.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "na-medida.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2669B01F3075469E006DF987 /* Exceptions for "na-medida" folder in "na-medida" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0786173B306AECD100009687 /* na-medida */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0786173E306AECD100009687 /* na-medida */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2669B01F3075469E006DF987 /* Exceptions for "na-medida" folder in "na-medida" target */,
+			);
 			path = "na-medida";
 			sourceTree = "<group>";
 		};
@@ -243,9 +256,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G4P28UKJSG;
+				DEVELOPMENT_TEAM = PR22DC4XWB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "na-medida/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Precisamos de acesso à câmera para escanear o código de barras dos produtos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -276,9 +290,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G4P28UKJSG;
+				DEVELOPMENT_TEAM = PR22DC4XWB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "na-medida/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Precisamos de acesso à câmera para escanear o código de barras dos produtos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
