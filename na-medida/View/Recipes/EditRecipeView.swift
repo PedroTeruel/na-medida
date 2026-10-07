@@ -3,111 +3,143 @@
 //  na-medida
 //
 //  Created by Rebeca Emanuela Calmon de Andrade Alves on 06/10/26.
-//
 
-//import SwiftUI
-//import SwiftData
-//
-//struct EditRecipeView: View {
-//    @Environment(Router.self) private var router
-//    @Environment(\.modelContext) private var mc
-//    
-//    @Bindable var recipe: Recipe
-//    
-//    var body: some View {
-//        ScrollView {
-//            VStack(spacing: 20) {
-//                
-//                // 1. Campo para editar o nome da receita
-//                TextField("Nome da receita", text: $recipe.name)
-//                    .font(.title)
-//                    .fontWeight(.bold)
-//                    .multilineTextAlignment(.center)
-//                    .textFieldStyle(.plain)
-//                    .padding(.top)
-//                
-////                 //2. Campo para editar a Tag / Categoria da receita
-////                TextField("Categoria", text: $recipe.tag)
-////                    .font(.subheadline)
-////                    .multilineTextAlignment(.center)
-////                    .padding(.horizontal, 16)
-////                    .padding(.vertical, 8)
-////                    .background(Color.secondary.opacity(0.15))
-////                    .clipShape(Capsule())
-//                
-//                // 3. Botão para Adicionar Novos Ingredientes
-//                Button {
-//                    router.navigate(to: .scanner(recipe))
-//                } label: {
-//                    AddIngredientButton()
-//                }
-//                .buttonStyle(.plain)
-//                .padding(.top, 10)
-//                
-//                // 4. Lista dos Ingredientes com Quantidades Editáveis
-//                VStack(spacing: 12) {
-//                    if recipe.ingredients.isEmpty {
-//                        Text("Nenhum ingrediente adicionado")
-//                            .foregroundStyle(.secondary)
-//                            .padding(.top, 20)
-//                    } else {
-//                        ForEach(recipe.ingredients) { recipeIng in
-//                            // Wrapper de Binding para vincular o objeto do SwiftData
-//                            IngredientRowView(recipeIng: recipeIng) {
-//                                deleteIngredient(recipeIng)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            .padding(.horizontal)
-//        }
-//        .navigationBarBackButtonHidden(true)
-//        .toolbar(.hidden, for: .tabBar)
-//        .navigationTitle("Editar Receita")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .toolbar {
-//            ToolbarItem(placement: .topBarLeading) {
-//                Button("Cancelar") {
-//                    router.pop()
-//                }
-//            }
-//            ToolbarItem(placement: .topBarTrailing) {
-//                Button("Salvar") {
-//                    try? mc.save()
-//                    router.pop()
-//                }
-//                .fontWeight(.bold)
-//            }
-//        }
-//    }
-//    
-//    private func deleteIngredient(_ ingredient: RecipeIngredient) {
-//        if let index = recipe.ingredients.firstIndex(where: { $0.id == ingredient.id }) {
-//            recipe.ingredients.remove(at: index)
-//            mc.delete(ingredient)
-//        }
-//    }
-//}
-//
-//// Subview auxiliar para expor os Bindings de cada RecipeIngredient no ForEach
-//private struct IngredientRowView: View {
-//    @Bindable var recipeIng: RecipeIngredient
-//    var onDelete: () -> Void
-//    
-//    var body: some View {
-//        CardIngredient(
-//            productName: recipeIng.ingredient?.name ?? "",
-//            imageURL: recipeIng.ingredient?.photoURL,
-//            isEditable: true,
-//            userQuantity: $recipeIng.userQuantity,
-//            unity: $recipeIng.unity,
-//            onRemove: onDelete
-//        )
-//    }
-//}
+import SwiftUI
+import SwiftData
 
+struct EditRecipeView: View {
+    @Bindable var recipe: Recipe
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    @Environment(Router.self) private var router
+    
+    @State private var isShowingTagSheet = false
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                
+                // MARK: - 1. Título / Nome da Receita
+                TextField("Minha receita", text: $recipe.name)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                // MARK: - 2. Categoria / Tag (Pill/Badge)
+                Button {
+                    isShowingTagSheet = true
+                } label: {
+                    Text(recipe.tag.rawValue)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(recipe.tag.foregroundColor)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                        .background(recipe.tag.color.opacity(0.3))
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(recipe.tag.foregroundColor.opacity(0.5), style: StrokeStyle(dash: [4]))
+                        )
+                }
+                .buttonStyle(.plain)
+                
+                // MARK: - 3. Carrossel Existente (Opaco)
+                VStack(spacing: 8) {
+                    Text("Informações nutricionais")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    
+                    CarouselView(recipe: recipe)
+                }
+                .opacity(0.4)
+                .disabled(true)
+                
+                // MARK: - 4. Botão Adicionar Ingredientes
+                Button {
+                    router.navigate(to: .scanner(nil))
+                } label: {
+                    AddIngredientButton()
+                }
+                .buttonStyle(.plain)
+                
+                // MARK: - 5. Lista de Ingredientes
+                VStack(spacing: 12) {
+                    if recipe.ingredients.isEmpty {
+                        Text("Nenhum ingrediente adicionado.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .padding(.vertical, 8)
+                    } else {
+                        ForEach(recipe.ingredients.indices, id: \.self) { index in
+                            CardRecipeIngredient(
+                                productName: recipe.ingredients[index].ingredient?.name,
+                                imageURL: recipe.ingredients[index].ingredient?.photoURL,
+                                brands: recipe.ingredients[index].ingredient?.brand,
+                                isEditable: true,
+                                userQuantity: $recipe.ingredients[index].userQuantity,
+                                unity: $recipe.ingredients[index].unity,
+                                onRemove: {
+                                    removeIngredient(recipe.ingredients[index])
+                                }
+                            )
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            .padding(.vertical)
+        }
+        .sheet(isPresented: $isShowingTagSheet) {
+            TagSheetView(
+                recipe: recipe,
+                cancelAction: { isShowingTagSheet = false },
+                confirmAction: { isShowingTagSheet = false }
+            )
+            .presentationDetents([.medium])
+        }
+    }
+    
+    private func removeIngredient(_ recipeIngredient: RecipeIngredient) {
+        if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
+            recipe.ingredients.remove(at: index)
+            modelContext.delete(recipeIngredient)
+        }
+    }
+}
 
-
-
-
+// MARK: - Preview
+#Preview {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Recipe.self, RecipeIngredient.self, Ingredient.self, configurations: config)
+    
+    let sampleIngredient = Ingredient(
+        barcode: "123456",
+        name: "Achocolatado em pó, NESCAU Nestlé - 350g",
+        brand: "Nestlé",
+        photoURL: nil,
+        caloriesPer100g: 370.0,
+        proteinsPer100g: 4.0,
+        carbsPer100g: 80.0,
+        fatsPer100g: 2.0
+    )
+    
+    let sampleRecipeIngredient = RecipeIngredient(
+        userQuantity: 100.0,
+        unity: .g,
+        ingredient: sampleIngredient
+    )
+    
+    let sampleRecipe = Recipe(
+        name: "Minha receita",
+        tag: .dinner
+    )
+    
+    sampleRecipe.ingredients.append(sampleRecipeIngredient)
+    container.mainContext.insert(sampleRecipe)
+    
+    return EditRecipeView(recipe: sampleRecipe)
+        .modelContainer(container)
+        .environment(Router())
+}
