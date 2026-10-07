@@ -11,6 +11,20 @@ import SwiftUI
 @main
 struct na_medidaApp: App {
     
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
+        
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.foregroundColor: UIColor.systemBackground],
+            for: .selected
+        )
+        
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.foregroundColor: UIColor.label],
+            for: .normal
+        )
+    }
+    
     @State private var apiService = OpenFoodFactsService()
     
     var body: some Scene {
