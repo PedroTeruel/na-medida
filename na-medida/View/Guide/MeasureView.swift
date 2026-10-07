@@ -29,8 +29,11 @@ struct MeasureView: View {
                 } else{
                     
                 }
+                ThreeTable()
                 MeasureWarningCard()
+                
             }
+            .padding(.horizontal)
             .navigationTitle("Tabela de Medidas")
             .navigationBarTitleDisplayMode(.large)
         }
