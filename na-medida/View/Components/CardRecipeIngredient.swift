@@ -16,7 +16,6 @@ struct CardRecipeIngredient: View {
     @Binding var unity: QntUnity
     var onRemove: (() -> Void)?
     
-    // Inicializador com valores padrão para manter compatibilidade total
     init(
         productName: String? = nil,
         imageURL: String? = nil,
@@ -61,7 +60,7 @@ struct CardRecipeIngredient: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(productName ?? "produto sem nome")
+                Text((productName ?? "produto sem nome").uppercased())
                     .foregroundStyle(.primary)
                     .font(.title3)
                     .fontWeight(.bold)

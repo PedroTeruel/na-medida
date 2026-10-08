@@ -78,4 +78,8 @@ extension Recipe {
     var totalRecipeFats: Double {
         ingredients.reduce(0) { $0 + $1.totalIngredientFats }
     }
+    
+    var totalRecipeSodium: Double {
+        ingredients.reduce(0) { $0 + $1.totalIngredientsSodium}
+    }
 }

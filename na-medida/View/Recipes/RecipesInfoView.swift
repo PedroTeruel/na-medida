@@ -24,7 +24,7 @@ struct RecipesInfoView: View {
             
             TagStatic(tag: recipe.tag)
             
-            Text("Informações nutricionais")
+            Text("Informações nutricionais totais")
                 .foregroundStyle(.secondary)
                 .padding(.top, 32)
             
@@ -46,7 +46,7 @@ struct RecipesInfoView: View {
                         Text("Nenhum ingrediente adicionado")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(recipe.ingredients) { recipeIng in
+                        ForEach(recipe.ingredients.reversed()) { recipeIng in
                             Button {
                                 if let ingredient = recipeIng.ingredient{
                                     router.navigate(to: .savedIngredient(ingredient))

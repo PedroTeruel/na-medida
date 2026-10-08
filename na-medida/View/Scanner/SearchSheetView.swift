@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchSheetView: View {
     
     @Environment(OpenFoodFactsService.self) private var apiService
+    @Environment(TacoService.self) private var tacoService
     
     @State private var searchField = ""
     @Binding var currentDetent: PresentationDetent
@@ -26,12 +27,19 @@ struct SearchSheetView: View {
         
         searchTask = Task {
             do {
-                let results = try await apiService.searchProducts(query: query)
+                
+                let tacoResults = tacoService.searchProducts(query: query)
+                
+                await MainActor.run {
+                    self.searchResults = tacoResults
+                }
+                
+                let apiResults = try await apiService.searchProducts(query: query)
                 
                 if Task.isCancelled { return }
                 
                 await MainActor.run {
-                    self.searchResults = results
+                    self.searchResults = tacoResults + apiResults
                     self.isLoading = false
                 }
             } catch {

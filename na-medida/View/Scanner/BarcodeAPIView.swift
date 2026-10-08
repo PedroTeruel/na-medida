@@ -1,5 +1,5 @@
 //
-//  ScannerView.swift
+//  BarcodeAPIView.swift
 //  na-medida
 //
 //  Created by Vitor Silva Souza on 28/09/26.
@@ -19,15 +19,29 @@ struct BarcodeAPIView: View {
     @State private var scannerCode: String?
     @State private var isLoading = false
     @State private var errorMessage: String?
-    @State private var showErrorAlert = false
     @State private var fetchTask: Task<Void, Never>?
     
     var recipe: Recipe? = nil
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             DataScanner(scannerCode: $scannerCode)
                 .ignoresSafeArea()
+            
+            if let errorMsg = errorMessage {
+                Text(errorMsg)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.red.opacity(0.9))
+                    .clipShape(Capsule())
+                    .shadow(radius: 5)
+                    .padding(.top, 16)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(2)
+            }
             
             if isLoading {
                 Color.black.opacity(0.5).ignoresSafeArea()
@@ -43,9 +57,10 @@ struct BarcodeAPIView: View {
                 .padding()
                 .background(Color.black.opacity(0.7))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
+                .zIndex(1)
             }
         }
-        .navigationTitle("")
+        .navigationTitle("Adicione ingredientes")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -59,6 +74,7 @@ struct BarcodeAPIView: View {
                 Button(action: saveRecipeNavigate) {
                     Image(systemName: "checkmark")
                 }
+                .foregroundStyle(.white)
                 .buttonStyle(.glassProminent)
                 .disabled(draft.ingredients.isEmpty)
             }
@@ -71,15 +87,10 @@ struct BarcodeAPIView: View {
         }
         .sheet(isPresented: $showSheet) {
             SearchSheetView(currentDetent: $sheetDetent)
-                .presentationDetents([.fraction(0.3), .medium, .large], selection: $sheetDetent)
+                .presentationDetents([.fraction(0.4), .medium, .large], selection: $sheetDetent)
                 .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                 .interactiveDismissDisabled()
                 .presentationBackground(.background)
-        }
-        .alert("Atenção", isPresented: $showErrorAlert) {
-            Button("Ok", role: .cancel) { scannerCode = nil }
-        } message: {
-            Text(errorMessage ?? "Erro")
         }
         .onDisappear {
             fetchTask?.cancel()
@@ -130,17 +141,9 @@ struct BarcodeAPIView: View {
     }
     
     private func fetchProduct(barcode: String) {
-        let descriptor = FetchDescriptor<Ingredient>(
-            predicate: #Predicate { $0.barcode == barcode }
-        )
-        
-        if let cachedIngredient = try? mc.fetch(descriptor).first {
-            router.navigate(to: .savedIngredient(cachedIngredient))
-            return
-        }
-        
         isLoading = true
-        errorMessage = nil
+        // Esconde erro anterior, se houver
+        withAnimation { errorMessage = nil }
         
         fetchTask?.cancel()
         fetchTask = Task {
@@ -166,21 +169,43 @@ struct BarcodeAPIView: View {
     @MainActor
     private func showError(_ message: String) {
         isLoading = false
-        errorMessage = message
-        showErrorAlert = true
+        
+        withAnimation(.spring()) {
+            errorMessage = message
+        }
+        
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            withAnimation(.easeInOut) {
+                self.errorMessage = nil
+            }
+            self.scannerCode = nil
+        }
     }
     
     @MainActor
     private func handleSuccess(_ product: ProductOpenFoodFactsDTO) async {
         isLoading = false
-        showSheet = false
-        try? await Task.sleep(for: .milliseconds(200))
-        router.navigate(to: .ingredientinfo(product))
+        withAnimation { errorMessage = nil }
+        
+        if !draft.ingredients.contains(product) {
+            withAnimation(.spring()) {
+                draft.addIngredient(product)
+            }
+        }
+        
+        if sheetDetent == .fraction(0.3) {
+            sheetDetent = .medium
+        }
+        
+        scannerCode = nil
     }
 }
 
 #Preview {
     BarcodeAPIView()
         .environment(Router())
+        .environment(RecipeDraft())
+        .environment(OpenFoodFactsService())
         .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
 }

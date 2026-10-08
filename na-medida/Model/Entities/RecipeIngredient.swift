@@ -50,7 +50,7 @@ enum QntUnity: String, Codable {
 //extension com calculo dos macronutriente da receita
 extension RecipeIngredient {
     
-//normalizando a quantidade que o usuario digitar para g ou mL
+    //normalizando a quantidade que o usuario digitar para g ou mL
     private var baseQuantity: Double {
         switch unity {
         case .g, .ml, .un:
@@ -60,24 +60,30 @@ extension RecipeIngredient {
         }
     }
     
-//regra de tres para calcular os nutrientes com a userQuantity normalizada
+    //regra de tres para calcular os nutrientes com a userQuantity normalizada
     private var multiplier: Double {
         return baseQuantity / 100.0
     }
     //propiedades computadas -> os macros da receita nao seroa armazenados no banco de dados, só serao calculados na hora
     var totalIngredientCalories: Double {
-            (ingredient?.caloriesPer100g ?? 0.0) * multiplier
-        }
-        
-        var totalIngredientProteins: Double {
-            (ingredient?.proteinsPer100g ?? 0.0) * multiplier
-        }
-        
-        var totalIngredientCarbs: Double {
-            (ingredient?.carbsPer100g ?? 0.0) * multiplier
-        }
-        
-        var totalIngredientFats: Double {
-            (ingredient?.fatsPer100g ?? 0.0) * multiplier
+        (ingredient?.caloriesPer100g ?? 0.0) * multiplier
     }
+    
+    var totalIngredientProteins: Double {
+        (ingredient?.proteinsPer100g ?? 0.0) * multiplier
+    }
+    
+    var totalIngredientCarbs: Double {
+        (ingredient?.carbsPer100g ?? 0.0) * multiplier
+    }
+    
+    var totalIngredientFats: Double {
+        (ingredient?.fatsPer100g ?? 0.0) * multiplier
+    }
+    
+    var totalIngredientsSodium: Double {
+        (ingredient?.sodium100g ?? 0.0) * multiplier
+    }
+    
+    
 }

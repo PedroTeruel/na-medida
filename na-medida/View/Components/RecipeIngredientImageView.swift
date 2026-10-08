@@ -13,7 +13,10 @@ struct RecipeIngredientImageView: View {
     
     var body: some View {
         
-        AsyncProductImage(urlString: urlString, size: 70, cornerRadius: 35)
+        AsyncProductImage(
+            urlString: urlString,
+            size: 70,
+            cornerRadius: 35)
             .overlay(Circle().stroke(Color.white, lineWidth: 3))
     }
 }
