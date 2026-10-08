@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct NutrientGenereal: View {
-    var cardTitle: String = "As medidas podem variar"
-    var cardBody: String = "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K)."
+    var generalBody: String = "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K)."
+    var generalCap:String
+    var generalColor: Color
     
     var body: some View {
         VStack(alignment: .leading, spacing: 26){
@@ -18,7 +19,7 @@ struct NutrientGenereal: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .foregroundStyle(.primary)
-                Text(cardBody)
+                Text(generalBody)
                     .font(.body)
                     .fontWeight(.regular)
                     .foregroundStyle(.secondary)
@@ -34,7 +35,7 @@ struct NutrientGenereal: View {
                         )
                     VStack(alignment: .leading, spacing: 8) {
                         
-                        Text("Fornecem 9 calorias por grama, sendo o nutriente mais calórico.")
+                        Text(generalCap)
                             .font(.body)
                             .fontWeight(.regular)
                             .foregroundStyle(.secondary)
@@ -53,24 +54,13 @@ struct NutrientGenereal: View {
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(.yellow.opacity(0.1))
+                    .fill(generalColor.opacity(0.1))
             }
-            VStack(alignment: .leading){
-                Text("Principais Funções")
-                    .font(.title3)
-                    .foregroundStyle(.primary)
-                    .fontWeight(.semibold)
-                FuncCard(funcIcon: "bolt.fill", funcText: "Fonte de energia")
-                FuncCard(funcIcon: "heart.fill", funcText: "Produção de hormonios")
-                FuncCard(funcIcon: "shield.fill", funcText: "Absorção de vitaminas A, D, E e K")
-            }
-            
-          
         }
         
     }
 }
 
 #Preview {
-    NutrientGenereal(cardTitle: "As medidas podem variar", cardBody: "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K).")
+    NutrientGenereal(generalBody: "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K).", generalCap: "Fornecem 9 calorias por grama, sendo o nutriente mais calórico", generalColor: .yellow)
 }

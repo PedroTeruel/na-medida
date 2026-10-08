@@ -14,44 +14,50 @@ struct NutrientsSource: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            Text("Principais Funções")
-                .font(.title3)
-                .foregroundStyle(.primary)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.leading)
+//            Text("Principais Funções")
+//                .font(.title3)
+//                .foregroundStyle(.primary)
+//                .fontWeight(.semibold)
+//                .multilineTextAlignment(.leading)
             HStack(){
-                VStack(){
+                VStack(spacing: 12){
                     Image("OliveIcon")
                         .resizable()
                         .scaledToFit()
                         .frame(height: 70)
                     Text(sourceName)
+                        .font(.footnote)
+                        .fontWeight(.medium)
+                        .multilineTextAlignment(.center)
                 }
+                .frame(width: 80, height: 120)
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 24)
                         .fill(.quinary.opacity(0.6))
                 )
-                Spacer()
-                VStack(){
-                    Image("OliveIcon")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 70)
-                    Text(sourceName)
-                }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 24)
-                        .fill(.quinary.opacity(0.6))
-                )
+//                Spacer()
+//                VStack(){
+//                    Image("OliveIcon")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(height: 70)
+//                    Text(sourceName)
+//                }
+//                .padding()
+//                .background(
+//                    RoundedRectangle(cornerRadius: 24)
+//                        .fill(.quinary.opacity(0.6))
+//                )
 
             }
+            
         }
+        
         
     }
 }
 
 #Preview {
-    NutrientsSource(sourceName: "Azeite de Oliva")
+    NutrientsSource(sourceName: "Peixes Gordurosos")
 }

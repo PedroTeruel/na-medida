@@ -8,48 +8,97 @@
 import SwiftUI
 
 struct NutrientView: View {
-    @State var segmentedControl = 0
-    var nutrientName: String
-    var nutrientImg: String
-    var nutrientDescription: String
-    var body: some View {
+    @State private var segmentedControl = 0
+    let nutrient: Nutrient
+
+    var body: some View{
+
         ScrollView{
-            VStack(alignment: .center, spacing: 22){
-                VStack(alignment: .center){
-                    Image(nutrientImg)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 120, alignment: .center)
-                    Text(nutrientName)
-                        .font(.title)
-                        .fontWeight(.semibold)
-                    Text(nutrientDescription)
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .frame(maxWidth: 280)
-                Picker("Informações", selection: $segmentedControl) {
-                    Text("Visão Geral").tag(0)
-                    Text("Fontes").tag(1)
+            VStack(spacing: 24){
+                VStack(spacing: 10){
+                            Image(nutrient.image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 120, height: 120)
+
+                            Text(nutrient.name)
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .multilineTextAlignment(.center)
+
+                            Text(nutrient.description)
+                                .font(.title3)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: 280)
+
+                Picker(
+                    "Informações",
+                    selection: $segmentedControl
+                ) {
+                    Text("Visão Geral")
+                        .tag(0)
+
+                    Text("Fontes")
+                        .tag(1)
                 }
                 .pickerStyle(.segmented)
-                
-                if segmentedControl == 0 {
-                    NutrientGenereal(cardTitle: "As medidas podem variar", cardBody: "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K).")
-                }
-                else{
-                    NutrientsSource(sourceName: "Azeite de Oliva")
-                    MeasureWarningCard()
+                if segmentedControl == 0{
+                    VStack(alignment: .leading, spacing: 24){
+                                NutrientGenereal(
+                                    generalBody: nutrient.generalBody,
+                                    generalCap: nutrient.generalCap,
+                                    generalColor: nutrient.generalColor
+                                )
+                                VStack(
+                                    alignment: .leading,
+                                    spacing: 12
+                                ) {
+                                    Text("Principais Funções")
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.primary)
+                                    ForEach(nutrient.functions){ function in
+                                        FuncCard(
+                                            funcIcon: function.icon,
+                                            funcText: function.text
+                                        )
+                                    }
+                                }
+                            }
+                } else{
+
+                    
+                    VStack(alignment: .leading, spacing: 16){
+                        Text("Principais Fontes")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                        FlowLayout(spacing: 12, rowSpacing: 12){
+                            ForEach(nutrient.sources, id: \.self) { source in
+                                
+                                NutrientsSource(
+                                    sourceName: source
+                                )
+                            }
+                        }
+                        MeasureWarningCard()
+                    }
                 }
             }
+            .padding(.horizontal)
+            .padding(.bottom, 32)
         }
-        .padding(.horizontal)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-#Preview {
+#Preview{
+
     NavigationStack{
-        NutrientView(nutrientName: "Calorias", nutrientImg: "CaloriesIcon", nutrientDescription: "Energia, hormônios e absorção de vitaminas")
+
+        NutrientView(
+            nutrient: nutrients[3]
+        )
     }
 }
