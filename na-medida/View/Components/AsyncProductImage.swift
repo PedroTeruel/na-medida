@@ -12,8 +12,23 @@ struct AsyncProductImage: View {
     let size: CGFloat
     var cornerRadius: CGFloat = 16
     
+    private var isEmoji: Bool {
+        guard let url = urlString, !url.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return false
+        }
+        return !url.hasPrefix("http")
+    }
+    
     var body: some View {
-        if let urlString = urlString, let url = URL(string: urlString) {
+        
+        if isEmoji, let emoji = urlString {
+            Text(emoji)
+                .font(.system(size: size * 0.55))
+                .frame(width: size, height: size)
+                .background(Color.blue.gradient)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            
+        } else if let urlString = urlString, let url = URL(string: urlString) {
             AsyncImage(url: url) { phase in
                 switch phase {
                 case .success(let image):

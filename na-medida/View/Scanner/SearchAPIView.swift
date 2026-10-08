@@ -24,9 +24,16 @@ struct SearchAPIView: View {
     var isLoading: Bool
     var onSearchSubmit: (String) -> Void
     
-    private func showFeedbackToast(productName: String?) {
-        let name = productName ?? "Ingrediente"
-        let firstName = name.components(separatedBy: ["-", "–", "—"]).first?.trimmingCharacters(in: .whitespaces) ?? name
+    private func showFeedbackToast(product: ProductOpenFoodFactsDTO) {
+        let name = product.productName ?? "Ingrediente"
+        let isTaco = product.brands?.uppercased().contains("TACO") ?? false
+        
+        let firstName: String
+        if isTaco {
+            firstName = name.trimmingCharacters(in: .whitespaces)
+        } else {
+            firstName = name.components(separatedBy: ["-", "–", "—"]).first?.trimmingCharacters(in: .whitespaces) ?? name
+        }
         
         feedbackMessage = "\(firstName) adicionado!"
         
@@ -89,14 +96,14 @@ struct SearchAPIView: View {
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
                                     quantity: product.servingSize,
-                                    imageURL: product.fotoProdutoURL,
+                                    imageURL: product.photoProduct,
                                     isAdded: isAlreadyAdd,
                                     onAdd: {
                                         if !isAlreadyAdd {
                                             withAnimation(.spring()) {
                                                 draft.addIngredient(product)
                                             }
-                                            showFeedbackToast(productName: product.productName)
+                                            showFeedbackToast(product: product)
                                             searchText = ""
                                             isSearchFocused = false
                                         }
@@ -127,7 +134,7 @@ struct SearchAPIView: View {
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
                                     quantity: product.servingSize,
-                                    imageURL: product.fotoProdutoURL,
+                                    imageURL: product.photoProduct,
                                     onRemove: {
                                         draft.removeIngredient(product)
                                     }

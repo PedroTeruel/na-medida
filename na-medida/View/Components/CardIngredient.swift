@@ -17,10 +17,25 @@ struct CardIngredient: View {
     var onRemove: (() -> Void)?
     
     private var formattedProductName: String {
+        let isTaco = brand?.uppercased().contains("TACO") ?? false
+        if isTaco {
+            return productName.trimmingCharacters(in: .whitespaces).uppercased()
+        }
+        
         let separators = CharacterSet(charactersIn: "-–—")
         let components = productName.components(separatedBy: separators)
         let baseName = components.first?.trimmingCharacters(in: .whitespaces) ?? productName
         return baseName.uppercased()
+    }
+    
+    private var displayBrand: String? {
+        guard let b = brand, !b.isEmpty else {
+            return nil
+        }
+        if b.uppercased().contains("TACO") {
+            return nil
+        }
+        return b
     }
     
     private var hasBrandOrQuantity: Bool {
@@ -55,16 +70,16 @@ struct CardIngredient: View {
                     .foregroundStyle(.primary)
                     .font(.callout)
                     .fontWeight(.regular)
-                    .lineLimit(1)
+                    .lineLimit(2)
                 //.minimumScaleFactor(0.8)
                 
                 if hasBrandOrQuantity {
                     HStack {
-                        if let brand = brand, !brand.isEmpty {
-                            Text(brand)
+                        if let brandToShow = displayBrand {
+                            Text(brandToShow)
                         }
                         
-                        if let brand = brand, !brand.isEmpty, let quantity = quantity, !quantity.isEmpty {
+                        if displayBrand != nil, let quantity = quantity, !quantity.isEmpty {
                             Text("•")
                         }
                         
