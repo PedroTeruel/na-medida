@@ -12,7 +12,7 @@ struct NutrientGenereal: View {
     var cardBody: String = "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K)."
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8){
+        VStack(alignment: .leading, spacing: 26){
             VStack(alignment: .leading, spacing: 8){
                 Text("O que são?")
                     .font(.title3)
@@ -53,14 +53,18 @@ struct NutrientGenereal: View {
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(.blue.opacity(0.1))
+                    .fill(.yellow.opacity(0.1))
             }
-            VStack(){
+            VStack(alignment: .leading){
                 Text("Principais Funções")
                     .font(.title3)
                     .foregroundStyle(.primary)
                     .fontWeight(.semibold)
+                FuncCard(funcIcon: "bolt.fill", funcText: "Fonte de energia")
+                FuncCard(funcIcon: "heart.fill", funcText: "Produção de hormonios")
+                FuncCard(funcIcon: "shield.fill", funcText: "Absorção de vitaminas A, D, E e K")
             }
+            
           
         }
         

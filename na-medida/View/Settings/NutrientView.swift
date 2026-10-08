@@ -24,26 +24,24 @@ struct NutrientView: View {
                         .font(.title)
                         .fontWeight(.semibold)
                     Text(nutrientDescription)
+                        .font(.title3)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .frame(maxWidth: 260)
+                .frame(maxWidth: 280)
                 Picker("Informações", selection: $segmentedControl) {
                     Text("Visão Geral").tag(0)
                     Text("Fontes").tag(1)
-                    Text("Dicas").tag(2)
                 }
                 .pickerStyle(.segmented)
                 
                 if segmentedControl == 0 {
-                    ThreeTable(version: 0)
-                } else if segmentedControl == 1 {
-                    ThreeTable(version: 1)
-                } else{
-                    TwoTable()
+                    NutrientGenereal(cardTitle: "As medidas podem variar", cardBody: "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K).")
                 }
-                MeasureWarningCard()
-                
+                else{
+                    NutrientsSource(sourceName: "Azeite de Oliva")
+                    MeasureWarningCard()
+                }
             }
         }
         .padding(.horizontal)

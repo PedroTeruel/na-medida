@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AboutNutrientsView: View {
     @State var segmentedControl = 0
+//    var text: String
+//    var isFocused: Bool = false
     var body: some View {
        
         ScrollView{
@@ -17,7 +19,11 @@ struct AboutNutrientsView: View {
                     .font(.body)
                     .foregroundStyle(.secondary)
                 
-                // Componente da barra de pesquisa
+//                SearchBarComponent(
+//                    searchText: $text,
+//                    isSearchFocused: $isFocused,
+//                    onSearchSubmit: { _ in }
+//                )
                 VStack(){
                     NutrientsCard(nutrientImg: "FatIcon")
                     NutrientsCard(nutrientName: "Carboídratos", nutrientDescription: "Principal fonte de energia do corpo", nutrientImg: "CarboIcon")
@@ -37,5 +43,7 @@ struct AboutNutrientsView: View {
 }
 
 #Preview {
-    AboutNutrientsView()
+    NavigationStack{
+        AboutNutrientsView()
+    }
 }
