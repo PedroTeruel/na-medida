@@ -19,14 +19,14 @@ struct EditRecipeView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                // MARK: - 1. Título / Nome da Receita
+                //titulo da receita
                 TextField("Minha receita", text: $recipe.name)
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 
-                // MARK: - 2. Categoria / Tag (Pill/Badge)
+                //botao da tag categoria
                 Button {
                     isShowingTagSheet = true
                 } label: {
@@ -43,54 +43,65 @@ struct EditRecipeView: View {
                                 .strokeBorder(recipe.tag.foregroundColor.opacity(0.5), style: StrokeStyle(dash: [4]))
                         )
                 }
-                .buttonStyle(.plain)
                 
-                // MARK: - 3. Carrossel Existente (Opaco)
-                VStack(spacing: 8) {
+                //carrosel opaco desabilitado
                     Text("Informações nutricionais")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     
                     CarouselView(recipe: recipe)
-                }
-                .opacity(0.4)
-                .disabled(true)
+                    .opacity(0.4)
+                    .disabled(true)
                 
-                // MARK: - 4. Botão Adicionar Ingredientes
+                
+                //botao de add ingrediente
                 Button {
                     router.navigate(to: .scanner(nil))
                 } label: {
                     AddIngredientButton()
                 }
-                .buttonStyle(.plain)
                 
-                // MARK: - 5. Lista de Ingredientes
-                VStack(spacing: 12) {
+                //lista de ingredientes
                     if recipe.ingredients.isEmpty {
                         Text("Nenhum ingrediente adicionado.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 12)
                     } else {
-                        ForEach(recipe.ingredients.indices, id: \.self) { index in
-                            CardRecipeIngredient(
-                                productName: recipe.ingredients[index].ingredient?.name,
-                                imageURL: recipe.ingredients[index].ingredient?.photoURL,
-                                brands: recipe.ingredients[index].ingredient?.brand,
-                                isEditable: true,
-                                userQuantity: $recipe.ingredients[index].userQuantity,
-                                unity: $recipe.ingredients[index].unity,
-                                onRemove: {
-                                    removeIngredient(recipe.ingredients[index])
-                                }
-                            )
+                        ForEach(recipe.ingredients) { item in
+                            if let index = recipe.ingredients.firstIndex(where: { $0.id == item.id }) {
+                                CardRecipeIngredient(
+                                    productName: item.ingredient?.name,
+                                    imageURL: item.ingredient?.photoURL,
+                                    brands: item.ingredient?.brand,
+                                    isEditable: true,
+                                    userQuantity: $recipe.ingredients[index].userQuantity,
+                                    unity: $recipe.ingredients[index].unity,
+                                    onRemove: {
+                                        removeIngredient(item)
+                                    }
+                                )
+                            }
                         }
                     }
-                }
-                .padding(.horizontal)
             }
-            .padding(.vertical)
+            .padding(.top, 16)
         }
+        
+        //botao de salvar
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    saveChanges()
+                } label: {
+                    Image(systemName: "checkmark")
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(.blue)
+                }
+            }
+        }
+        
+        //sheet de categorias
         .sheet(isPresented: $isShowingTagSheet) {
             TagSheetView(
                 recipe: recipe,
@@ -101,6 +112,17 @@ struct EditRecipeView: View {
         }
     }
     
+    //func para salvar alteracoes
+    private func saveChanges() {
+        do {
+            try modelContext.save()
+            dismiss() // Fecha a tela após salvar com sucesso
+        } catch {
+            print("Erro ao salvar alterações da receita: \(error)")
+        }
+    }
+    
+    //func para remover ingrediente
     private func removeIngredient(_ recipeIngredient: RecipeIngredient) {
         if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
             recipe.ingredients.remove(at: index)
@@ -143,3 +165,4 @@ struct EditRecipeView: View {
         .modelContainer(container)
         .environment(Router())
 }
+
