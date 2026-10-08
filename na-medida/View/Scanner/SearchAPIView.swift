@@ -97,6 +97,8 @@ struct SearchAPIView: View {
                                                 draft.addIngredient(product)
                                             }
                                             showFeedbackToast(productName: product.productName)
+                                            searchText = ""
+                                            isSearchFocused = false
                                         }
                                     }
                                 )

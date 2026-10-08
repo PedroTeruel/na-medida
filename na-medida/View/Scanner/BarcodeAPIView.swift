@@ -60,7 +60,7 @@ struct BarcodeAPIView: View {
                 .zIndex(1)
             }
         }
-        .navigationTitle("")
+        .navigationTitle("Adicione ingredientes")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -74,6 +74,7 @@ struct BarcodeAPIView: View {
                 Button(action: saveRecipeNavigate) {
                     Image(systemName: "checkmark")
                 }
+                .foregroundStyle(.white)
                 .buttonStyle(.glassProminent)
                 .disabled(draft.ingredients.isEmpty)
             }

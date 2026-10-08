@@ -95,6 +95,7 @@ struct IngredientView: View {
                     Text("Composição").tag(1)
                 }
                 .pickerStyle(.segmented)
+                .padding(.top)
                 
                 if segmentedControl == 0 {
                     NutritionFactsTable(

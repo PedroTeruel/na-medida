@@ -18,7 +18,7 @@ final class RecipeDraft {
     
     func addIngredient(_ dto: ProductOpenFoodFactsDTO) {
         if !ingredients.contains(dto) {
-            ingredients.append(dto)
+            ingredients.insert(dto, at: 0)
         }
     }
     
