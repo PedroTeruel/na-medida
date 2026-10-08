@@ -75,28 +75,12 @@ struct CardRecipeIngredient: View {
             
             Spacer()
             
-            if let imageURLString = imageURL, let url = URL(string: imageURLString) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    default:
-                        Color.gray
-                    }
-                }
-                .frame(width: 48, height: 48)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal, 4)
-            } else {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 48, height: 48)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.horizontal, 4)
-            }
+            AsyncProductImage(
+                urlString: imageURL,
+                size: 48,
+                cornerRadius: 16
+            )
+            .padding(.horizontal,4)
             
             if isEditable, let onRemove = onRemove {
                 Button(action: onRemove) {

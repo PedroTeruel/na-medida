@@ -343,7 +343,7 @@ extension Ingredient {
             barcode: dto.countries_tags?.first,
             name: dto.productName ?? "Sem Nome",
             brand: dto.brands,
-            photoURL: dto.fotoProdutoURL,
+            photoURL: dto.photoProduct,
             servingSize: dto.servingSize,
             caloriesPer100g: dto.nutriments?.energyKcal100g ?? 0.0,
             proteinsPer100g: dto.nutriments?.proteins100g ?? 0.0,

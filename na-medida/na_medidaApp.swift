@@ -12,11 +12,13 @@ import SwiftUI
 struct na_medidaApp: App {
     
     @State private var apiService = OpenFoodFactsService()
+    @State private var tacoService = TacoService()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(apiService)
+                .environment(tacoService)
         }
         .modelContainer(for: [
             Recipe.self,
