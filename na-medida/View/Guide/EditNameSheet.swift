@@ -29,6 +29,7 @@ struct EditNameSheet: View {
                     RoundedRectangle(cornerRadius: 25)
                         .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                 )
+                .autocorrectionDisabled()
             
             Button(action: {
                 onConfirm(newUsername)
@@ -59,18 +60,6 @@ struct EditNameSheet: View {
         .padding(.top, 44)
         
         Spacer()
-        
-//        VStack {
-//            Text("Qual é o seu nome?")
-//
-//            TextField("Nome", text: $newUsername)
-//
-//            Button("Confirmar") {
-//                onConfirm(newUsername)
-//                dismiss()
-//            }
-//            .buttonStyle(.bordered)
-//        }
     }
 }
 

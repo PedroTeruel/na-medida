@@ -25,7 +25,7 @@ struct AsyncProductImage: View {
             Text(emoji)
                 .font(.system(size: size * 0.55))
                 .frame(width: size, height: size)
-                .background(Color.blue.gradient)
+                .background(Color.button.gradient)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             
         } else if let urlString = urlString, let url = URL(string: urlString) {

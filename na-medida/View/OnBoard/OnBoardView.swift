@@ -23,36 +23,32 @@ struct OnBoardView: View {
                 endPoint: .topTrailing
             )
             .frame(height: 260)
-            //mask para gradiente nao ficar marcado na borda inferior
             .mask(
                 LinearGradient(
                     stops: [
-                        .init(color: .black, location: 0.4),       // Opacidade total no topo
-                        .init(color: .black, location: 0.5),       // Mantém a cor intensa até a metade
-                        .init(color: .clear, location: 1.0)        // Esmaece totalmente na borda inferior
+                        .init(color: .black, location: 0.4),
+                        .init(color: .black, location: 0.5),
+                        .init(color: .clear, location: 1.0)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
             )
             
-            Spacer() // Mantém o gradiente fixado no topo da tela
+            Spacer()
         }
     }
     
     var body: some View {
         ScrollViewReader { proxy in
             ZStack{
-                // gradiente no Topo
                 backgroundGradient
                     .ignoresSafeArea()
                 
-                // 3. Conteúdo com Distribuição do Espaço
                 GeometryReader { geometry in
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 0) {
                             
-                            // Cabeçalho (Topo)
                             VStack(spacing: 16) {
                                 Text("Bem-vindo(a) ao\nNa Medida!")
                                     .font(.system(size: 28, weight: .heavy))
@@ -70,17 +66,15 @@ struct OnBoardView: View {
                             .padding(.top, 60)
                             .padding(.horizontal, 16)
                             
-                            Spacer() // Empurra a imagem para o centro
+                            Spacer()
                             
-                            // Ícone (Centro)
                             Image("iconeOnBoard")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 180)
                             
-                            Spacer() // Empurra a seção de entrada para a parte inferior
+                            Spacer()
                             
-                            // Entrada do Nome e Botão (Rodapé)
                             VStack(spacing: 16) {
                                 Text("Como podemos te chamar?")
                                     .font(.system(size: 16, weight: .semibold))
@@ -96,6 +90,7 @@ struct OnBoardView: View {
                                         RoundedRectangle(cornerRadius: 25)
                                             .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                                     )
+                                    .autocorrectionDisabled()
                                 
                                 Button(action: {
                                     onContinue(username)
@@ -114,7 +109,6 @@ struct OnBoardView: View {
                             .padding(.horizontal, 42)
                             .padding(.bottom, 60)
                         }
-                        // Garante que a VStack ocupe no mínimo a altura total disponível do ecrã
                         .frame(minHeight: geometry.size.height)
                     }
                 }

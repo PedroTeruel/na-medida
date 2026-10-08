@@ -60,9 +60,9 @@ extension RecipeTag {
         case .breakfast: return "Wave1"
         case .lunch: return "Wave3"
         case .dinner: return "Wave2"
-        case .morningSnack: return "FundoCarouselRed"
-        case .afternoonSnack: return "FundoCarouselPink"
-        case .nightSnack: return "FundoCarouselBlue"
+        case .morningSnack: return "Wave6"
+        case .afternoonSnack: return "Wave5"
+        case .nightSnack: return "Wave7"
         case .dessert: return "Wave4"
         }
     }

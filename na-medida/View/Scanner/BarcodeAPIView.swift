@@ -46,15 +46,25 @@ struct BarcodeAPIView: View {
             if isLoading {
                 Color.black.opacity(0.5).ignoresSafeArea()
                 
-                VStack {
-                    ProgressView()
-                        .tint(.white)
-                        .scaleEffect(1.5)
+                VStack(spacing: 16) {
+                    ZStack {
+                        Image("IconeSearch")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                        
+                        ProgressView()
+                            .controlSize(.large)
+                            .scaleEffect(1.5)
+                            .tint(.white)
+                    }
+                    .frame(width: 60, height: 60)
+                    
                     Text("Buscando produto...")
                         .foregroundStyle(.white)
                         .fontWeight(.bold)
                 }
-                .padding()
+                .padding(24)
                 .background(Color.black.opacity(0.7))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .zIndex(1)
@@ -207,5 +217,6 @@ struct BarcodeAPIView: View {
         .environment(Router())
         .environment(RecipeDraft())
         .environment(OpenFoodFactsService())
+        .environment(TacoService())
         .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
 }

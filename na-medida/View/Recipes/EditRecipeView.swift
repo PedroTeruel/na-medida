@@ -19,14 +19,13 @@ struct EditRecipeView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                //titulo da receita
                 TextField("Minha receita", text: $recipe.name)
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
+                    .autocorrectionDisabled()
                 
-                //botao da tag categoria
                 Button {
                     isShowingTagSheet = true
                 } label: {
@@ -44,7 +43,6 @@ struct EditRecipeView: View {
                         )
                 }
                 
-                //carrosel opaco desabilitado
                     Text("Informações nutricionais")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -54,14 +52,12 @@ struct EditRecipeView: View {
                     .disabled(true)
                 
                 
-                //botao de add ingrediente
                 Button {
                     router.navigate(to: .scanner(nil))
                 } label: {
                     AddIngredientButton()
                 }
                 
-                //lista de ingredientes
                     if recipe.ingredients.isEmpty {
                         Text("Nenhum ingrediente adicionado.")
                             .font(.subheadline)
@@ -88,7 +84,6 @@ struct EditRecipeView: View {
             .padding(.top, 16)
         }
         
-        //botao de salvar
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -101,7 +96,6 @@ struct EditRecipeView: View {
             }
         }
         
-        //sheet de categorias
         .sheet(isPresented: $isShowingTagSheet) {
             TagSheetView(
                 recipe: recipe,
@@ -112,17 +106,15 @@ struct EditRecipeView: View {
         }
     }
     
-    //func para salvar alteracoes
     private func saveChanges() {
         do {
             try modelContext.save()
-            dismiss() // Fecha a tela após salvar com sucesso
+            dismiss()
         } catch {
             print("Erro ao salvar alterações da receita: \(error)")
         }
     }
     
-    //func para remover ingrediente
     private func removeIngredient(_ recipeIngredient: RecipeIngredient) {
         if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
             recipe.ingredients.remove(at: index)
@@ -131,7 +123,6 @@ struct EditRecipeView: View {
     }
 }
 
-// MARK: - Preview
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Recipe.self, RecipeIngredient.self, Ingredient.self, configurations: config)

@@ -64,18 +64,59 @@ struct SearchAPIView: View {
                     if isLoading {
                         HStack {
                             Spacer()
-                            ProgressView("Buscando...")
+                            
+                            VStack(spacing: 0) {
+                                
+                                Image("IconeSearch")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                                ProgressView()
+                                    .controlSize(.large)
+                                    .scaleEffect(0.5)
+                                    .tint(.primary)
+                                Text("Buscando")
+                                    .fontWeight(.regular)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(3)
+                            }
+                            .frame(maxWidth: .infinity)
+                            
+                            
                             Spacer()
                         }
+                        .padding(.top, 40)
                         .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                         
                     } else if !searchText.isEmpty {
                         
                         if searchResults.isEmpty {
                             if hasSearched {
-                                Text("Nenhum produto encontrado para \"\(searchText)\".")
-                                    .foregroundStyle(.secondary)
-                                    .listRowSeparator(.hidden)
+                                HStack(alignment: .center) {
+                                    Spacer()
+                                    VStack(spacing: 8) {
+                                        Image("IconeSearch")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 60, height: 60)
+                                        Text("Oops,")
+                                            .font(.title)
+                                            .fontWeight(.bold)
+                                            .foregroundStyle(.primary)
+                                        Text("Nenhum produto encontrado para \"\(searchText)\". As vezes a pesquisa pode falhar. Tente novamente.")
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(.secondary)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .frame(maxWidth: 280)
+                                    Spacer()
+                                }
+                                .padding(.top, 40)
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+
                             }
                             
                         } else {
@@ -180,4 +221,24 @@ struct SearchAPIView: View {
             hasSearched = false
         }
     }
+}
+
+#Preview {
+    struct PreviewWrapper: View {
+        @State private var detent: PresentationDetent = .medium
+        @State private var search = "Chocolate"
+        
+        var body: some View {
+            SearchAPIView(
+                currentDetent: $detent,
+                searchText: $search,
+                searchResults: [],
+                isLoading: false,
+                onSearchSubmit: { _ in }
+            )
+            .environment(Router())
+            .environment(RecipeDraft())
+        }
+    }
+    return PreviewWrapper()
 }

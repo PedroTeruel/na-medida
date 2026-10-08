@@ -32,14 +32,14 @@ struct SettingsView: View {
                     showEditSheet = true
                 }
             }
-            .padding(.top, 16)
-            .padding(.bottom, 32)
+            .padding()
             
             VStack(alignment: .leading) {
                 Text("Sobre nutrientes")
                     .fontWeight(.bold)
                     .foregroundStyle(.primary)
                     .padding(.bottom, 8)
+                    .padding(.top)
                 
                 Button {
                     router.navigate(to: .aboutNutrients)

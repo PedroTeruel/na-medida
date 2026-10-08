@@ -100,7 +100,7 @@ struct CardIngredient: View {
                 Button {
                     onRemove()
                 } label: {
-                    Image(systemName: "trash")
+                    Image(systemName: "trash.fill")
                         .fontWeight(.bold)
                 }
                 .buttonStyle(.borderedProminent)

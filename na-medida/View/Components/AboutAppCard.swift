@@ -33,10 +33,10 @@ struct AboutAppCard: View {
             RoundedRectangle(cornerRadius: 24)
                 .fill(.background)
                 .shadow(
-                    color: .black.opacity(0.18),
-                    radius: 6,
+                    color: .primary.opacity(0.18),
+                    radius: 2,
                     x: 0,
-                    y: 4
+                    y: 2
                 )
         }
         .overlay {

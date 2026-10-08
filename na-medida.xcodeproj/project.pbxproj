@@ -93,11 +93,12 @@
 				};
 			};
 			buildConfigurationList = 07861737306AECD100009687 /* Build configuration list for PBXProject "na-medida" */;
-			developmentRegion = en;
+			developmentRegion = "pt-BR";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
 			);
 			mainGroup = 07861733306AECD100009687;
 			minimizedProjectReferenceProxies = 1;
