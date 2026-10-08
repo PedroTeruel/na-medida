@@ -11,6 +11,8 @@ struct NewRecipeView: View {
     @Environment(Router.self) private var router
     @Environment(RecipeDraft.self) private var draft
     
+    @FocusState private var isTitleFocused: Bool
+    
     @State private var showDiscardAlert = false
     
     private var ifModifications: Bool {
@@ -23,26 +25,29 @@ struct NewRecipeView: View {
         VStack {
             VStack(spacing: 58) {
                 VStack(spacing: 8) {
-                    Text("Titulo")
-                        .font(.title3)
-                        .fontWeight(.semibold)
+                    Text("Título")
+                        .font(.title2)
+                        .fontWeight(.bold)
                     
                     TextField("Minha receita", text: $draftBindable.title)
                         .multilineTextAlignment(.center)
                         .font(.title)
-                        .frame(width: 180)
+                        .frame(maxWidth: .infinity)
+                        .autocorrectionDisabled()
+                        .focused($isTitleFocused)
                 }
                 
                 VStack(spacing: 8) {
                     Text("Vamos Organizar?")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    Text("Selecione uma categoria para guardar sua receita")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    Text("Selecione uma categoria para criar sua receita")
                         .font(.body)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
+                .padding()
             }
             
             FlowLayout(spacing: 12, rowSpacing: 12) {
@@ -70,7 +75,13 @@ struct NewRecipeView: View {
             .tint(.button)
             .disabled(draft.title.trimmingCharacters(in: .whitespaces).isEmpty)
         }
+        
         .padding()
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isTitleFocused = false
+        }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .toolbar(.hidden, for: .tabBar)
         .navigationTitle("Criar Receita")
         .navigationBarTitleDisplayMode(.inline)

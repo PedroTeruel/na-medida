@@ -19,8 +19,9 @@ struct SearchBarComponent: View {
                     .foregroundColor(.primary)
                 
                 TextField("Pesquisar ingrediente", text: $searchText)
-                    .focused(isSearchFocused)
                     .submitLabel(.search)
+                    .autocorrectionDisabled()
+                    .focused(isSearchFocused)
                     .onSubmit {
                         onSearchSubmit(searchText)
                     }

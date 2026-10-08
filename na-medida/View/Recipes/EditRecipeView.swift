@@ -231,4 +231,3 @@ struct EditRecipeView: View {
     .environment(Router())
     .modelContainer(container)
 }
-

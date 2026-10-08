@@ -10,7 +10,7 @@ import SwiftUI
 struct CardRecipeIngredient: View {
     var productName: String?
     var imageURL: String?
-    var brands: String?
+    //var brands: String?
     var isEditable: Bool
     @Binding var userQuantity: Double
     @Binding var unity: QntUnity
@@ -27,7 +27,7 @@ struct CardRecipeIngredient: View {
     ) {
         self.productName = productName
         self.imageURL = imageURL
-        self.brands = brands
+        //self.brands = brands
         self.isEditable = isEditable
         self._userQuantity = userQuantity
         self._unity = unity
@@ -35,41 +35,26 @@ struct CardRecipeIngredient: View {
     }
     
     var body: some View {
-        HStack{
-            if let imageURLString = imageURL, let url = URL(string: imageURLString) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    default:
-                        Color.gray
-                    }
-                }
-                .frame(width: 48, height: 48)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal, 4)
-            } else {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 48, height: 48)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.horizontal, 4)
-            }
+        HStack (spacing: 16) {
+            
+            AsyncProductImage(
+                urlString: imageURL,
+                size: 62,
+                cornerRadius: 16
+            )
             
             VStack(alignment: .leading, spacing: 4) {
                 Text((productName ?? "produto sem nome").uppercased())
                     .foregroundStyle(.primary)
-                    .font(.title3)
+                    .font(.callout)
                     .fontWeight(.bold)
-                
-                if let brands = brands, !brands.isEmpty {
-                    Text(brands)
-                        .foregroundStyle(.secondary)
-                        .font(.subheadline)
-                }
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+//                if let brands = brands, !brands.isEmpty {
+//                    Text(brands)
+//                        .foregroundStyle(.secondary)
+//                        .font(.subheadline)
+//                }
                 
                 if isEditable {
                     HStack(spacing: 6) {
@@ -95,25 +80,28 @@ struct CardRecipeIngredient: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .padding(.horizontal)
-            
             Spacer()
             
             if isEditable, let onRemove = onRemove {
-                Button(action: onRemove) {
-                    Image(systemName: "trash")
-                        .foregroundStyle(.red)
-                        .padding(8)
+                Button {
+                    onRemove()
+                } label: {
+                    Image(systemName: "trash.fill")
+                        .fontWeight(.bold)
                 }
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
+                .clipShape(Circle())
+                
             }
         }
-        .padding()
+        .padding(16)
         .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 24)
                 .fill(Color(.systemBackground))
                 .shadow(
-                    color: .black.opacity(0.15),
+                    color: .primary.opacity(0.15),
                     radius: 6,
                     x: 0,
                     y: 4
@@ -136,7 +124,7 @@ struct CardRecipeIngredient: View {
         )
         
         CardRecipeIngredient(
-            productName: "Leite Integral",
+            productName: "Leite Integral Integral Integral Integral",
             imageURL: nil,
             brands: "Elegê",
             isEditable: false,
