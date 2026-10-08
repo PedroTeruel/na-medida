@@ -35,7 +35,30 @@ struct CardRecipeIngredient: View {
     }
     
     var body: some View {
-        HStack {
+        HStack{
+            if let imageURLString = imageURL, let url = URL(string: imageURLString) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    default:
+                        Color.gray
+                    }
+                }
+                .frame(width: 48, height: 48)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .padding(.horizontal, 4)
+            } else {
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 48, height: 48)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .padding(.horizontal, 4)
+            }
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text((productName ?? "produto sem nome").uppercased())
                     .foregroundStyle(.primary)
@@ -72,15 +95,9 @@ struct CardRecipeIngredient: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .padding(.horizontal)
             
             Spacer()
-            
-            AsyncProductImage(
-                urlString: imageURL,
-                size: 48,
-                cornerRadius: 16
-            )
-            .padding(.horizontal,4)
             
             if isEditable, let onRemove = onRemove {
                 Button(action: onRemove) {
@@ -92,7 +109,16 @@ struct CardRecipeIngredient: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(.quinary, in: RoundedRectangle(cornerRadius: 16))
+        .background {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color(.systemBackground))
+                .shadow(
+                    color: .black.opacity(0.15),
+                    radius: 6,
+                    x: 0,
+                    y: 4
+                )
+        }
         .padding(.horizontal)
     }
 }
