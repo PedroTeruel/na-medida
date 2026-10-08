@@ -19,6 +19,7 @@ enum AppRoute: Hashable {
     case aboutMeasures
     case aboutUs
     case termsOfUse
+    case editrecipe(Recipe)
 }
 
 @Observable
@@ -117,6 +118,8 @@ class Router {
         case .termsOfUse:
             TermsOfUseView()
             
+        case .editrecipe(let recipe):
+            EditRecipeView(recipe: recipe)
         }
     }
 }

@@ -1,102 +1,40 @@
 //
-//  ThreeTable.swift
+//  TwoTable.swift
 //  na-medida
 //
-//  Created by Pedro Henrique Hossaka Teruel on 02/10/26.
+//  Created by Pedro Henrique Hossaka Teruel on 07/10/26.
 //
 
 import SwiftUI
 
-struct ThreeTable: View {
-    
-    var version: Int
-    
-    private var selectedMeasures: [Measure] {
-        switch version {
-        case 0:
-            return measureSolid
-        case 1:
-            return measureSauce
-        default:
-            return []
-        }
-    }
+struct TwoTable: View {
 
     struct Measure: Identifiable {
         let id = UUID()
         let name: String
-        let cup: String
-        let spoon: String
+        let value: String
     }
-
-    private let measureSolid: [Measure] = [
-        .init(
-            name: "Farinha de Trigo",
-            cup: "120 g",
-            spoon: "8 g"
-        ),
-        .init(
-            name: "Açúcar Refinado",
-            cup: "200 g",
-            spoon: "12 g"
-        ),
-        .init(
-            name: "Açúcar Mascavo",
-            cup: "150 g",
-            spoon: "10 g"
-        ),
-        .init(
-            name: "Margarina",
-            cup: "200 g",
-            spoon: "15 g"
-        ),
-        .init(
-            name: "Cacau em Pó",
-            cup: "90 g",
-            spoon: "6 g"
-        ),
-        .init(
-            name: "Aveia em Flocos",
-            cup: "80 g",
-            spoon: "5 g"
-        ),
-        .init(
-            name: "Arroz Cru",
-            cup: "200 g",
-            spoon: "15 g"
-        )
-    ]
     
-    private let measureSauce: [Measure] = [
+    private let measureLiquid: [Measure] = [
         .init(
-            name: "Sal Fino",
-            cup: "15 g",
-            spoon: "5 g"
+            name: "1 Xícara de Chá",
+            value: "250"
         ),
         .init(
-            name: "Sal Grosso",
-            cup: "20 g",
-            spoon: "7 g"
+            name: "1/2 Xícara de Chá",
+            value: "120"
         ),
         .init(
-            name: "Fermento",
-            cup: "12g",
-            spoon: "4 g"
+            name: "1/4 Xícara de Chá",
+            value: "60"
         ),
         .init(
-            name: "Bicarbonato",
-            cup: "14 g",
-            spoon: "5 g"
+            name: "1 Colher de Sopa",
+            value: "15"
         ),
         .init(
-            name: "Especiarias",
-            cup: "6 g",
-            spoon: "2 g"
-        ),
-        .init(
-            name: "Ervas",
-            cup: "3 g",
-            spoon: "1 g"
+            name: "1 Colher de Chá",
+            value: "5"
         )
     ]
 
@@ -135,37 +73,19 @@ struct ThreeTable: View {
 
                 HStack(spacing: 22) {
 
-                    Text("Ingrediente")
+                    Text("Medida Caseira")
                         .font(.footnote)
                         .fontWeight(.semibold)
                     
                     Spacer()
-
-                    VStack(){
-                        Image(systemName: "cup.and.saucer")
-                            .frame(height: 12)
-                        Text("1 Xícara de Chá")
-                            .font(.caption2)
-                    }
                     
                     VStack(){
-                        Image(systemName: "spoon.serving")
-                            .frame(height: 12)
-                        Text("1 Colher de Sopa")
-                            .font(.caption2)
+                        Text("Mililítros")
+                            .font(.footnote)
+                        Text("(mL)")
+                            .font(.caption)
                     }
-                    
-//                    Label(
-//                        "1 Xícara de Chá",
-//                        systemImage: "cup.and.saucer"
-//                    )
-//                    Label(
-//                        "1 Colher de Sopa",
-//                        systemImage: "fork.knife"
-//                    )
-
                 }
-                .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 18)
@@ -174,7 +94,7 @@ struct ThreeTable: View {
                         .fill(.blue.opacity(0.07))
                 }
 
-                ForEach(Array(selectedMeasures.enumerated()), id: \.element.id) { index, measure in
+                ForEach(Array(measureLiquid.enumerated()), id: \.element.id) { index, measure in
 
                     HStack(spacing: 8) {
 
@@ -190,30 +110,21 @@ struct ThreeTable: View {
                             alignment: .leading
                         )
 
-                        Text(measure.cup)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .center
-                            )
-                            .padding(.leading, 40)
-
                         VStack(alignment:.center){
-                            Text(measure.spoon)
+                            Text(measure.value)
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .frame(
                                     maxWidth: .infinity,
                                     alignment: .trailing
                                 )
-                                .padding(.trailing, 26)
+                                .padding(.trailing, 14)
                         }
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
 
-                    if index != selectedMeasures.count - 1 {
+                    if index != measureLiquid.count - 1 {
                         Divider()
                             .padding(.horizontal)
                     }
@@ -239,5 +150,5 @@ struct ThreeTable: View {
 }
 
 #Preview {
-    ThreeTable(version: 1)
+    TwoTable()
 }

@@ -22,7 +22,7 @@ struct RecipesTabView: View {
     
     private var filteredRecipes: [Recipe] {
         let filtered: [Recipe]
-
+        
         if let selectedTag {
             filtered = recipes.filter { recipe in
                 recipe.tag == selectedTag
@@ -30,13 +30,13 @@ struct RecipesTabView: View {
         } else {
             filtered = recipes
         }
-
+        
         switch sortOrder {
         case .newest:
             return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
                 recipe1.creationDate > recipe2.creationDate
             }
-
+            
         case .oldest:
             return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
                 recipe1.creationDate < recipe2.creationDate
@@ -96,24 +96,34 @@ struct RecipesTabView: View {
                                 .padding(.bottom, 8)
                                 .padding(.horizontal, 16)
                             }
-                            ScrollView {
-                                VStack {
-                                    ForEach(filteredRecipes) { recipe in
-                                        Button {
-                                            router.navigate(to: .recipesinfo(recipe))
+                            
+                            //lista de componentes CardRecipe
+                            List {
+                                ForEach(filteredRecipes) { recipe in
+                                    Button {
+                                        router.navigate(to: .recipesinfo(recipe))
+                                    } label: {
+                                        CardRecipe(recipe: recipe)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .listRowSeparator(.hidden) // Remove a linha entre os itens
+                                    .listRowBackground(Color.clear) // Mantém o fundo transparente
+                                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)) // Ajusta o espaçamento
+                                    //GESTOS SWIPE PARA ESQUERDA
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                        Button(role: .destructive) {
+                                            deleteRecipe(recipe)
                                         } label: {
-                                            CardRecipe(recipe: recipe)
+                                            Label("Deletar", systemImage: "trash")
                                         }
-                                        .buttonStyle(.plain)
-                                        .padding(.vertical, 4)
                                     }
                                 }
-                                .padding(.horizontal, 16)
-                                .frame(maxWidth: .infinity)
                             }
+                            .listStyle(.plain)
+                            .scrollDisabled(true) // Desabilita a rolagem interna da List para rolar junto com a ScrollView externa
+                            .frame(height: CGFloat(filteredRecipes.count) * 220)
                         }
                     }
-                    
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .navigationTitle("Olá, \(username)!")
@@ -146,7 +156,14 @@ struct RecipesTabView: View {
             }
         }
     }
+    //func de delete receita
+    private func deleteRecipe(_ recipe: Recipe) {
+        withAnimation {
+            mc.delete(recipe)
+        }
+    }
 }
+
 
 #Preview {
     RecipesTabView(username: "Will")

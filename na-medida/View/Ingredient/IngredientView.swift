@@ -40,9 +40,9 @@ struct IngredientView: View {
         self.allergensText = allergensText
         
         //essa config altera os outros segmented control do app
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.systemBackground], for: .selected)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.label], for: .normal)
+//        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
+//        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.systemBackground], for: .selected)
+//        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.label], for: .normal)
     }
     
     init(productDTO: ProductOpenFoodFactsDTO) {

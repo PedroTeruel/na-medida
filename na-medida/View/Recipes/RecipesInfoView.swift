@@ -11,8 +11,11 @@ import SwiftData
 struct RecipesInfoView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
+    @Environment(\.dismiss) private var dismiss
     
     var recipe: Recipe
+    
+    @State private var isShowingDeleteAlert = false
     
     var body: some View {
         ScrollView {
@@ -78,16 +81,44 @@ struct RecipesInfoView: View {
                     }
                 }
             }
-            ToolbarItem {
-                Button {
-                    print("Menu")
+            
+            //TOOLBAR
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button {
+                        router.navigate(to: .editrecipe(recipe))
+                    } label: {
+                        Label("Editar", systemImage: "pencil")
+                    }
+                    
+                    Button(role: .destructive) {
+                        isShowingDeleteAlert = true
+                    } label: {
+                        Label("Excluir", systemImage: "trash")
+                    }
                 } label: {
                     Image(systemName: "ellipsis")
                 }
             }
         }
+        // Alerta de confirmação para exclusão da receita
+        .alert("Excluir Receita?", isPresented: $isShowingDeleteAlert) {
+            Button("Cancelar", role: .cancel) { }
+            
+            Button("Excluir", role: .destructive) {
+                deleteRecipe()
+            }
+        } message: {
+            Text("Tem certeza de que deseja excluir \"\(recipe.name)\"? Ela não poderá ser recuperada depois.")
+        }
+    }
+    
+    private func deleteRecipe() {
+        mc.delete(recipe)
+        dismiss()
     }
 }
+
 
 #Preview {
     NavigationStack {
