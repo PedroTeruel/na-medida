@@ -8,13 +8,67 @@
 import SwiftUI
 
 struct FuncCard: View {
+    
+//    var nutriKind: Int
+    
+    struct NutrientS{
+        let funcIcon: String
+        let funcText: String
+    }
+    
+//    private var selectedNutrient: [NutrientS] {
+//        switch nutriKind {
+//        case 0:
+//            return fat
+//        case 1:
+//            return fat
+//        default:
+//            return []
+//        }
+//    }
+    
+    private let fat: [NutrientS] = [
+        .init(
+            funcIcon: "RayIcon",
+            funcText: "Fonte de energia"
+        )
+    ]
+    
+    private let carb: [NutrientS] = [
+        .init(
+            funcIcon: "RayIcon",
+            funcText: "Fonte de energia"
+        )
+    ]
+    private let cal: [NutrientS] = [
+        .init(
+            funcIcon: "RayIcon",
+            funcText: "Fonte de energia"
+        )
+    ]
+    
+    private let prot: [NutrientS] = [
+        .init(
+            funcIcon: "RayIcon",
+            funcText: "Fonte de energia"
+        )
+    ]
+    
+    private let sod: [NutrientS] = [
+        .init(
+            funcIcon: "RayIcon",
+            funcText: "Fonte de energia"
+        )
+    ]
+    
     var funcIcon: String
     var funcText: String
     var body: some View {
         HStack(spacing: 22){
-            Image(systemName: funcIcon)
-                .frame(width: 22)
-                .foregroundStyle(Color.orange)
+            Image(funcIcon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 40)
             Text(funcText)
             Spacer()
             
@@ -30,5 +84,5 @@ struct FuncCard: View {
 }
 
 #Preview {
-    FuncCard(funcIcon: "bolt.fill", funcText: "Fonte de energia")
+    FuncCard(funcIcon: "RayIcon", funcText: "Fonte de energia")
 }

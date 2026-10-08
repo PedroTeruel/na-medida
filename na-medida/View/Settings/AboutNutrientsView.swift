@@ -26,9 +26,9 @@ struct AboutNutrientsView: View {
 //                )
                 VStack(){
                     NutrientsCard(nutrientImg: "FatIcon")
-                    NutrientsCard(nutrientName: "Carboídratos", nutrientDescription: "Principal fonte de energia do corpo", nutrientImg: "CarboIcon")
+                    NutrientsCard(nutrientName: "Carboídratos", nutrientDescription: "Principal fonte de energia do corpo", nutrientImg: "CarbIcon")
                     NutrientsCard(nutrientName: "Calorias", nutrientDescription: "Energia que o corpo utiliza", nutrientImg: "CaloriesIcon")
-                    NutrientsCard(nutrientName: "Proteínas", nutrientDescription: "Construção muscular e reparo dos tecidos", nutrientImg: "ProteinIcon")
+                    NutrientsCard(nutrientName: "Proteínas", nutrientDescription: "Construção muscular e reparo dos tecidos", nutrientImg: "ProtIcon")
                     NutrientsCard(nutrientName: "Sódio", nutrientDescription: "Equilibrio de fluidos e função nervosa", nutrientImg: "SodiumIcon")
                 }
                 

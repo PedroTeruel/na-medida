@@ -28,10 +28,6 @@ struct ThreeTable: View {
         let cup: String
         let spoon: String
     }
-    
-    private var measureLiquid: [Measure] = [
-        
-    ]
 
     private let measureSolid: [Measure] = [
         .init(
