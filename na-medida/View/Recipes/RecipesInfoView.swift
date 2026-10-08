@@ -86,7 +86,7 @@ struct RecipesInfoView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {
-//                        router.navigate(to: .editrecipe(recipe))
+                        router.navigate(to: .editrecipe(recipe))
                     } label: {
                         Label("Editar", systemImage: "pencil")
                     }
