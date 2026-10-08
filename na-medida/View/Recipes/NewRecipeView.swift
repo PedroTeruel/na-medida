@@ -11,6 +11,12 @@ struct NewRecipeView: View {
     @Environment(Router.self) private var router
     @Environment(RecipeDraft.self) private var draft
     
+    @State private var showDiscardAlert = false
+    
+    private var ifModifications: Bool {
+        !draft.title.trimmingCharacters(in: .whitespaces).isEmpty || !draft.ingredients.isEmpty || draft.tag != .breakfast
+    }
+    
     var body: some View {
         @Bindable var draftBindable = draft
         
@@ -68,9 +74,36 @@ struct NewRecipeView: View {
         .toolbar(.hidden, for: .tabBar)
         .navigationTitle("Criar Receita")
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: . topBarLeading) {
+                Button {
+                    if ifModifications {
+                        showDiscardAlert = true
+                    } else {
+                        draft.clear()
+                        router.pop()
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .fontWeight(.medium)
+                    }
+                }
+            }
+        }
+        .alert("Descartar Receita?", isPresented: $showDiscardAlert) {
+                    Button("Cancelar", role: .cancel) { }
+                    
+                    Button("Descartar", role: .destructive) {
+                        draft.clear()
+                        router.pop()
+                    }
+                } message: {
+                    Text("Se você voltar, todas as informações adicionadas serão perdidas.")
+                }
+            }
+        }
 #Preview {
     NavigationStack {
         NewRecipeView()
