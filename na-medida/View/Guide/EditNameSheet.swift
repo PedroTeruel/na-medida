@@ -10,9 +10,9 @@ import SwiftUI
 struct EditNameSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var newUsername: String = ""
-
+    
     let onConfirm: (String) -> Void
-
+    
     var body: some View {
         
         VStack(spacing: 16) {

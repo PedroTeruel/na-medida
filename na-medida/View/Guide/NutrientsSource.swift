@@ -14,7 +14,7 @@ struct NutrientsSource: View {
     
     var body: some View {
         VStack(alignment: .leading){
-
+            
             HStack(){
                 VStack(spacing: 12){
                     Image("OliveIcon")
@@ -32,12 +32,10 @@ struct NutrientsSource: View {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(.quinary.opacity(0.6))
                 )
-
+                
             }
             
         }
-        
-        
     }
 }
 

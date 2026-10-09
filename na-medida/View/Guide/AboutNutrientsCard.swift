@@ -21,17 +21,17 @@ struct AboutNutrientsCard: View {
                     .foregroundStyle(.primary)
                     .fontWeight(.semibold)
                     .fixedSize(horizontal: false, vertical: true)
-
+                
                 Text(cardBody)
                     .font(.body)
                     .fontWeight(.regular)
                     .foregroundStyle(.secondary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-
+                
             }
             Spacer()
-
+            
             Image(cardImg)
                 .resizable()
                 .scaledToFit()

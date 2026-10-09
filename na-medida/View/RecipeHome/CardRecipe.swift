@@ -66,12 +66,12 @@ struct CardRecipe: View {
                     icon: "MacroTagProteinas",
                     text: "\(Int(recipe.totalRecipeProteins))g"
                 )
-
+                
                 MacroTagView(
                     icon: "MacroTagCalorias",
                     text: "\(Int(recipe.totalRecipeCalories)) kcal"
                 )
-
+                
                 MacroTagView(
                     icon: "MacroTagCarbo",
                     text: "\(Int(recipe.totalRecipeCarbs))g"
@@ -97,16 +97,16 @@ struct CardRecipe: View {
         for: Recipe.self,
         configurations: config
     )
-
+    
     let banana = Ingredient(barcode: "0001", name: "Banana", photoURL: "https://images.openfoodfacts.org/images/products/401/440/092/0063/front_en.400.jpg")
     let aveia = Ingredient(barcode: "0002", name: "Aveia", photoURL: "https://images.openfoodfacts.org/images/products/316/893/001/0007/front_en.400.jpg")
     let leite = Ingredient(barcode: "0003", name: "Leite", photoURL: "https://images.openfoodfacts.org/images/products/356/007/012/5074/front_en.400.jpg")
     let ovo = Ingredient(barcode: "0004", name: "Ovo", photoURL: "https://images.openfoodfacts.org/images/products/327/019/002/5503/front_en.400.jpg")
     let morango = Ingredient(barcode: "0005", name: "Morango", photoURL: "https://images.openfoodfacts.org/images/products/356/007/011/9508/front_en.400.jpg")
     let pastaAmendoim = Ingredient(barcode: "0006", name: "Pasta", photoURL: "https://images.openfoodfacts.org/images/products/001/111/000/0030/front_en.400.jpg")
-
+    
     let sampleRecipe = Recipe(name: "Panqueca Proteica", tag: .breakfast)
-
+    
     sampleRecipe.ingredients = [
         RecipeIngredient(userQuantity: 100, unity: .g, ingredient: banana, recipe: sampleRecipe),
         RecipeIngredient(userQuantity: 50, unity: .g, ingredient: aveia, recipe: sampleRecipe),
@@ -115,7 +115,7 @@ struct CardRecipe: View {
         RecipeIngredient(userQuantity: 50, unity: .g, ingredient: morango, recipe: sampleRecipe),
         RecipeIngredient(userQuantity: 20, unity: .g, ingredient: pastaAmendoim, recipe: sampleRecipe)
     ]
-
+    
     return ScrollView {
         CardRecipe(recipe: sampleRecipe)
     }

@@ -28,7 +28,7 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
         super.viewDidLoad()
         SwipeController.shared.navigationController = self
         interactivePopGestureRecognizer?.delegate = SwipeController.shared
-    
+        
     }
     
 }

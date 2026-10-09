@@ -10,7 +10,7 @@ import SwiftUI
 struct AboutNutrientsView: View {
     @Environment(Router.self) private var router
     @State var segmentedControl = 0
-
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
