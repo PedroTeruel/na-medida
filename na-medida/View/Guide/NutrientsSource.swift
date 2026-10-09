@@ -14,11 +14,7 @@ struct NutrientsSource: View {
     
     var body: some View {
         VStack(alignment: .leading){
-//            Text("Principais Funções")
-//                .font(.title3)
-//                .foregroundStyle(.primary)
-//                .fontWeight(.semibold)
-//                .multilineTextAlignment(.leading)
+
             HStack(){
                 VStack(spacing: 12){
                     Image("OliveIcon")
@@ -36,19 +32,6 @@ struct NutrientsSource: View {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(.quinary.opacity(0.6))
                 )
-//                Spacer()
-//                VStack(){
-//                    Image("OliveIcon")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(height: 70)
-//                    Text(sourceName)
-//                }
-//                .padding()
-//                .background(
-//                    RoundedRectangle(cornerRadius: 24)
-//                        .fill(.quinary.opacity(0.6))
-//                )
 
             }
             

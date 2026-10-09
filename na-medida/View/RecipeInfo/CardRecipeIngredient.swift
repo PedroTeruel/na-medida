@@ -50,11 +50,6 @@ struct CardRecipeIngredient: View {
                     .fontWeight(.bold)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
-//                if let brands = brands, !brands.isEmpty {
-//                    Text(brands)
-//                        .foregroundStyle(.secondary)
-//                        .font(.subheadline)
-//                }
                 
                 if isEditable {
                     HStack(spacing: 6) {

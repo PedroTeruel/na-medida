@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardIngredient: View {
+struct CardSheet: View {
     var productName: String
     var brand: String?
     var quantity: String?
@@ -131,15 +131,15 @@ struct CardIngredient: View {
 
 #Preview {
     VStack {
-        CardIngredient(productName: "Cioccolato Fondente Deciso – Lindt – 100g")
+        CardSheet(productName: "Cioccolato Fondente Deciso – Lindt – 100g")
         
-        CardIngredient(
+        CardSheet(
             productName: "Cioccolato Fondente Deciso – Lindt – 100g",
             brand: "Lindt",
             quantity: "100g",
             onAdd: {})
         
-        CardIngredient(
+        CardSheet(
             productName: "Cioccolato Fondente Deciso – Lindt – 100g",
             brand: "Lindt",
             quantity: "100g",
