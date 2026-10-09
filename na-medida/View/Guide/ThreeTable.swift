@@ -21,14 +21,14 @@ struct ThreeTable: View {
             return []
         }
     }
-
+    
     struct Measure: Identifiable {
         let id = UUID()
         let name: String
         let cup: String
         let spoon: String
     }
-
+    
     private let measureSolid: [Measure] = [
         .init(
             name: "Farinha de Trigo",
@@ -99,12 +99,12 @@ struct ThreeTable: View {
             spoon: "1 g"
         )
     ]
-
+    
     var body: some View {
         VStack(spacing: 20) {
-
+            
             HStack(spacing: 16) {
-
+                
                 Image(systemName: "takeoutbag.and.cup.and.straw.fill")
                     .font(.title2)
                     .foregroundStyle(.blue)
@@ -113,12 +113,12 @@ struct ThreeTable: View {
                         RoundedRectangle(cornerRadius: 16)
                             .fill(.blue.opacity(0.1))
                     }
-
+                
                 VStack(alignment: .leading, spacing: 4) {
-
+                    
                     Text("Medidas de Sólidos")
                         .font(.headline)
-
+                    
                     Text(
                         "Veja equivalências entre gramas e medidas caseiras mais comuns."
                     )
@@ -126,21 +126,21 @@ struct ThreeTable: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 }
-
+                
                 Spacer()
             }
             .padding()
-
+            
             VStack(spacing: 0) {
-
+                
                 HStack(spacing: 22) {
-
+                    
                     Text("Ingrediente")
                         .font(.footnote)
                         .fontWeight(.semibold)
                     
                     Spacer()
-
+                    
                     VStack(){
                         Image(systemName: "cup.and.saucer")
                             .frame(height: 12)
@@ -154,16 +154,6 @@ struct ThreeTable: View {
                         Text("1 Colher de Sopa")
                             .font(.caption2)
                     }
-                    
-//                    Label(
-//                        "1 Xícara de Chá",
-//                        systemImage: "cup.and.saucer"
-//                    )
-//                    Label(
-//                        "1 Colher de Sopa",
-//                        systemImage: "fork.knife"
-//                    )
-
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -173,13 +163,13 @@ struct ThreeTable: View {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(.blue.opacity(0.07))
                 }
-
+                
                 ForEach(Array(selectedMeasures.enumerated()), id: \.element.id) { index, measure in
-
+                    
                     HStack(spacing: 8) {
-
+                        
                         HStack(spacing: 12) {
-
+                            
                             Text(measure.name)
                                 .font(.footnote)
                                 .foregroundStyle(.primary)
@@ -189,7 +179,7 @@ struct ThreeTable: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
-
+                        
                         Text(measure.cup)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -198,7 +188,7 @@ struct ThreeTable: View {
                                 alignment: .center
                             )
                             .padding(.leading, 40)
-
+                        
                         VStack(alignment:.center){
                             Text(measure.spoon)
                                 .font(.subheadline)
@@ -212,7 +202,7 @@ struct ThreeTable: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
-
+                    
                     if index != selectedMeasures.count - 1 {
                         Divider()
                             .padding(.horizontal)
@@ -223,7 +213,6 @@ struct ThreeTable: View {
             .padding(.bottom, 8)
             .padding(.horizontal, 4)
         }
-        //.padding(16)
         .background {
             RoundedRectangle(cornerRadius: 28)
                 .fill(.background)
@@ -234,7 +223,6 @@ struct ThreeTable: View {
                     y: 4
                 )
         }
-        //.padding(.horizontal)
     }
 }
 

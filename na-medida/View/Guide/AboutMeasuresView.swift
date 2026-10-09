@@ -10,7 +10,7 @@ import SwiftUI
 struct AboutMeasuresView: View {
     @State var segmentedControl = 0
     var body: some View {
-       
+        
         ScrollView{
             VStack(alignment: .leading, spacing: 22){
                 Text("Aprenda a converter a quantidade de ingredientes usando medidas caseiras.")

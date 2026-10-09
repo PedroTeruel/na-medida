@@ -23,7 +23,7 @@ struct MeasureWarningCard: View{
                     .font(.headline)
                     .foregroundStyle(.primary)
                     .fontWeight(.semibold)
-
+                
                 Text(cardBody)
                     .font(.callout)
                     .fontWeight(.regular)

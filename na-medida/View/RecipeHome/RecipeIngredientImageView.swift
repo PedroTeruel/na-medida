@@ -17,7 +17,7 @@ struct RecipeIngredientImageView: View {
             urlString: urlString,
             size: 70,
             cornerRadius: 35)
-            .overlay(Circle().stroke(Color.white, lineWidth: 3))
+        .overlay(Circle().stroke(Color.white, lineWidth: 3))
     }
 }
 

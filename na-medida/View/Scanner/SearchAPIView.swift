@@ -116,7 +116,7 @@ struct SearchAPIView: View {
                                 .padding(.top, 40)
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
-
+                                
                             }
                             
                         } else {

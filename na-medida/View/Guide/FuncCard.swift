@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FuncCard: View {
-        
+    
     struct NutrientS{
         let funcIcon: String
         let funcText: String

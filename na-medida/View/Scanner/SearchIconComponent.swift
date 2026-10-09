@@ -23,7 +23,7 @@ struct SearchIconComponent: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                
+            
             
             
         }

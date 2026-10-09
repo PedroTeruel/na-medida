@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TwoTable: View {
-
+    
     struct Measure: Identifiable {
         let id = UUID()
         let name: String
@@ -37,12 +37,12 @@ struct TwoTable: View {
             value: "5"
         )
     ]
-
+    
     var body: some View {
         VStack(spacing: 20) {
-
+            
             HStack(spacing: 16) {
-
+                
                 Image(systemName: "takeoutbag.and.cup.and.straw.fill")
                     .font(.title2)
                     .foregroundStyle(.blue)
@@ -51,12 +51,12 @@ struct TwoTable: View {
                         RoundedRectangle(cornerRadius: 16)
                             .fill(.blue.opacity(0.1))
                     }
-
+                
                 VStack(alignment: .leading, spacing: 4) {
-
+                    
                     Text("Medidas de Sólidos")
                         .font(.headline)
-
+                    
                     Text(
                         "Veja equivalências entre gramas e medidas caseiras mais comuns."
                     )
@@ -64,15 +64,15 @@ struct TwoTable: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 }
-
+                
                 Spacer()
             }
             .padding()
-
+            
             VStack(spacing: 0) {
-
+                
                 HStack(spacing: 22) {
-
+                    
                     Text("Medida Caseira")
                         .font(.footnote)
                         .fontWeight(.semibold)
@@ -93,13 +93,13 @@ struct TwoTable: View {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(.blue.opacity(0.07))
                 }
-
+                
                 ForEach(Array(measureLiquid.enumerated()), id: \.element.id) { index, measure in
-
+                    
                     HStack(spacing: 8) {
-
+                        
                         HStack(spacing: 12) {
-
+                            
                             Text(measure.name)
                                 .font(.footnote)
                                 .foregroundStyle(.primary)
@@ -109,7 +109,7 @@ struct TwoTable: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
-
+                        
                         VStack(alignment:.center){
                             Text(measure.value)
                                 .font(.subheadline)
@@ -123,7 +123,7 @@ struct TwoTable: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
-
+                    
                     if index != measureLiquid.count - 1 {
                         Divider()
                             .padding(.horizontal)
@@ -134,7 +134,6 @@ struct TwoTable: View {
             .padding(.bottom, 8)
             .padding(.horizontal, 4)
         }
-        //.padding(16)
         .background {
             RoundedRectangle(cornerRadius: 28)
                 .fill(.background)
@@ -145,7 +144,6 @@ struct TwoTable: View {
                     y: 4
                 )
         }
-        //.padding(.horizontal)
     }
 }
 

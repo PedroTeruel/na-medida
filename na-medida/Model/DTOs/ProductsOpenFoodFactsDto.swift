@@ -93,7 +93,7 @@ struct NutrimentsDTO: Decodable, Hashable {
     let calciumServing: Double?
     let ironServing: Double?
     let zincServing: Double?
-
+    
     let vitaminA100g: Double?
     let vitaminD100g: Double?
     let vitaminK100g: Double?
@@ -152,7 +152,7 @@ struct NutrimentsDTO: Decodable, Hashable {
         case calciumServing = "calcium_serving"
         case ironServing = "iron_serving"
         case zincServing = "zinc_serving"
-
+        
         case vitaminA100g = "vitamin-a_100g"
         case vitaminD100g = "vitamin-d_100g"
         case vitaminK100g = "vitamin-k_100g"
@@ -275,7 +275,7 @@ extension ProductOpenFoodFactsDTO {
                 items.append(NutritionalFactsItem(name: nome, value100g: AnvisaNutritionFormatter.format(v100g, scale: .mcg), valuePortion: AnvisaNutritionFormatter.format(vPortion, scale: .mcg), dailyValue: "", isBold: false))
             }
         }
-
+        
         if nutriments.calcium100g != nil || nutriments.calciumServing != nil {
             items.append(NutritionalFactsItem(name: "Cálcio (mg)", value100g: AnvisaNutritionFormatter.format(nutriments.calcium100g, scale: .mg), valuePortion: AnvisaNutritionFormatter.format(nutriments.calciumServing, scale: .mg), dailyValue: "", isBold: false))
         }

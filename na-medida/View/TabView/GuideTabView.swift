@@ -43,14 +43,14 @@ struct GuideTabView: View {
                 
                 Button {
                     router.navigate(to: .aboutNutrients)
-                    } label: {
-                        AboutNutrientsCard(
-                            cardTitle: "Definição dos nutrientes",
-                            cardBody: "Entenda melhor sobre os ingredientes das suas receitas",
-                            cardImg: "book" )
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.bottom, 6)
+                } label: {
+                    AboutNutrientsCard(
+                        cardTitle: "Definição dos nutrientes",
+                        cardBody: "Entenda melhor sobre os ingredientes das suas receitas",
+                        cardImg: "book" )
+                }
+                .buttonStyle(.plain)
+                .padding(.bottom, 6)
                 
                 Button {
                     router.navigate(to: .aboutMeasures)
