@@ -233,7 +233,7 @@ struct SearchAPIView: View {
                 currentDetent: $detent,
                 searchText: $search,
                 searchResults: [],
-                isLoading: false,
+                isLoading: true,
                 onSearchSubmit: { _ in }
             )
             .environment(Router())
