@@ -133,7 +133,7 @@ struct SearchAPIView: View {
                             ForEach(searchResults, id: \.self) { product in
                                 let isAlreadyAdd = draft.ingredients.contains(product)
                                 
-                                CardIngredient(
+                                CardSheet(
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
                                     quantity: product.servingSize,
@@ -171,7 +171,7 @@ struct SearchAPIView: View {
                                 .listRowSeparator(.hidden)
                             
                             ForEach(draft.ingredients, id: \.self) { product in
-                                CardIngredient(
+                                CardSheet(
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
                                     quantity: product.servingSize,

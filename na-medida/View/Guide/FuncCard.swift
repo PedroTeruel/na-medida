@@ -8,24 +8,11 @@
 import SwiftUI
 
 struct FuncCard: View {
-    
-//    var nutriKind: Int
-    
+        
     struct NutrientS{
         let funcIcon: String
         let funcText: String
     }
-    
-//    private var selectedNutrient: [NutrientS] {
-//        switch nutriKind {
-//        case 0:
-//            return fat
-//        case 1:
-//            return fat
-//        default:
-//            return []
-//        }
-//    }
     
     private let fat: [NutrientS] = [
         .init(

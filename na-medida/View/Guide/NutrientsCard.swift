@@ -19,7 +19,6 @@ struct NutrientsCard: View {
                 .resizable()
                 .scaledToFit()
                 .frame(height: 70)
-                //.padding(.leading, 10)
             
             VStack(alignment: .leading, spacing: 8) {
                 
