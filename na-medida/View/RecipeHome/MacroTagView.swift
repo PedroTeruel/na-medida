@@ -10,15 +10,13 @@ import SwiftUI
 struct MacroTagView: View {
     let icon: String
     let text: String
-    let color: Color
 
     var body: some View {
-        HStack(spacing: 4) {
-            // Agora (Asset personalizado)
+        HStack(spacing: 8) {
             Image(icon)
                 .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
+                .scaledToFill()
+                .frame(width: 10, height: 10)
 
             Text(text)
                 .font(.callout)
@@ -37,5 +35,5 @@ struct MacroTagView: View {
 }
 
 #Preview {
-    MacroTagView(icon: "person", text: "Lasanha", color: Color.blue)
+    MacroTagView(icon: "MacroTagCalorias", text: "Lasanha")
 }

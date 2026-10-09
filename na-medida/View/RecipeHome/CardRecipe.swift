@@ -63,21 +63,18 @@ struct CardRecipe: View {
             
             HStack(spacing: 18){
                 MacroTagView(
-                    icon: "ProtIcon",
-                    text: "\(Int(recipe.totalRecipeProteins))g",
-                    color: .blue
+                    icon: "MacroTagProteinas",
+                    text: "\(Int(recipe.totalRecipeProteins))g"
                 )
 
                 MacroTagView(
-                    icon: "CaloriesIcon",
-                    text: "\(Int(recipe.totalRecipeCalories)) Kcal",
-                    color: .orange
+                    icon: "MacroTagCalorias",
+                    text: "\(Int(recipe.totalRecipeCalories)) kcal"
                 )
 
                 MacroTagView(
-                    icon: "CarbIcon",
-                    text: "\(Int(recipe.totalRecipeCarbs))g",
-                    color: .green
+                    icon: "MacroTagCarbo",
+                    text: "\(Int(recipe.totalRecipeCarbs))g"
                 )
             }
         }

@@ -53,7 +53,13 @@ struct NewRecipeView: View {
             FlowLayout(spacing: 12, rowSpacing: 12) {
                 ForEach(RecipeTag.allCases, id: \.self) { tag in
                     TagButton(tag: tag, title: tag.rawValue, isSelected: draft.tag == tag) {
-                        draft.tag = tag
+                        //draft.tag = tag
+                        
+                        if draft.tag == tag {
+                            draft.tag = nil
+                        } else {
+                            draft.tag = tag
+                        }
                     }
                 }
             }
