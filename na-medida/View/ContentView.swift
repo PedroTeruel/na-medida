@@ -27,9 +27,7 @@ struct ContentView: View {
                     GuideTabView(user: currentUser)
                 }
                 
-                Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview
-//                    , role: .prominent
-                ) {
+                Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .prominent) {
                     SearchingTabView()
                 }
             }
