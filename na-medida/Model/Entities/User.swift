@@ -12,7 +12,7 @@ import SwiftData
 final class User{
     var username: String = ""
     var alreadySawOnBoard: Bool = false
-
+    
     init(username: String) {
         self.username = username
     }

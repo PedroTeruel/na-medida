@@ -8,42 +8,41 @@
 import SwiftUI
 
 struct AboutNutrientsView: View {
+    @Environment(Router.self) private var router
     @State var segmentedControl = 0
-//    var text: String
-//    var isFocused: Bool = false
+    
     var body: some View {
-       
-        ScrollView{
-            VStack(alignment: .leading, spacing: 22){
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
                 Text("Descubra para que servem os principais Nutrientes")
                     .font(.body)
                     .foregroundStyle(.secondary)
                 
-//                SearchBarComponent(
-//                    searchText: $text,
-//                    isSearchFocused: $isFocused,
-//                    onSearchSubmit: { _ in }
-//                )
-                VStack(){
-                    NutrientsCard(nutrientImg: "FatIcon")
-                    NutrientsCard(nutrientName: "Carboídratos", nutrientDescription: "Principal fonte de energia do corpo", nutrientImg: "CarbIcon")
-                    NutrientsCard(nutrientName: "Calorias", nutrientDescription: "Energia que o corpo utiliza", nutrientImg: "CaloriesIcon")
-                    NutrientsCard(nutrientName: "Proteínas", nutrientDescription: "Construção muscular e reparo dos tecidos", nutrientImg: "ProtIcon")
-                    NutrientsCard(nutrientName: "Sódio", nutrientDescription: "Equilibrio de fluidos e função nervosa", nutrientImg: "SodiumIcon")
+                VStack(spacing: 16) {
+                    ForEach(nutrients) { nutrient in
+                        Button {
+                            router.navigate(to: .nutrientInfo(nutrient))
+                        } label: {
+                            NutrientsCard(
+                                nutrientName: nutrient.name,
+                                nutrientDescription: nutrient.description,
+                                nutrientImg: nutrient.image
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
-                
-                
             }
             .padding(.horizontal)
             .navigationTitle("Definição dos Nutrientes")
             .navigationBarTitleDisplayMode(.large)
         }
-        
     }
 }
 
 #Preview {
-    NavigationStack{
+    NavigationStack {
         AboutNutrientsView()
+            .environment(Router())
     }
 }

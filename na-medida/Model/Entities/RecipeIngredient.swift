@@ -11,10 +11,10 @@ import SwiftData
 @Model
 final class RecipeIngredient {
     
-    var userQuantity: Double // qtd inserida pelo user
-    var unity: QntUnity // unidade selecionada pelo user
-    var recipe: Recipe? //vinculo com alguma Recipe
-    var ingredient: Ingredient? // Vínculo com algum Ingredient
+    var userQuantity: Double
+    var unity: QntUnity
+    var recipe: Recipe?
+    var ingredient: Ingredient?
     
     init(userQuantity: Double, unity: QntUnity, ingredient: Ingredient? = nil, recipe: Recipe? = nil) {
         self.userQuantity = userQuantity
@@ -54,11 +54,9 @@ extension RecipeIngredient {
     
     var totalIngredientCalories: Double {
         if unity == .un {
-            //se for unidade, multiplica pelo valor da porção
             let val = ingredient?.caloriesServing ?? ingredient?.caloriesPer100g ?? 0.0
             return val * userQuantity
         } else {
-            //se for g, kg, ml ou L, usa o peso proporcional
             return (ingredient?.caloriesPer100g ?? 0.0) * weightMultiplier
         }
     }

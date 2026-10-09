@@ -29,9 +29,9 @@ struct EditRecipeView: View {
                 Button {
                     isShowingTagSheet = true
                 } label: {
-
+                    
                     if let tag = recipe.tag {
-
+                        
                         Text(tag.rawValue)
                             .font(.subheadline)
                             .fontWeight(.medium)
@@ -49,9 +49,9 @@ struct EditRecipeView: View {
                                         style: StrokeStyle(dash: [4])
                                     )
                             }
-
+                        
                     } else {
-
+                        
                         Label(
                             "Adicionar categoria",
                             systemImage: "plus"

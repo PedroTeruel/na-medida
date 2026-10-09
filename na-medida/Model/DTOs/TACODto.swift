@@ -179,11 +179,10 @@ struct TacoItemDTO: Decodable, Hashable {
             "ingredients_text": "Informação baseada na Tabela Brasileira de Composição de Alimentos (TACO).",
             "image_url": getEmoji(),
             "serving_size": "100g",
-            "countries_tags": ["taco-\(id)"], //converte o dicionario diretamente no formato do codigo
+            "countries_tags": ["taco-\(id)"],
             "nutriments": nutrimentsDict
         ]
         
-        //converte o dicionario diretamente no formato do codigo
         guard let jsonData = try? JSONSerialization.data(withJSONObject: productDict),
               let dto = try? JSONDecoder().decode(ProductOpenFoodFactsDTO.self, from: jsonData) else {
             return nil

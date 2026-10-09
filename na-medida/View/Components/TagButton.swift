@@ -41,19 +41,19 @@ struct TagStatic: View{
     var body: some View{
         
         if let tag{
-              Text(tag.rawValue)
-                  .font(.subheadline)
-                  .fontWeight(.semibold)
-                  .padding(.horizontal, 16)
-                  .padding(.vertical, 8)
-                  .background(tag.color)
-                  .foregroundStyle(tag.foregroundColor)
-                  .clipShape(Capsule())
-          }else{
-              Text("Sem categoria")
-                  .font(.subheadline)
-                  .foregroundStyle(.secondary)
-          }
+            Text(tag.rawValue)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(tag.color)
+                .foregroundStyle(tag.foregroundColor)
+                .clipShape(Capsule())
+        }else{
+            Text("Sem categoria")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
     }
 }
 

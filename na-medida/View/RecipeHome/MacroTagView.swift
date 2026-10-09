@@ -10,14 +10,14 @@ import SwiftUI
 struct MacroTagView: View {
     let icon: String
     let text: String
-
+    
     var body: some View {
         HStack(spacing: 8) {
             Image(icon)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 10, height: 10)
-
+            
             Text(text)
                 .font(.callout)
                 .fontWeight(.regular)

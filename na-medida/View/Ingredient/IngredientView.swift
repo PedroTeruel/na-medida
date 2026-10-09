@@ -38,11 +38,6 @@ struct IngredientView: View {
         self.servingSizeText = servingSizeText
         self.ingredientsText = ingredientsText
         self.allergensText = allergensText
-        
-        //essa config altera os outros segmented control do app
-//        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.button
-//        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.systemBackground], for: .selected)
-//        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.label], for: .normal)
     }
     
     init(productDTO: ProductOpenFoodFactsDTO) {

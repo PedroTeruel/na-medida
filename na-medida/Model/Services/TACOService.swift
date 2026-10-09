@@ -16,7 +16,6 @@ final class TacoService {
         loadTacoData()
     }
     
-    //carrega e decodifica
     private func loadTacoData() {
         guard let url = Bundle.main.url(forResource: "tabela_alimentos", withExtension: "json") else {
             print("Arquivo tabela_alimentos.json não encontrado no Bundle.")
@@ -34,7 +33,6 @@ final class TacoService {
         }
     }
     
-    //busca local
     func searchProducts(query: String) -> [ProductOpenFoodFactsDTO] {
         guard !query.isEmpty else { return [] }
         

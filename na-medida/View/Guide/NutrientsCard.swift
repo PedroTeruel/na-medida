@@ -26,7 +26,7 @@ struct NutrientsCard: View {
                     .foregroundStyle(.primary)
                     .fontWeight(.semibold)
                     .fixedSize(horizontal: false, vertical: true)
-
+                
                 Text(nutrientDescription)
                     .font(.body)
                     .fontWeight(.regular)
