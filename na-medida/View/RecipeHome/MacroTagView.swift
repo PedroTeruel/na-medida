@@ -23,8 +23,8 @@ struct MacroTagView: View {
                 .fontWeight(.regular)
                 .foregroundStyle(.primary)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
+        .padding(.horizontal, 8)
+        .padding(.vertical,4)
         .background(.background)
         .clipShape(Capsule())
         .overlay(

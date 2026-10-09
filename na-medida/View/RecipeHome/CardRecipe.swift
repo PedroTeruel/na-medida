@@ -61,7 +61,7 @@ struct CardRecipe: View {
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
             
-            HStack(spacing: 8) {
+            HStack(spacing: 18){
                 MacroTagView(
                     icon: "MacroTagProteinas",
                     text: "\(Int(recipe.totalRecipeProteins))g"
