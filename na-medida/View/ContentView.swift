@@ -23,8 +23,8 @@ struct ContentView: View {
                     RecipesTabView(username: currentUser.username)
                 }
                 
-                Tab("Ajustes", systemImage: "gearshape.fill", value: AppTab.tabsettingsview) {
-                    SettingsView(user: currentUser)
+                Tab("Guia", systemImage: "gearshape.fill", value: AppTab.tabsettingsview) {
+                    GuideTabView(user: currentUser)
                 }
                 
                 Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .prominent) {

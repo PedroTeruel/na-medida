@@ -152,7 +152,6 @@ struct BarcodeAPIView: View {
     
     private func fetchProduct(barcode: String) {
         isLoading = true
-        // Esconde erro anterior, se houver
         withAnimation { errorMessage = nil }
         
         fetchTask?.cancel()

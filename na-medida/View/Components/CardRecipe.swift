@@ -12,14 +12,12 @@ struct CardRecipe: View {
     
     let recipe: Recipe
     
-    private var ingredientPhotoURLs: [String] {
-        recipe.ingredients.compactMap { $0.ingredient?.photoURL }
-    }
-    
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
             
-            if ingredientPhotoURLs.isEmpty {
+            let urls = recipe.ingredients.compactMap { $0.ingredient?.photoURL }
+            
+            if urls.isEmpty {
                 Image(systemName: "fork.knife")
                     .resizable()
                     .scaledToFit()
@@ -28,19 +26,19 @@ struct CardRecipe: View {
             } else {
                 HStack(spacing: -18) {
                     
-                    let hasExtra = ingredientPhotoURLs.count > 4
-                    let visibleCount = hasExtra ? 3 : ingredientPhotoURLs.count
+                    let hasExtra = urls.count > 4
+                    let visibleCount = hasExtra ? 3 : urls.count
                     
                     ForEach(0..<visibleCount, id: \.self) { index in
-                        RecipeIngredientImageView(urlString: ingredientPhotoURLs[index])
+                        RecipeIngredientImageView(urlString: urls[index])
                             .transition(.scale.combined(with: .opacity))
                     }
                     
                     if hasExtra {
-                        let extraCount = ingredientPhotoURLs.count - 3
+                        let extraCount = urls.count - 3
                         
                         ZStack {
-                            RecipeIngredientImageView(urlString: ingredientPhotoURLs[3])
+                            RecipeIngredientImageView(urlString: urls[3])
                             
                             Circle()
                                 .fill(Color.secondary.opacity(0.65))
@@ -54,7 +52,7 @@ struct CardRecipe: View {
                         .transition(.scale.combined(with: .opacity))
                     }
                 }
-                .animation(.spring(response: 0.4, dampingFraction: 0.7), value: ingredientPhotoURLs.count)
+                .animation(.spring(response: 0.4, dampingFraction: 0.7), value: urls.count)
             }
             
             Text(recipe.name)

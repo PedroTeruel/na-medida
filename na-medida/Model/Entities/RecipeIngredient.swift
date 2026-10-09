@@ -24,14 +24,6 @@ final class RecipeIngredient {
     }
 }
 
-//enum QntUnity: String, Codable {
-//    case un // Unidade
-//    case g  // Grama
-//    case kg // Quilograma
-//    case ml // Mililitro
-//    case l  // Litro
-//}
-
 enum QntUnity: String, Codable {
     case un, g, kg, ml, l
     
@@ -47,43 +39,63 @@ enum QntUnity: String, Codable {
     }
 }
 
-//extension com calculo dos macronutriente da receita
 extension RecipeIngredient {
     
-    //normalizando a quantidade que o usuario digitar para g ou mL
-    private var baseQuantity: Double {
+    private var weightMultiplier: Double {
         switch unity {
-        case .g, .ml, .un:
-            return userQuantity
+        case .g, .ml:
+            return userQuantity / 100.0
         case .kg, .l:
-            return userQuantity * 1000.0
+            return (userQuantity * 1000.0) / 100.0
+        case .un:
+            return 0.0
         }
     }
     
-    //regra de tres para calcular os nutrientes com a userQuantity normalizada
-    private var multiplier: Double {
-        return baseQuantity / 100.0
-    }
-    //propiedades computadas -> os macros da receita nao seroa armazenados no banco de dados, só serao calculados na hora
     var totalIngredientCalories: Double {
-        (ingredient?.caloriesPer100g ?? 0.0) * multiplier
+        if unity == .un {
+            //se for unidade, multiplica pelo valor da porção
+            let val = ingredient?.caloriesServing ?? ingredient?.caloriesPer100g ?? 0.0
+            return val * userQuantity
+        } else {
+            //se for g, kg, ml ou L, usa o peso proporcional
+            return (ingredient?.caloriesPer100g ?? 0.0) * weightMultiplier
+        }
     }
     
     var totalIngredientProteins: Double {
-        (ingredient?.proteinsPer100g ?? 0.0) * multiplier
+        if unity == .un {
+            let val = ingredient?.proteinsServing ?? ingredient?.proteinsPer100g ?? 0.0
+            return val * userQuantity
+        } else {
+            return (ingredient?.proteinsPer100g ?? 0.0) * weightMultiplier
+        }
     }
     
     var totalIngredientCarbs: Double {
-        (ingredient?.carbsPer100g ?? 0.0) * multiplier
+        if unity == .un {
+            let val = ingredient?.carbsServing ?? ingredient?.carbsPer100g ?? 0.0
+            return val * userQuantity
+        } else {
+            return (ingredient?.carbsPer100g ?? 0.0) * weightMultiplier
+        }
     }
     
     var totalIngredientFats: Double {
-        (ingredient?.fatsPer100g ?? 0.0) * multiplier
+        if unity == .un {
+            let val = ingredient?.fatsServing ?? ingredient?.fatsPer100g ?? 0.0
+            return val * userQuantity
+        } else {
+            return (ingredient?.fatsPer100g ?? 0.0) * weightMultiplier
+        }
     }
     
     var totalIngredientsSodium: Double {
-        (ingredient?.sodium100g ?? 0.0) * multiplier
+        if unity == .un {
+            let val = ingredient?.sodiumServing ?? ingredient?.sodium100g ?? 0.0
+            return val * userQuantity
+        } else {
+            return (ingredient?.sodium100g ?? 0.0) * weightMultiplier
+        }
     }
-    
-    
 }

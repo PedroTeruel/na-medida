@@ -46,7 +46,7 @@ struct RecipesInfoView: View {
                 
                 VStack {
                     if recipe.ingredients.isEmpty {
-                        Text("Nenhum ingrediente adicionado")
+                        Text("")
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(recipe.ingredients.reversed()) { recipeIng in
@@ -59,7 +59,10 @@ struct RecipesInfoView: View {
                                 CardRecipeIngredient(
                                     productName: recipeIng.ingredient?.name,
                                     imageURL: recipeIng.ingredient?.photoURL,
-                                    brands: recipeIng.ingredient?.brand)
+                                    brands: recipeIng.ingredient?.brand,
+                                    isEditable: false,
+                                    userQuantity: .constant(recipeIng.userQuantity),
+                                    unity: .constant(recipeIng.unity))
                             }
                             .buttonStyle(.plain)
                         }
@@ -82,7 +85,6 @@ struct RecipesInfoView: View {
                 }
             }
             
-            //TOOLBAR
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {
@@ -101,7 +103,6 @@ struct RecipesInfoView: View {
                 }
             }
         }
-        // Alerta de confirmação para exclusão da receita
         .alert("Excluir Receita?", isPresented: $isShowingDeleteAlert) {
             Button("Cancelar", role: .cancel) { }
             

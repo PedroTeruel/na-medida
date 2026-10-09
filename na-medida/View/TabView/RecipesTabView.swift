@@ -97,7 +97,6 @@ struct RecipesTabView: View {
                                 .padding(.horizontal, 16)
                             }
                             
-                            //lista de componentes CardRecipe
                             List {
                                 ForEach(filteredRecipes) { recipe in
                                     Button {
@@ -106,10 +105,9 @@ struct RecipesTabView: View {
                                         CardRecipe(recipe: recipe)
                                     }
                                     .buttonStyle(.plain)
-                                    .listRowSeparator(.hidden) // Remove a linha entre os itens
-                                    .listRowBackground(Color.clear) // Mantém o fundo transparente
-                                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)) // Ajusta o espaçamento
-                                    //GESTOS SWIPE PARA ESQUERDA
+                                    .listRowSeparator(.hidden)
+                                    .listRowBackground(Color.clear)
+                                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                         Button(role: .destructive) {
                                             deleteRecipe(recipe)
@@ -120,7 +118,7 @@ struct RecipesTabView: View {
                                 }
                             }
                             .listStyle(.plain)
-                            .scrollDisabled(true) // Desabilita a rolagem interna da List para rolar junto com a ScrollView externa
+                            .scrollDisabled(true)
                             .frame(height: CGFloat(filteredRecipes.count) * 220)
                         }
                     }
@@ -156,7 +154,6 @@ struct RecipesTabView: View {
             }
         }
     }
-    //func de delete receita
     private func deleteRecipe(_ recipe: Recipe) {
         withAnimation {
             mc.delete(recipe)
