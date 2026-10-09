@@ -37,15 +37,17 @@ struct TagSheetView: View {
 
                 VStack(spacing: 8) {
                     Text("Vamos Organizar?")
-                        .font(.title3)
-                        .fontWeight(.semibold)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.top, 24)
 
-                    Text("Selecione uma categoria para guardar sua receita")
+                    Text("Selecione uma categoria para criar sua receita")
                         .font(.body)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
+                .padding()
 
                 FlowLayout(spacing: 12, rowSpacing: 12) {
                     ForEach(RecipeTag.allCases, id: \.self) { tag in
@@ -59,12 +61,11 @@ struct TagSheetView: View {
                         }
                     }
                 }
-                .padding(.horizontal)
 
                 Spacer()
             }
             .padding(.top, 24)
-            .navigationTitle("Adicionar Categoria")
+            .navigationTitle("Editar categoria")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
 

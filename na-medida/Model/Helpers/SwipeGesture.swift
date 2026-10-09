@@ -7,4 +7,28 @@
 
 import SwiftUI
 
-#warning("Definir gesto para voltar na tela scanner, se necessario. Ao que parece nao e recomando em cameras")
+class SwipeController: NSObject, UIGestureRecognizerDelegate {
+    static let shared = SwipeController()
+    var swipeAction: (() -> Bool)?
+    weak var navigationController: UINavigationController?
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let n = navigationController, n.viewControllers.count <= 1 {
+            return false
+        }
+        if let action = swipeAction {
+            return action()
+        }
+        return true
+    }
+}
+
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        SwipeController.shared.navigationController = self
+        interactivePopGestureRecognizer?.delegate = SwipeController.shared
+    
+    }
+    
+}

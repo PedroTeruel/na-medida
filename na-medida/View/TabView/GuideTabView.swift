@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct SettingsView: View {
+struct GuideTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
     @State private var showEditSheet = false
@@ -104,13 +104,14 @@ struct SettingsView: View {
                 )
             }
             .presentationDetents([.fraction(0.3)])
+            .presentationBackground(.background)
             
         }
     }
 }
 
 #Preview {
-    SettingsView(user: User(username: "William"))
+    GuideTabView(user: User(username: "William"))
         .environment(Router())
         .modelContainer(
             for: User.self,

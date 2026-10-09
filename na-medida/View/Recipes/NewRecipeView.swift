@@ -58,7 +58,7 @@ struct NewRecipeView: View {
                 }
             }
             .padding(.horizontal)
-    
+            
             
             Spacer()
             
@@ -104,17 +104,30 @@ struct NewRecipeView: View {
             }
         }
         .alert("Descartar Receita?", isPresented: $showDiscardAlert) {
-                    Button("Cancelar", role: .cancel) { }
-                    
-                    Button("Descartar", role: .destructive) {
-                        draft.clear()
-                        router.pop()
-                    }
-                } message: {
-                    Text("Se você voltar, todas as informações adicionadas serão perdidas.")
+            Button("Cancelar", role: .cancel) { }
+            
+            Button("Descartar", role: .destructive) {
+                draft.clear()
+                router.pop()
+            }
+        } message: {
+            Text("Se você voltar, todas as informações adicionadas serão perdidas.")
+        }
+        .onAppear {
+            SwipeController.shared.swipeAction = {
+                if ifModifications {
+                    showDiscardAlert = true
+                    return false
                 }
+                return true
             }
         }
+        .onDisappear {
+            SwipeController.shared.swipeAction = nil
+        }
+    }
+}
+
 #Preview {
     NavigationStack {
         NewRecipeView()
