@@ -56,7 +56,7 @@ struct OnBoardView: View {
                                     .foregroundColor(.primary)
                                     .fixedSize(horizontal: false, vertical: true)
                                 
-                                Text("Entender o que você consome não precisa ser complicado. Descubra a composição nutricional das suas receitas e dos produtos que você consome.")
+                                Text("Entender o que você consome não precisa ser complicado. Descubra a composição nutricional das suas receitas e dos produtos que você consome!")
                                     .font(.system(size: 17))
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(.primary)
