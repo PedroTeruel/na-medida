@@ -14,7 +14,7 @@ struct TagSheetView: View {
 
     let recipe: Recipe
 
-    @State private var selectedTag: RecipeTag
+    @State private var selectedTag: RecipeTag?
 
     var cancelAction: () -> Void
     var confirmAction: () -> Void

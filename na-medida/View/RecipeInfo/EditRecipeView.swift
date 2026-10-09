@@ -29,21 +29,52 @@ struct EditRecipeView: View {
                 Button {
                     isShowingTagSheet = true
                 } label: {
-                    Text(recipe.tag.rawValue)
+
+                    if let tag = recipe.tag {
+
+                        Text(tag.rawValue)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(tag.foregroundColor)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(
+                                tag.color.opacity(0.3)
+                            )
+                            .clipShape(Capsule())
+                            .overlay {
+                                Capsule()
+                                    .strokeBorder(
+                                        tag.foregroundColor.opacity(0.5),
+                                        style: StrokeStyle(dash: [4])
+                                    )
+                            }
+
+                    } else {
+
+                        Label(
+                            "Adicionar categoria",
+                            systemImage: "plus"
+                        )
                         .font(.subheadline)
                         .fontWeight(.medium)
-                        .foregroundStyle(recipe.tag.foregroundColor)
+                        .foregroundStyle(.secondary)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
-                        .background(recipe.tag.color.opacity(0.3))
-                        .clipShape(Capsule())
-                        .autocorrectionDisabled()
-                        .overlay(
+                        .background {
                             Capsule()
-                                .strokeBorder(recipe.tag.foregroundColor.opacity(0.5), style: StrokeStyle(dash: [4]))
-                        )
+                                .fill(.quaternary.opacity(0.5))
+                        }
+                        .overlay {
+                            Capsule()
+                                .strokeBorder(
+                                    .secondary.opacity(0.4),
+                                    style: StrokeStyle(dash: [4])
+                                )
+                        }
+                    }
                 }
-                
+                .buttonStyle(.plain)
                 Text("Informações nutricionais")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)

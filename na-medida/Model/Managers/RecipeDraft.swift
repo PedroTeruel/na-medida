@@ -11,7 +11,7 @@ import Observation
 @Observable
 final class RecipeDraft {
     var title: String = ""
-    var tag: RecipeTag = .breakfast
+    var tag: RecipeTag? = nil
     var ingredients: [ProductOpenFoodFactsDTO] = []
     
     var editingRecipe: Recipe? = nil
@@ -28,7 +28,7 @@ final class RecipeDraft {
     
     func clear() {
         title = ""
-        tag = .breakfast
+        tag = nil
         ingredients.removeAll()
         editingRecipe = nil
     }

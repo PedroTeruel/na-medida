@@ -13,12 +13,12 @@ import SwiftUI
 final class Recipe{
     var name: String
     var creationDate: Date
-    var tag: RecipeTag
+    var tag: RecipeTag?
     
     @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
     var ingredients: [RecipeIngredient] = []
     
-    init(name: String, creationDate: Date = .now, tag: RecipeTag) {
+    init(name: String, creationDate: Date = .now, tag: RecipeTag? = nil) {
         self.name = name
         self.creationDate = creationDate
         self.tag = tag
