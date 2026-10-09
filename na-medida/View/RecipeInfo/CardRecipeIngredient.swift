@@ -44,10 +44,10 @@ struct CardRecipeIngredient: View {
             )
             
             VStack(alignment: .leading, spacing: 4) {
-                Text((productName ?? "produto sem nome").uppercased())
+                Text((productName ?? "produto sem nome"))
                     .foregroundStyle(.primary)
                     .font(.callout)
-                    .fontWeight(.bold)
+                    .fontWeight(.semibold)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
                 
@@ -82,7 +82,7 @@ struct CardRecipeIngredient: View {
                     onRemove()
                 } label: {
                     Image(systemName: "trash.fill")
-                        .fontWeight(.bold)
+                        .fontWeight(.semibold)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
