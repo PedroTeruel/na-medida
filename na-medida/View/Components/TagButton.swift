@@ -26,6 +26,7 @@ struct TagButton: View {
                     (isSelected ? tag.color.opacity(1) : tag.color.opacity(0.3))
                         .clipShape(Capsule())
                 )
+                .fontWeight(isSelected ? .bold : .regular)
                 .foregroundStyle(tag.foregroundColor)
                 .cornerRadius(24)
                 .minimumScaleFactor(0.8)
@@ -35,13 +36,11 @@ struct TagButton: View {
     }
 }
 
-struct TagStatic: View {
-    
+struct TagStatic: View{
     var tag: RecipeTag?
-
-    var body: some View {
+    var body: some View{
         
-        if let tag {
+        if let tag{
               Text(tag.rawValue)
                   .font(.subheadline)
                   .fontWeight(.semibold)
@@ -50,7 +49,7 @@ struct TagStatic: View {
                   .background(tag.color)
                   .foregroundStyle(tag.foregroundColor)
                   .clipShape(Capsule())
-          }else {
+          }else{
               Text("Sem categoria")
                   .font(.subheadline)
                   .foregroundStyle(.secondary)
@@ -58,9 +57,9 @@ struct TagStatic: View {
     }
 }
 
-extension RecipeTag {
-    var carouselImageBaseName: String {
-        switch self {
+extension RecipeTag{
+    var carouselImageBaseName: String{
+        switch self{
         case .breakfast: return "Wave1"
         case .lunch: return "Wave3"
         case .dinner: return "Wave2"
@@ -72,6 +71,6 @@ extension RecipeTag {
     }
 }
 
-#Preview {
+#Preview{
     TagStatic(tag: .morningSnack)
 }
