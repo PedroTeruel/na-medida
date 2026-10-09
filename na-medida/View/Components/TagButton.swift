@@ -37,20 +37,24 @@ struct TagButton: View {
 
 struct TagStatic: View {
     
-    var tag: RecipeTag
+    var tag: RecipeTag?
 
     var body: some View {
         
-        HStack {
-            Text(tag.rawValue)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-        }
-        .background(tag.color)
-        .foregroundStyle(tag.foregroundColor)
-        .cornerRadius(24)
+        if let tag {
+              Text(tag.rawValue)
+                  .font(.subheadline)
+                  .fontWeight(.semibold)
+                  .padding(.horizontal, 16)
+                  .padding(.vertical, 8)
+                  .background(tag.color)
+                  .foregroundStyle(tag.foregroundColor)
+                  .clipShape(Capsule())
+          }else {
+              Text("Sem categoria")
+                  .font(.subheadline)
+                  .foregroundStyle(.secondary)
+          }
     }
 }
 
