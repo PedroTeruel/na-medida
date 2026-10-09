@@ -14,18 +14,19 @@ struct MacroTagView: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            Image(systemName: icon)
-                .font(.callout)
-                .fontWeight(.bold)
-                .foregroundColor(color)
+            // Agora (Asset personalizado)
+            Image(icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 18, height: 18)
 
             Text(text)
                 .font(.callout)
                 .fontWeight(.regular)
                 .foregroundStyle(.primary)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
+        .padding(.horizontal, 8)
+        .padding(.vertical,4)
         .background(.background)
         .clipShape(Capsule())
         .overlay(

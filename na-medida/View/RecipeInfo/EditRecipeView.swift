@@ -18,7 +18,7 @@ struct EditRecipeView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 
                 TextField("Minha receita", text: $recipe.name)
                     .font(.title)
@@ -51,7 +51,6 @@ struct EditRecipeView: View {
                             }
 
                     } else {
-
                         Label(
                             "Adicionar categoria",
                             systemImage: "plus"
@@ -74,14 +73,20 @@ struct EditRecipeView: View {
                         }
                     }
                 }
-                .buttonStyle(.plain)
-                Text("Informações nutricionais")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+//                .buttonStyle(.plain)
+//                Text("Informações nutricionais")
+//                    .font(.subheadline)
+//                    .foregroundStyle(.secondary)
                 
-                CarouselView(recipe: recipe)
-                    .opacity(0.4)
-                    .disabled(true)
+//                CarouselView(recipe: recipe)
+//                    .opacity(0.4)
+//                    .disabled(true)
+                
+                VStack{
+                Text("Adicone os ingredientes da sua receita e as quantidades usadas")
+                    .multilineTextAlignment(.center)
+                    .font(.subheadline)
+.foregroundStyle(.secondary)
                 
                 Button {
                     router.navigate(to: .scanner(recipe))
@@ -112,6 +117,8 @@ struct EditRecipeView: View {
                     }
                 }
             }
+                .padding(.top, 16)
+        }
             .padding(.top, 16)
         }
         .navigationBarBackButtonHidden(true)
