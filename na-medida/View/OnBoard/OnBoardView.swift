@@ -91,20 +91,29 @@ struct OnBoardView: View {
                                             .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                                     )
                                     .autocorrectionDisabled()
-                                
-                                Button(action: {
-                                    onContinue(username)
-                                }) {
-                                    Text("Continuar")
-                                        .font(.system(size: 17, weight: .semibold))
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 16)
-                                        .background(Color("buttonColor"))
-                                        .cornerRadius(25)
+                                VStack(spacing: 36){
+                                    Button(action: {
+                                        onContinue(username)
+                                    }) {
+                                        Text("Continuar")
+                                            .font(.system(size: 17, weight: .semibold))
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 16)
+                                            .background(Color("buttonColor"))
+                                            .cornerRadius(25)
+                                    }
+                                    .disabled(username.trimmingCharacters(in: .whitespaces).isEmpty)
+                                    .opacity(username.trimmingCharacters(in: .whitespaces).isEmpty ? 0.6 : 1.0)
+                                    
+                                    Button(action: {
+                                        onContinue("Visitante")
+                                    }) {
+                                        Text("Prefiro não informar")
+                                            .font(.system(size: 17, weight: .semibold))
+                                            .foregroundStyle(.primary)
+                                    }
                                 }
-                                .disabled(username.trimmingCharacters(in: .whitespaces).isEmpty)
-                                .opacity(username.trimmingCharacters(in: .whitespaces).isEmpty ? 0.6 : 1.0)
                             }
                             .padding(.horizontal, 42)
                             .padding(.bottom, 60)
