@@ -10,6 +10,10 @@ import SwiftUI
 struct TermsOfUseView: View {
     var body: some View {
         Text("Termos de uso")
+            .font(.title)
+            .foregroundStyle(.primary)
+            .fontWeight(.bold)
+        
     }
 }
 

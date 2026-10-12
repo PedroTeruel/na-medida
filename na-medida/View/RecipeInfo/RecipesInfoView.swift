@@ -19,6 +19,7 @@ struct RecipesInfoView: View {
     
     var body: some View {
         ScrollView {
+            VStack{
             Text(recipe.name)
                 .font(.title)
                 .fontWeight(.bold)
@@ -31,18 +32,21 @@ struct RecipesInfoView: View {
                 .foregroundStyle(.secondary)
                 .padding(.top, 32)
             
-            VStack(spacing: 40) {
-                CarouselView(recipe: recipe)
-            }
+            CarouselView(recipe: recipe)
             
             VStack {
+                Text("Adicione os ingredientes e as porções usadas na sua receita.")
+                    .multilineTextAlignment(.leading)
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
+                
                 Button {
                     router.navigate(to: .scanner(recipe))
                 } label: {
                     AddIngredientButton()
                 }
                 .buttonStyle(.plain)
-                .padding(.top, 32)
+//                .padding(.top, 32)
                 
                 VStack {
                     if recipe.ingredients.isEmpty {
@@ -69,6 +73,16 @@ struct RecipesInfoView: View {
                     }
                 }
             }
+            .padding(.top, 32)
+            }
+            
+            //texto de aviso
+            Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
+                .multilineTextAlignment(.leading)
+                .foregroundStyle(.secondary)
+                .fontWeight(.thin)
+                .padding(.top, 32)
+                .padding(.horizontal, 12)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
