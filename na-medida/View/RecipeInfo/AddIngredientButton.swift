@@ -11,22 +11,17 @@ struct AddIngredientButton:  View {
     var body: some View {
         
         HStack {
-            VStack(alignment: .leading) {
-                Text("Ingredientes")
-                    .foregroundStyle(.white)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                
-                Text("Adicione ingredientes")
-                    .foregroundStyle(.white)
-                    .font(.subheadline)
-            }
+            Text("Adicionar Ingredientes")
+                .foregroundStyle(.white)
+                .font(.title3)
+                .fontWeight(.semibold)
+            
             Spacer ()
+            
             Image("IconeAdicionar")
                 .resizable()
                 .scaledToFill()
-                .frame(width: 48, height: 48)
-                .padding(.horizontal, 8)
+                .frame(width: 44, height: 44)
         }
         .padding()
         .frame(maxWidth: .infinity)

@@ -18,20 +18,18 @@ struct EditRecipeView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            
+            VStack(spacing: 24) {
                 
                 TextField("Minha receita", text: $recipe.name)
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal)
                 
                 Button {
                     isShowingTagSheet = true
                 } label: {
-                    
                     if let tag = recipe.tag {
-                        
                         Text(tag.rawValue)
                             .font(.subheadline)
                             .fontWeight(.medium)
@@ -46,10 +44,9 @@ struct EditRecipeView: View {
                                 Capsule()
                                     .strokeBorder(
                                         tag.foregroundColor.opacity(0.5),
-                                        style: StrokeStyle(dash: [4])
+//                                        style: StrokeStyle(dash: [4])
                                     )
                             }
-                        
                     } else {
                         
                         Label(
@@ -75,42 +72,61 @@ struct EditRecipeView: View {
                     }
                 }
                 .buttonStyle(.plain)
-                Text("Informações nutricionais")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
                 
-                CarouselView(recipe: recipe)
-                    .opacity(0.4)
-                    .disabled(true)
+                Spacer()
                 
-                Button {
-                    router.navigate(to: .scanner(recipe))
-                } label: {
-                    AddIngredientButton()
-                }
+//                Text("Informações nutricionais")
+//                    .font(.headline)
+//                    .foregroundStyle(.secondary)
+//                
+//                CarouselView(recipe: recipe)
+//                    .opacity(0.4)
+//                    .disabled(true)
                 
-                if recipe.ingredients.isEmpty {
-                    Text("Nenhum ingrediente adicionado.")
+                VStack (spacing: 16){
+                    Text("Adicione os ingredientes e as porções usadas na sua receita.")
+                        .multilineTextAlignment(.leading)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .padding(.vertical, 12)
-                } else {
-                    ForEach(recipe.ingredients) { item in
-                        if let index = recipe.ingredients.firstIndex(where: { $0.id == item.id }) {
-                            CardRecipeIngredient(
-                                productName: item.ingredient?.name,
-                                imageURL: item.ingredient?.photoURL,
-                                brands: item.ingredient?.brand,
-                                isEditable: true,
-                                userQuantity: $recipe.ingredients[index].userQuantity,
-                                unity: $recipe.ingredients[index].unity,
-                                onRemove: {
-                                    removeIngredient(item)
-                                }
-                            )
+                        .foregroundStyle(.primary)
+                    
+                    Button {
+                        router.navigate(to: .scanner(recipe))
+                    } label: {
+                        AddIngredientButton()
+                    }
+                    
+                    if recipe.ingredients.isEmpty {
+                        Text("Nenhum ingrediente adicionado.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .padding(.vertical, 12)
+                    } else {
+                        ForEach(recipe.ingredients) { item in
+                            if let index = recipe.ingredients.firstIndex(where: { $0.id == item.id }) {
+                                CardRecipeIngredient(
+                                    productName: item.ingredient?.name,
+                                    imageURL: item.ingredient?.photoURL,
+                                    brands: item.ingredient?.brand,
+                                    isEditable: true,
+                                    userQuantity: $recipe.ingredients[index].userQuantity,
+                                    unity: $recipe.ingredients[index].unity,
+                                    onRemove: {
+                                        removeIngredient(item)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
+                
+                Spacer()
+                
+                //texto de aviso
+                Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
+                    .multilineTextAlignment(.leading)
+                    .foregroundStyle(.secondary)
+                    .fontWeight(.thin)
+                    .padding(.horizontal, 12)
             }
             .padding(.top, 16)
         }
