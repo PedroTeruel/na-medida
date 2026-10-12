@@ -24,9 +24,9 @@ struct NewRecipeView: View {
         
         VStack {
             VStack(spacing: 58) {
-                VStack(spacing: 8) {
+                VStack(spacing: 16) {
                     Text("Título")
-                        .font(.title2)
+                        .font(.title)
                         .fontWeight(.bold)
                     
                     TextField("Minha receita", text: $draftBindable.title)
@@ -37,18 +37,18 @@ struct NewRecipeView: View {
                         .focused($isTitleFocused)
                 }
                 
-                VStack(spacing: 8) {
-                    Text("Vamos Organizar?")
+                VStack(spacing: 16) {
+                    Text("Vamos organizar?")
                         .font(.title2)
-                        .fontWeight(.bold)
+                        .fontWeight(.semibold)
                     Text("Selecione uma categoria para criar sua receita")
                         .font(.body)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
-                .padding()
             }
+            .padding()
             
             FlowLayout(spacing: 12, rowSpacing: 12) {
                 ForEach(RecipeTag.allCases, id: \.self) { tag in

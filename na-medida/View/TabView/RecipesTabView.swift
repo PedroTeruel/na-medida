@@ -53,9 +53,10 @@ struct RecipesTabView: View {
             ScrollView{
                 VStack(alignment: .leading){
                     VStack(alignment: .leading, spacing: 36){
-                        Text("Pronto para registrar uma receita?")
+                        Text("Pronto para registrar suas receitas?")
                             .font(.callout)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
+                        
                         if recipes.isEmpty{
                             Spacer()
                         } else{
@@ -64,17 +65,21 @@ struct RecipesTabView: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                         }
-                        
                     }
                     .padding(.horizontal, 16)
                     
                     if recipes.isEmpty {
                         VStack(alignment: .center){
-                            Spacer()
-                            Text(recipes.isEmpty ? "Nenhuma receita criada" : "Nenhuma receita nessa categoria")
-                            Spacer()
+                            
+                            Image("iconeOnBoard").resizable().scaledToFit()
+                                .frame( height: 120)
+                            
+                            Text(recipes.isEmpty ? "Ainda não há nenhuma receita registrada" : "Nenhuma receita nessa categoria")
+                                .foregroundStyle(.secondary)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 400)
+                        .padding()
                     } else {
                         VStack(alignment: .leading){
                             ScrollView(.horizontal, showsIndicators: false){

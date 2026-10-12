@@ -60,18 +60,19 @@ struct SearchingTabView: View {
                 if searchText.isEmpty {
                     VStack(spacing: 16) {
                         Spacer()
-                        Image("IconeSearch")
+                        Image("iconeOnBoard")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 60, height: 60)
-                            .opacity(0.6)
+                            .frame(height: 110)
                         
-                        Text("Busque por suas receitas criadas ou ingredientes salvos.")
+                        Text("Busque por suas receitas ou por ingredientes usados nela.")
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 32)
+                        
                         Spacer()
+                        
                     }
                 } else if filteredRecipes.isEmpty && filteredIngredients.isEmpty {
                     VStack(spacing: 16) {
