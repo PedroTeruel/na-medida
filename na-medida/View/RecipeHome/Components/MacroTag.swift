@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MacroTagView: View {
+struct MacroTag: View {
     let icon: String
     let text: String
     
@@ -35,5 +35,5 @@ struct MacroTagView: View {
 }
 
 #Preview {
-    MacroTagView(icon: "MacroTagCalorias", text: "Lasanha")
+    MacroTag(icon: "MacroTagCalorias", text: "Lasanha")
 }

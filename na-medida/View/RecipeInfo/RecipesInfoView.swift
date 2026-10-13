@@ -36,9 +36,10 @@ struct RecipesInfoView: View {
             
             VStack {
                 Text("Adicione os ingredientes e as porções usadas na sua receita.")
-                    .multilineTextAlignment(.leading)
+                    .multilineTextAlignment(.center)
                     .font(.subheadline)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
                 
                 Button {
                     router.navigate(to: .scanner(recipe))
@@ -46,7 +47,7 @@ struct RecipesInfoView: View {
                     AddIngredientButton()
                 }
                 .buttonStyle(.plain)
-//                .padding(.top, 32)
+                .padding(.top)
                 
                 VStack {
                     if recipe.ingredients.isEmpty {
@@ -78,11 +79,12 @@ struct RecipesInfoView: View {
             
             //texto de aviso
             Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
-                .multilineTextAlignment(.leading)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
                 .fontWeight(.thin)
                 .padding(.top, 32)
-                .padding(.horizontal, 12)
+                .padding(.horizontal)
+                .font(.footnote)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)

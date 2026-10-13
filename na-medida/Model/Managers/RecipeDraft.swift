@@ -10,9 +10,13 @@ import Observation
 
 @Observable
 final class RecipeDraft {
+    
+    
     var title: String = ""
     var tag: RecipeTag? = nil
     var ingredients: [ProductOpenFoodFactsDTO] = []
+    var quantities: [ProductOpenFoodFactsDTO: Double] = [:]
+    var units: [ProductOpenFoodFactsDTO: QntUnity] = [:]
     
     var editingRecipe: Recipe? = nil
     
@@ -31,5 +35,7 @@ final class RecipeDraft {
         tag = nil
         ingredients.removeAll()
         editingRecipe = nil
+        quantities.removeAll()
+        units.removeAll()
     }
 }

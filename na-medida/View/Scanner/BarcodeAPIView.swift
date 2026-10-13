@@ -76,7 +76,7 @@ struct BarcodeAPIView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: handleBackAction) {
-                    HStack { Text("Voltar") }
+                    Image(systemName: "chevron.left")
                 }
             }
             
@@ -124,16 +124,48 @@ struct BarcodeAPIView: View {
     
     private func saveRecipeNavigate() {
         let repository = RecipeRepository(mc: mc)
-        
+
+        let savedRecipe: Recipe
+        let isExisting = recipe != nil
+
         if let existingRecipe = recipe {
-            repository.addIngredients(to: existingRecipe, dtos: draft.ingredients)
-            draft.clear()
-            handlePopTo(existing: true, recipe: existingRecipe)
+            repository.addIngredients(
+                to: existingRecipe,
+                dtos: draft.ingredients
+            )
+
+            savedRecipe = existingRecipe
         } else {
-            let newRecipe = repository.saveRecipe(draft: draft)
-            draft.clear()
-            handlePopTo(existing: false, recipe: newRecipe)
+            savedRecipe = repository.saveRecipe(draft: draft)
         }
+
+        for product in draft.ingredients {
+
+            guard let recipeIngredient = savedRecipe.ingredients.first(where: {
+                $0.ingredient?.name == product.productName &&
+                $0.ingredient?.brand == product.brands
+            }) else {
+                print("Ingrediente não localizado:", product.productName ?? "")
+                continue
+            }
+
+            recipeIngredient.userQuantity = draft.quantities[product] ?? 100.0
+            recipeIngredient.unity = draft.units[product] ?? .g
+        }
+
+        do {
+            try mc.save()
+        } catch {
+            print("Erro ao salvar receita:", error)
+            return
+        }
+
+        draft.clear()
+
+        handlePopTo(
+            existing: isExisting,
+            recipe: savedRecipe
+        )
     }
     
     private func handlePopTo(existing: Bool, recipe: Recipe) {

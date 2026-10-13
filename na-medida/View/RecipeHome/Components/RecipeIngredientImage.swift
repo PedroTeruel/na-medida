@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RecipeIngredientImageView: View {
+struct RecipeIngredientImage: View {
     
     let urlString: String
     
@@ -22,5 +22,5 @@ struct RecipeIngredientImageView: View {
 }
 
 #Preview {
-    RecipeIngredientImageView(urlString: "")
+    RecipeIngredientImage(urlString: "")
 }

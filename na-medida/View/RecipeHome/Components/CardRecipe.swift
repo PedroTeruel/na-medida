@@ -30,7 +30,7 @@ struct CardRecipe: View {
                     let visibleCount = hasExtra ? 3 : urls.count
                     
                     ForEach(0..<visibleCount, id: \.self) { index in
-                        RecipeIngredientImageView(urlString: urls[index])
+                        RecipeIngredientImage(urlString: urls[index])
                             .transition(.scale.combined(with: .opacity))
                     }
                     
@@ -38,7 +38,7 @@ struct CardRecipe: View {
                         let extraCount = urls.count - 3
                         
                         ZStack {
-                            RecipeIngredientImageView(urlString: urls[3])
+                            RecipeIngredientImage(urlString: urls[3])
                             
                             Circle()
                                 .fill(Color.secondary.opacity(0.65))
@@ -62,17 +62,17 @@ struct CardRecipe: View {
                 .multilineTextAlignment(.center)
             
             HStack(spacing: 8) {
-                MacroTagView(
+                MacroTag(
                     icon: "MacroTagProteinas",
                     text: "\(Int(recipe.totalRecipeProteins))g"
                 )
                 
-                MacroTagView(
+                MacroTag(
                     icon: "MacroTagCalorias",
                     text: "\(Int(recipe.totalRecipeCalories)) kcal"
                 )
                 
-                MacroTagView(
+                MacroTag(
                     icon: "MacroTagCarbo",
                     text: "\(Int(recipe.totalRecipeCarbs))g"
                 )

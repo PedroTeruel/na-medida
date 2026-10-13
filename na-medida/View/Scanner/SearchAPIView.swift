@@ -11,6 +11,8 @@ struct SearchAPIView: View {
     @Binding var currentDetent: PresentationDetent
     @Binding var searchText: String
     
+    
+    
     @Environment(Router.self) private var router
     @Environment(RecipeDraft.self) private var draft
     
@@ -133,6 +135,15 @@ struct SearchAPIView: View {
                             ForEach(searchResults, id: \.self) { product in
                                 let isAlreadyAdd = draft.ingredients.contains(product)
                                 
+//                                CardRecipeIngredient(
+//                                    productName: product.productName ?? "Produto sem nome",
+//                                    imageURL: product.photoProduct,
+//                                    brands: product.brands,
+//                                    isEditable: true,
+//                                    userQuantity: .constant(100.0),
+//                                    unity: .constant(.g),
+//                                    onRemove: { print("Apagar") }
+//                                )
                                 CardSheet(
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
@@ -171,17 +182,47 @@ struct SearchAPIView: View {
                                 .listRowSeparator(.hidden)
                             
                             ForEach(draft.ingredients, id: \.self) { product in
-                                CardSheet(
+//                                CardSheet(
+//                                    productName: product.productName ?? "Produto sem nome",
+//                                    brand: product.brands,
+//                                    quantity: product.servingSize,
+//                                    imageURL: product.photoProduct,
+//                                    onRemove: {
+//                                        draft.removeIngredient(product)
+//                                    }
+//                                )
+                                CardRecipeIngredient(
                                     productName: product.productName ?? "Produto sem nome",
-                                    brand: product.brands,
-                                    quantity: product.servingSize,
                                     imageURL: product.photoProduct,
+                                    brands: product.brands,
+                                    isEditable: true,
+
+                                    userQuantity: Binding(
+                                        get: {
+                                            draft.quantities[product] ?? 100.0
+                                        },
+                                        set: { newValue in
+                                            draft.quantities[product] = newValue
+                                        }
+                                    ),
+
+                                    unity: Binding(
+                                        get: {
+                                            draft.units[product] ?? .g
+                                        },
+                                        set: { newValue in
+                                            draft.units[product] = newValue
+                                        }
+                                    ),
+
                                     onRemove: {
                                         draft.removeIngredient(product)
+                                        draft.quantities.removeValue(forKey: product)
+                                        draft.units.removeValue(forKey: product)
                                     }
                                 )
                                 .listRowSeparator(.hidden)
-                                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button(role: .destructive) {
                                         draft.removeIngredient(product)
