@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct NutritionFactsTable: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
+    
     let items: [NutritionalFactsItem]
     var servingsPerContainer: String? = nil
     var servingSizeText: String? = nil
@@ -86,7 +89,7 @@ struct NutritionFactsTable: View {
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color(.systemBackground))
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
                     color: .black.opacity(0.15),
                     radius: 6,

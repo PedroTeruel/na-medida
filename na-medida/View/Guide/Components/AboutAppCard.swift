@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AboutAppCard: View {
+    @Environment(\.colorScheme) private var colorScheme
     
     var iconCard: String = "info.circle"
     var aboutTitle: String = "Sobre nós"
@@ -31,9 +32,9 @@ struct AboutAppCard: View {
         .padding(.vertical, 24)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(.background)
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
-                    color: .primary.opacity(0.18),
+                    color: .black.opacity(0.18),
                     radius: 2,
                     x: 0,
                     y: 2

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct CompositionIngredientCard: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
     let ingredientsText: String
     let allergensText: String?
     
@@ -57,7 +59,7 @@ struct CompositionIngredientCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color(.systemBackground))
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
                     color: .black.opacity(0.15),
                     radius: 6,

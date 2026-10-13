@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TwoTable: View {
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     struct Measure: Identifiable {
         let id = UUID()
         let name: String
@@ -136,7 +138,7 @@ struct TwoTable: View {
         }
         .background {
             RoundedRectangle(cornerRadius: 28)
-                .fill(.background)
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
                     color: .black.opacity(0.08),
                     radius: 10,
