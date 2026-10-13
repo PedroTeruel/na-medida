@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CardRecipeIngredient: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
+    
     var productName: String?
     var imageURL: String?
     //var brands: String?
@@ -94,9 +97,9 @@ struct CardRecipeIngredient: View {
         .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color(.systemBackground))
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
-                    color: .primary.opacity(0.15),
+                    color: .black.opacity(0.15),
                     radius: 6,
                     x: 0,
                     y: 4

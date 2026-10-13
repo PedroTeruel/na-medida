@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CardSheet: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
+    
     var productName: String
     var brand: String?
     var quantity: String?
@@ -123,9 +126,13 @@ struct CardSheet: View {
         }
         .padding(8)
         .frame(maxWidth: .infinity, minHeight: 60)
+        .background{
+            RoundedRectangle(cornerRadius: 16)
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
+        }
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(.primary, lineWidth: 0.1))
+                .stroke(.black, lineWidth: 0.1))
     }
 }
 

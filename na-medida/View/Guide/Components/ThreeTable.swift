@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ThreeTable: View {
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var version: Int
     
     private var selectedMeasures: [Measure] {
@@ -215,7 +217,7 @@ struct ThreeTable: View {
         }
         .background {
             RoundedRectangle(cornerRadius: 28)
-                .fill(.background)
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
                     color: .black.opacity(0.08),
                     radius: 10,

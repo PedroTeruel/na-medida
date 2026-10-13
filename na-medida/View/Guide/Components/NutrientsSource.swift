@@ -30,7 +30,7 @@ struct NutrientsSource: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 24)
-                        .fill(.quinary.opacity(0.6))
+                        .fill(.quinary)
                 )
                 
             }

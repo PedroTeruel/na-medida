@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct NutrientsCard: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
+    
     var nutrientName: String = "Gorduras Totais"
     var nutrientDescription: String = "Energia, hormônios e absorção de vitaminas"
     var nutrientImg: String = "book"
@@ -44,7 +47,7 @@ struct NutrientsCard: View {
         .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 24)
-                .fill(.background)
+                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
                     color: .black.opacity(0.1),
                     radius: 6,

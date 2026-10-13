@@ -10,6 +10,8 @@ import SwiftData
 
 struct CardRecipe: View {
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     let recipe: Recipe
     
     var body: some View {
@@ -81,9 +83,12 @@ struct CardRecipe: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity)
-        .background(.background)
+        .background(
+            RoundedRectangle(cornerRadius: 18)
+                .fill(colorScheme == .dark ? Color(red: 0.0784, green: 0.0784, blue: 0.0784) : .white)
+        )
         .cornerRadius(16)
-        .shadow(color: .primary.opacity(0.05), radius: 8, x: 0, y: 8)
+        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 8)
         .overlay(
             RoundedRectangle(cornerRadius: 18)
                 .stroke(Color.secondary.opacity(0.2), lineWidth: 1.5)

@@ -83,11 +83,15 @@ struct EditRecipeView: View {
 //                    .opacity(0.4)
 //                    .disabled(true)
                 
+                
+                
                 VStack (spacing: 16){
+                    
                     Text("Adicione os ingredientes e as porções usadas na sua receita.")
-                        .multilineTextAlignment(.leading)
+                        .multilineTextAlignment(.center)
                         .font(.subheadline)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
                     
                     Button {
                         router.navigate(to: .scanner(recipe))
@@ -123,10 +127,12 @@ struct EditRecipeView: View {
                 
                 //texto de aviso
                 Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
-                    .multilineTextAlignment(.leading)
+                    .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
                     .fontWeight(.thin)
-                    .padding(.horizontal, 12)
+                    .padding(.top, 32)
+                    .padding(.horizontal)
+                    .font(.footnote)
             }
             .padding(.top, 16)
         }

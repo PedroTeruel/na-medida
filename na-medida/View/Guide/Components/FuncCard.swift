@@ -64,7 +64,7 @@ struct FuncCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(.quinary.opacity(0.5))
+                .fill(.quinary)
         )
     }
     
