@@ -16,13 +16,23 @@ struct TagButton: View {
     let isSelected: Bool
     let action: () -> Void
 
+    // AINDA PRECISA INVERTER MAS VAI DAR PROBLEMA DE COR PELA OPACIDADE
     private var backgroundColor: Color {
-        colorScheme == .dark ? tag.color : tag.foregroundColor
+        colorScheme == .dark ? tag.foregroundColor : tag.color
     }
 
     private var textColor: Color {
-        colorScheme == .dark ? tag.foregroundColor : tag.color
+        colorScheme == .dark ? .black : tag.foregroundColor
     }
+    
+    
+//    private var backgroundColor: Color {
+//        colorScheme == .dark ? tag.color : tag.foregroundColor
+//    }
+//
+//    private var textColor: Color {
+//        colorScheme == .dark ? tag.foregroundColor : tag.color
+//    }
 
     var body: some View {
         Button(action: action) {
