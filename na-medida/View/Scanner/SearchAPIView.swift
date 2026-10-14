@@ -134,20 +134,11 @@ struct SearchAPIView: View {
                             
                             ForEach(searchResults, id: \.self) { product in
                                 let isAlreadyAdd = draft.ingredients.contains(product)
-                                
-//                                CardRecipeIngredient(
-//                                    productName: product.productName ?? "Produto sem nome",
-//                                    imageURL: product.photoProduct,
-//                                    brands: product.brands,
-//                                    isEditable: true,
-//                                    userQuantity: .constant(100.0),
-//                                    unity: .constant(.g),
-//                                    onRemove: { print("Apagar") }
-//                                )
+
                                 CardSheet(
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
-                                    quantity: product.servingSize,
+                                    quantity: product.quantity ?? product.servingSize,
                                     imageURL: product.photoProduct,
                                     isAdded: isAlreadyAdd,
                                     onAdd: {
@@ -182,15 +173,6 @@ struct SearchAPIView: View {
                                 .listRowSeparator(.hidden)
                             
                             ForEach(draft.ingredients, id: \.self) { product in
-//                                CardSheet(
-//                                    productName: product.productName ?? "Produto sem nome",
-//                                    brand: product.brands,
-//                                    quantity: product.servingSize,
-//                                    imageURL: product.photoProduct,
-//                                    onRemove: {
-//                                        draft.removeIngredient(product)
-//                                    }
-//                                )
                                 CardRecipeIngredient(
                                     productName: product.productName ?? "Produto sem nome",
                                     imageURL: product.photoProduct,
@@ -199,7 +181,7 @@ struct SearchAPIView: View {
 
                                     userQuantity: Binding(
                                         get: {
-                                            draft.quantities[product] ?? 100.0
+                                            draft.quantities[product] ?? product.defaultServing.quantity
                                         },
                                         set: { newValue in
                                             draft.quantities[product] = newValue
@@ -208,7 +190,7 @@ struct SearchAPIView: View {
 
                                     unity: Binding(
                                         get: {
-                                            draft.units[product] ?? .g
+                                            draft.units[product] ?? product.defaultServing.unit
                                         },
                                         set: { newValue in
                                             draft.units[product] = newValue

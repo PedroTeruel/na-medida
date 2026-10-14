@@ -28,6 +28,7 @@ struct ProductOpenFoodFactsDTO: Decodable, Hashable {
     let imageUrl: String?
     let imageSmallUrl: String?
     let servingSize: String?
+    let quantity: String?
     let countries_tags: [String]?
     
     enum CodingKeys: String, CodingKey {
@@ -40,6 +41,7 @@ struct ProductOpenFoodFactsDTO: Decodable, Hashable {
         case imageUrl = "image_url"
         case imageSmallUrl = "image_small_url"
         case servingSize = "serving_size"
+        case quantity
         case countries_tags
     }
     
@@ -170,6 +172,55 @@ struct NutrimentsDTO: Decodable, Hashable {
 }
 
 extension ProductOpenFoodFactsDTO {
+    
+        var defaultServing: (quantity: Double, unit: QntUnity) {
+            let candidates = [quantity, productName, servingSize].compactMap { $0 }
+            
+            for rawText in candidates where !rawText.isEmpty {
+                if let parsed = parseMeasure(from: rawText) {
+                    return parsed
+                }
+            }
+            
+            return (100.0, .g)
+        }
+        
+        private func parseMeasure(from text: String) -> (quantity: Double, unit: QntUnity)? {
+            let measurePattern = #"(\d+(?:[.,]\d+)?)\s*(ml|l|kg|g)\b"#
+            if let regex = try? NSRegularExpression(pattern: measurePattern, options: .caseInsensitive),
+               let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
+               let valueRange = Range(match.range(at: 1), in: text),
+               let unitRange = Range(match.range(at: 2), in: text) {
+                
+                let valueString = text[valueRange].replacingOccurrences(of: ",", with: ".")
+                let unitString = text[unitRange].lowercased()
+                
+                if let value = Double(valueString) {
+                    let unit: QntUnity
+                    switch unitString {
+                    case "ml": unit = .ml
+                    case "l":  unit = .l
+                    case "kg": unit = .kg
+                    default:   unit = .g
+                    }
+                    return (value, unit)
+                }
+            }
+            
+            let unitPattern = #"(\d+(?:[.,]\d+)?)\s*(un|und|unid|unidade|unidades)\b"#
+            if let regex = try? NSRegularExpression(pattern: unitPattern, options: .caseInsensitive),
+               let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
+               let valueRange = Range(match.range(at: 1), in: text) {
+                
+                let valueString = text[valueRange].replacingOccurrences(of: ",", with: ".")
+                if let value = Double(valueString) {
+                    return (value, .un)
+                }
+            }
+            
+            return nil
+        }
+    
     var nutritionalItems: [NutritionalFactsItem] {
         guard let nutriments = self.nutriments else { return [] }
         
