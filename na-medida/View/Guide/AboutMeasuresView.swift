@@ -17,8 +17,8 @@ struct AboutMeasuresView: View {
                     .font(.body)
                     .foregroundStyle(.secondary)
                 Picker("Informações", selection: $segmentedControl) {
-                    Text("Liquidos").tag(0)
-                    Text("Solidos").tag(1)
+                    Text("Líquidos").tag(0)
+                    Text("Sólidos").tag(1)
                     Text("Temperos").tag(2)
                 }
                 .pickerStyle(.segmented)
