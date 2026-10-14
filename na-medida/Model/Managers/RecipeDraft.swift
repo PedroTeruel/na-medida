@@ -11,7 +11,6 @@ import Observation
 @Observable
 final class RecipeDraft {
     
-    
     var title: String = ""
     var tag: RecipeTag? = nil
     var ingredients: [ProductOpenFoodFactsDTO] = []
@@ -23,11 +22,16 @@ final class RecipeDraft {
     func addIngredient(_ dto: ProductOpenFoodFactsDTO) {
         if !ingredients.contains(dto) {
             ingredients.insert(dto, at: 0)
+            let serving = dto.defaultServing
+            quantities[dto] = serving.quantity
+            units[dto] = serving.unit
         }
     }
     
     func removeIngredient(_ dto: ProductOpenFoodFactsDTO) {
         ingredients.removeAll { $0 == dto }
+        quantities.removeValue(forKey: dto)
+        units.removeValue(forKey: dto)
     }
     
     func clear() {

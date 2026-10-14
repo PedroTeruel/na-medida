@@ -35,10 +35,11 @@ final class RecipeRepository {
         
         for dto in draft.ingredients {
             let newIngredient = getOrCreateIngredient(from: dto)
+            let serving = dto.defaultServing
             
             let recipeIngredient = RecipeIngredient(
-                userQuantity: 100.0,
-                unity: .g,
+                userQuantity: draft.quantities[dto] ?? serving.quantity,
+                unity: draft.units[dto] ?? serving.unit,
                 ingredient: newIngredient,
                 recipe: newRecipe
             )
@@ -55,10 +56,11 @@ final class RecipeRepository {
     func addIngredients(to recipe: Recipe, dtos: [ProductOpenFoodFactsDTO]) {
         for dto in dtos {
             let newIngredient = getOrCreateIngredient(from: dto)
+            let serving = dto.defaultServing
             
             let recipeIngredient = RecipeIngredient(
-                userQuantity: 100.0,
-                unity: .g,
+                userQuantity: serving.quantity,
+                unity: serving.unit,
                 ingredient: newIngredient,
                 recipe: recipe
             )

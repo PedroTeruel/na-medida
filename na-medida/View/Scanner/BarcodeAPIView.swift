@@ -149,8 +149,8 @@ struct BarcodeAPIView: View {
                 continue
             }
 
-            recipeIngredient.userQuantity = draft.quantities[product] ?? 100.0
-            recipeIngredient.unity = draft.units[product] ?? .g
+            recipeIngredient.userQuantity = draft.quantities[product] ?? product.defaultServing.quantity
+            recipeIngredient.unity = draft.units[product] ?? product.defaultServing.unit
         }
 
         do {
