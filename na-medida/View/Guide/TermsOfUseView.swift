@@ -129,7 +129,7 @@ struct TermsOfUseView: View {
                 TermsClause(
                     number: "5.3.",
                     title: "Bases de Dados de Terceiros",
-                    text: "As informações nutricionais disponibilizadas provêm de bases públicas de pesquisa abertas, incluindo a Tabela Brasileira de Composição de Alimentos (TACO), desenvolvida pelo NEPA/UNICAMP (https://nepa.unicamp.br/publicacoes), e o Open Food Facts (https://br.openfoodfacts.org), uma base de dados de produtos alimentares, mantendo-se preservados todos os direitos autorais e créditos dos seus autores e mantenedores."
+                    text: "As informações nutricionais disponibilizadas provêm de bases públicas abertas, incluindo a Tabela Brasileira de Composição de Alimentos (TACO), desenvolvida pelo NEPA/UNICAMP (https://nepa.unicamp.br/publicacoes) com estruturação em JSON por Marcelo Santos sob Licença MIT (Copyright © 2023 Marcelo Santos - https://github.com/marcelosanto/tabela_taco), e o Open Food Facts (https://br.openfoodfacts.org), disponibilizado sob a Open Database License (ODbL) e CC BY-SA, mantendo-se preservados todos os direitos autorais e créditos dos seus autores e mantenedores."
                 )
             ]
         ),

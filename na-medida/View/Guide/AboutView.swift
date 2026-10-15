@@ -24,6 +24,8 @@ struct AboutView: View {
                 
                 teamCard
                 
+                creditsCard
+                
                 contactCard
             }
             .padding(.horizontal, 16)
@@ -41,7 +43,6 @@ struct AboutView: View {
                     .scaledToFit()
                     .frame(width: 46, height: 46)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                
                 
                 Text("O que é o Na Medida?")
                     .font(.title3)
@@ -151,6 +152,86 @@ struct AboutView: View {
                             .font(.headline)
                         Text("Desenvolvedor")
                             .font(.subheadline)
+                    }
+                }
+            }
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(cardBackground)
+        .overlay(cardBorder)
+    }
+    
+    private var creditsCard: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 14) {
+                Image(systemName: "books.vertical.fill")
+                    .font(.title3)
+                    .foregroundStyle(.orange)
+                    .frame(width: 46, height: 46)
+                    .background {
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(.orange.opacity(0.12))
+                    }
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Créditos e Licenças")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                    
+                    Text("Fontes de dados e atribuições")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer(minLength: 0)
+            }
+            
+            Divider()
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Open Food Facts")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                
+                Text("Base de dados colaborativa e aberta de produtos alimentares utilizada para a busca e leitura de códigos de barras.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineSpacing(3)
+                
+                if let offURL = URL(string: "https://br.openfoodfacts.org") {
+                    Link(destination: offURL) {
+                        HStack(spacing: 6) {
+                            Text("Acessar Open Food Facts")
+                            Image(systemName: "arrow.up.right")
+                        }
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.button)
+                    }
+                }
+            }
+            
+            Divider()
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Tabela TACO (JSON)")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                
+                Text("Dados da Tabela Brasileira de Composição de Alimentos (NEPA/UNICAMP) convertidos para formato JSON por Marcelo Santos.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineSpacing(3)
+                
+                if let tacoURL = URL(string: "https://github.com/marcelosanto/tabela_taco") {
+                    Link(destination: tacoURL) {
+                        HStack(spacing: 6) {
+                            Text("Repositório no GitHub (Marcelo Santos)")
+                            Image(systemName: "arrow.up.right")
+                        }
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.button)
                     }
                 }
             }

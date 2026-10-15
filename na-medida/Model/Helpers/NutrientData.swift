@@ -153,8 +153,8 @@ let nutrients: [Nutrient] = [
         
         sources: [
             NutrientFonts(icon: "sourceSal", text: "Sal de cozinha"),
-            NutrientFonts(icon: "sourceQueijos", text: "Queijos"),
-            NutrientFonts(icon: "sourceIndustrial", text: "Alimentos industrializados")
+            NutrientFonts(icon: "sourceQueijo", text: "Queijos"),
+            NutrientFonts(icon: "sourceConservas", text: "Conservas")
         ]
     )
 ]
