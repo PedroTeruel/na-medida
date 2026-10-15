@@ -48,7 +48,7 @@ struct AboutView: View {
                     .scaledToFit()
                     .frame(width: 46, height: 46)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                    
+                
                 
                 Text("O que é o Na Medida?")
                     .font(.title3)
@@ -121,11 +121,67 @@ struct AboutView: View {
             
             Divider()
             
-            Image("aboutUsPhoto")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: 18))
+            VStack {
+                HStack {
+                    Image("photoGui")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                    
+                    VStack (alignment: .leading) {
+                        Text("Guilherme Sales")
+                            .font(.headline)
+                        Text("Designer")
+                            .font(.subheadline)
+                    }
+                }
+            }
+            
+            VStack {
+                HStack {
+                    Image("photoRebeca")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                    
+                    VStack (alignment: .leading) {
+                        Text("Rebeca Calmon")
+                            .font(.headline)
+                        Text("Desenvolvedora")
+                            .font(.subheadline)
+                    }
+                }
+            }
+            VStack {
+                HStack {
+                    Image("photoTeruel")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                    
+                    VStack (alignment: .leading) {
+                        Text("Pedro Teruel")
+                            .font(.headline)
+                        Text("Desenvolvedor")
+                            .font(.subheadline)
+                    }
+                }
+            }
+            VStack {
+                HStack {
+                    Image("photoVitor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                    
+                    VStack (alignment: .leading) {
+                        Text("Vitor Souza")
+                            .font(.headline)
+                        Text("Desenvolvedor")
+                            .font(.subheadline)
+                    }
+                }
+            }
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
