@@ -11,13 +11,14 @@ struct NutrientsSource: View {
     var cardTitle: String = "As medidas podem variar"
     var cardBody: String = "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K)."
     var sourceName: String
+    var sourceIcon: String
     
     var body: some View {
         VStack(alignment: .leading){
             
             HStack(){
                 VStack(spacing: 12){
-                    Image("OliveIcon")
+                    Image(sourceIcon)
                         .resizable()
                         .scaledToFit()
                         .frame(height: 70)
@@ -40,5 +41,5 @@ struct NutrientsSource: View {
 }
 
 #Preview {
-    NutrientsSource(sourceName: "Peixes Gordurosos")
+    NutrientsSource(sourceName: "Peixes Gordurosos", sourceIcon: "")
 }

@@ -78,7 +78,8 @@ struct NutrientView: View {
                             ForEach(nutrient.sources, id: \.self) { source in
                                 
                                 NutrientsSource(
-                                    sourceName: source
+                                    sourceName: source,
+                                    sourceIcon: source
                                 )
                             }
                         }

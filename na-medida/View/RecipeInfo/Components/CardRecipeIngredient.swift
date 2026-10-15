@@ -115,10 +115,10 @@ struct CardRecipeIngredient: View {
             RoundedRectangle(cornerRadius: 24)
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
                 .shadow(
-                    color: .black.opacity(0.15),
-                    radius: 6,
+                    color: .black.opacity(0.12),
+                    radius: 2,
                     x: 0,
-                    y: 4
+                    y: 2
                 )
         }
     }
