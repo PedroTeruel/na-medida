@@ -11,6 +11,8 @@ import SwiftUI
 enum SortOrder {
     case newest
     case oldest
+    case fromA
+    case fromZ
 }
 
 struct RecipesTabView: View {
@@ -32,6 +34,16 @@ struct RecipesTabView: View {
         }
         
         switch sortOrder {
+        case .fromA:
+            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+                recipe1.name.localizedStandardCompare(recipe2.name) == .orderedAscending
+            }
+            
+        case .fromZ:
+            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+                recipe1.name.localizedStandardCompare(recipe2.name) == .orderedDescending
+            }
+            
         case .newest:
             return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
                 recipe1.creationDate > recipe2.creationDate
@@ -135,6 +147,12 @@ struct RecipesTabView: View {
                     ToolbarItemGroup(placement: .topBarTrailing) {
                         Menu {
                             Picker("Ordenar por", selection: $sortOrder) {
+                                Text("Ordem Alfabetica Crescente (A-Z)")
+                                    .tag(SortOrder.fromA)
+                                
+                                Text("Ordem Alfabetica Decrescente (Z-A)")
+                                    .tag(SortOrder.fromZ)
+                                
                                 Text("Mais recentes")
                                     .tag(SortOrder.newest)
                                 
