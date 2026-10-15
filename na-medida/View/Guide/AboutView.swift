@@ -12,13 +12,6 @@ struct AboutView: View {
     
     private let supportEmail = "Sousa.guilherme850@gmail.com"
     
-    private let teamMembers = [
-        "Guilherme Sales",
-        "Pedro Teruel",
-        "Rebeca Calmon",
-        "Vitor Souza"
-    ]
-    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
@@ -65,27 +58,6 @@ struct AboutView: View {
                 .foregroundStyle(.secondary)
                 .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
-            
-            HStack(spacing: 18) {
-                Image(systemName: "lightbulb.max.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 36)
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.yellow, .orange)
-                
-                Text("Nosso objetivo é tornar o acesso a essas informações mais simples e prático, incentivando você a ter mais consciência da composição nutricional das receitas que prepara.")
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
-                    .lineSpacing(3)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(.yellow.opacity(0.2))
-            }
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,7 +78,7 @@ struct AboutView: View {
                     }
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Equipe desenvolvedora")
+                    Text("Equipe")
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundStyle(.primary)

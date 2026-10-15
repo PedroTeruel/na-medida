@@ -272,7 +272,7 @@ struct TermsOfUseView: View {
                 
                 MeasureWarningCard(
                     cardTitle: "Privacidade e Armazenamento Local",
-                    cardBody: "Suas receitas ficam salvas apenas no seu próprio dispositivo. Vigência a partir de 14 de outubro de 2026."
+                    cardBody: "Suas receitas ficam salvas apenas no seu próprio dispositivo.                    Vigência a partir de 14 de outubro de 2026."
                 )
                 
                 VStack(spacing: 16) {
@@ -280,66 +280,12 @@ struct TermsOfUseView: View {
                         TermsSectionCard(section: section)
                     }
                 }
-                
-                contactFooterCard
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 32)
         }
         .navigationTitle("Termos de Uso")
         .navigationBarTitleDisplayMode(.large)
-    }
-    
-    private var contactFooterCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 12) {
-                Image(systemName: "envelope.fill")
-                    .font(.title3)
-                    .foregroundStyle(.button)
-                
-                Text("Ficou com alguma dúvida?")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-            }
-            
-            Text("Entre em contato diretamente com a nossa equipe pelo canal de atendimento oficial.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            
-            if let emailURL = URL(string: "mailto:\(supportEmail)") {
-                Link(destination: emailURL) {
-                    HStack {
-                        Text(supportEmail)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Image(systemName: "arrow.up.right")
-                            .font(.subheadline.bold())
-                    }
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 14)
-                    .background(.button, in: RoundedRectangle(cornerRadius: 16))
-                }
-                .padding(.top, 4)
-            }
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            RoundedRectangle(cornerRadius: 24)
-                .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
-                .shadow(
-                    color: .black.opacity(0.08),
-                    radius: 10,
-                    x: 0,
-                    y: 4
-                )
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 24)
-                .stroke(.secondary.opacity(0.2), lineWidth: 1.5)
-        }
     }
 }
 
