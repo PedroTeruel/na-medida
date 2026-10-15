@@ -17,22 +17,22 @@ struct TagButton: View {
     let action: () -> Void
 
     // AINDA PRECISA INVERTER MAS VAI DAR PROBLEMA DE COR PELA OPACIDADE
-    private var backgroundColor: Color {
-        colorScheme == .dark ? tag.foregroundColor : tag.color
-    }
-
-    private var textColor: Color {
-        colorScheme == .dark ? .black : tag.foregroundColor
-    }
-    
-    
 //    private var backgroundColor: Color {
-//        colorScheme == .dark ? tag.color : tag.foregroundColor
+//        colorScheme == .dark ? tag.foregroundColor : tag.color
 //    }
 //
 //    private var textColor: Color {
-//        colorScheme == .dark ? tag.foregroundColor : tag.color
+//        colorScheme == .dark ? .black : tag.foregroundColor
 //    }
+    
+    
+    private var backgroundColor: Color {
+        colorScheme == .dark ? tag.color : tag.foregroundColor
+    }
+
+    private var textColor: Color {
+        colorScheme == .dark ? tag.foregroundColor : tag.color
+    }
 
     var body: some View {
         Button(action: action) {
@@ -43,10 +43,10 @@ struct TagButton: View {
                 .padding(.vertical, 8)
                 .background {
                     Capsule()
-                        .fill(backgroundColor.opacity(isSelected ? 1 : 0.3))
+                        .fill(isSelected ? textColor.opacity(isSelected ? 1 : 0.3) : backgroundColor.opacity(isSelected ? 1 : 0.3))
                 }
                 .fontWeight(isSelected ? .bold : .regular)
-                .foregroundStyle(textColor)
+                .foregroundStyle(isSelected ? backgroundColor : textColor)
                 .minimumScaleFactor(0.8)
                 .lineLimit(1)
         }
