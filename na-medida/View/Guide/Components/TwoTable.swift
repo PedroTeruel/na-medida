@@ -56,7 +56,7 @@ struct TwoTable: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     
-                    Text("Medidas de Sólidos")
+                    Text("Guia de Medidas Caseiras")
                         .font(.headline)
                     
                     Text(

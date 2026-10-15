@@ -14,7 +14,13 @@ struct AboutNutrientsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                Text("Descubra para que servem os principais Nutrientes")
+                Text("Definição dos Nutrientes")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Text("Descubra para que servem os principais nutrientes")
                     .font(.body)
                     .foregroundStyle(.secondary)
                 
@@ -34,8 +40,6 @@ struct AboutNutrientsView: View {
                 }
             }
             .padding(.horizontal)
-            .navigationTitle("Definição dos Nutrientes")
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 }

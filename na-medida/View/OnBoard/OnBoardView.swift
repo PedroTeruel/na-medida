@@ -83,6 +83,9 @@ struct OnBoardView: View {
                                 TextField("Digite seu nome", text: $username)
                                     .focused($isNameFieldFocused)
                                     .id("nameField")
+                                    .onChange(of: username) { _, newValue in
+                                            username = String(newValue.prefix(20))
+                                        }
                                     .padding()
                                     .background(Color(.systemBackground))
                                     .cornerRadius(25)
