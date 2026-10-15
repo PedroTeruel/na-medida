@@ -49,6 +49,7 @@ struct TagSheetView: View {
                 }
                 .padding()
                 
+                
                 FlowLayout(spacing: 12, rowSpacing: 12) {
                     ForEach(RecipeTag.allCases, id: \.self) { tag in
                         
@@ -61,6 +62,8 @@ struct TagSheetView: View {
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal, 26)
                 
                 Spacer()
             }
@@ -98,4 +101,27 @@ struct TagSheetView: View {
             print("Erro ao alterar categoria: \(error)")
         }
     }
+}
+
+#Preview {
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+
+    let container = try! ModelContainer(
+        for: Recipe.self, RecipeIngredient.self, Ingredient.self,
+        configurations: configuration
+    )
+
+    let recipe = Recipe(
+        name: "Bolo de chocolate",
+        tag: .breakfast
+    )
+
+    container.mainContext.insert(recipe)
+
+    return TagSheetView(
+        recipe: recipe,
+        cancelAction: {},
+        confirmAction: {}
+    )
+    .modelContainer(container)
 }

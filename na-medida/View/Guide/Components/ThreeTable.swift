@@ -118,7 +118,7 @@ struct ThreeTable: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     
-                    Text("Guia de medidas caseiras")
+                    Text("Guia de Medidas Caseiras")
                         .font(.headline)
                     
                     Text(

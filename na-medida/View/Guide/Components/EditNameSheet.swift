@@ -22,6 +22,9 @@ struct EditNameSheet: View {
             
             TextField("Digite seu nome", text: $newUsername)
                 .id("nameField")
+                .onChange(of: newUsername) { _, newValue in
+                    newUsername = String(newValue.prefix(20))
+                }
                 .padding()
                 .background(Color(.systemBackground))
                 .cornerRadius(25)

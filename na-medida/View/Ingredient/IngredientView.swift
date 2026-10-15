@@ -93,11 +93,14 @@ struct IngredientView: View {
                 .padding(.top)
                 
                 if segmentedControl == 0 {
-                    NutritionFactsTable(
-                        items: items,
-                        servingsPerContainer: servingsPerContainer,
-                        servingSizeText: servingSizeText
-                    )
+                    VStack(spacing: 22){
+                        NutritionFactsTable(
+                            items: items,
+                            servingsPerContainer: servingsPerContainer,
+                            servingSizeText: servingSizeText
+                        )
+                        MeasureWarningCard(cardTitle: "As medidas são aproximadas", cardBody: "Os valores da tabela nutricional condizem a uma porção. Verifique a embalagem do produto para informações mais precisas.",wColor: .yellow)
+                    }
                 } else {
                     CompositionIngredientCard(
                         ingredientsText: ingredientsText,
