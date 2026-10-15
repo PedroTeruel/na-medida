@@ -65,7 +65,7 @@ struct RecipesTabView: View {
             ScrollView{
                 VStack(alignment: .leading){
                     VStack(alignment: .leading, spacing: 36){
-                        Text("Pronto para registrar suas receitas?")
+                        Text("Pronto(a) para registrar suas receitas?")
                             .font(.callout)
                             .foregroundStyle(.primary)
                         
