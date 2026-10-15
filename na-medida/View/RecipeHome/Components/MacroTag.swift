@@ -10,13 +10,15 @@ import SwiftUI
 struct MacroTag: View {
     let icon: String
     let text: String
+    let color: Color
     
     var body: some View {
         HStack(spacing: 8) {
-            Image(icon)
+            Image(systemName: icon)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 10, height: 10)
+                .foregroundColor(color)
             
             Text(text)
                 .font(.callout)
@@ -35,5 +37,5 @@ struct MacroTag: View {
 }
 
 #Preview {
-    MacroTag(icon: "MacroTagCalorias", text: "Lasanha")
+    MacroTag(icon: "leaf.fill", text: "Lasanha", color: .blue)
 }
