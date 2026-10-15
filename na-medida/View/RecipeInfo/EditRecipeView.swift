@@ -45,7 +45,6 @@ struct EditRecipeView: View {
                                 Capsule()
                                     .strokeBorder(
                                         tag.foregroundColor.opacity(0.5),
-//                                        style: StrokeStyle(dash: [4])
                                     )
                             }
                     } else {
@@ -106,6 +105,7 @@ struct EditRecipeView: View {
                                     isEditable: true,
                                     userQuantity: $recipe.ingredients[index].userQuantity,
                                     unity: $recipe.ingredients[index].unity,
+                                    defaultUnit: recipe.ingredients[index].unity,
                                     onRemove: {
                                         removeIngredient(item)
                                     }
@@ -118,7 +118,6 @@ struct EditRecipeView: View {
                 
                 Spacer()
                 
-                //texto de aviso
                 Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
                     .multilineTextAlignment(.leading)
                     .foregroundStyle(.secondary)

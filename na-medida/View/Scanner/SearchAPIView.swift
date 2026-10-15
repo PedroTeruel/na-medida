@@ -196,7 +196,7 @@ struct SearchAPIView: View {
                                             draft.units[product] = newValue
                                         }
                                     ),
-
+                                    defaultUnit: product.defaultServing.unit,
                                     onRemove: {
                                         draft.removeIngredient(product)
                                         draft.quantities.removeValue(forKey: product)
