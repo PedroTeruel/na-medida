@@ -44,30 +44,27 @@ struct BarcodeAPIView: View {
             }
             
             if isLoading {
-                Color.black.opacity(0.5).ignoresSafeArea()
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
                 
-                VStack(spacing: 16) {
-                    ZStack {
-                        Image("IconeSearch")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
-                        
-                        ProgressView()
-                            .controlSize(.large)
-                            .scaleEffect(1.5)
-                            .tint(.white)
-                    }
-                    .frame(width: 60, height: 60)
-                    
-                    Text("Buscando produto...")
-                        .foregroundStyle(.white)
-                        .fontWeight(.bold)
+                VStack(spacing: 0) {
+                    Image("IconeSearch")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60, height: 60)
+                    ProgressView()
+                        .controlSize(.large)
+                        .scaleEffect(0.5)
+                        .tint(.primary)
+                    Text("Buscando")
+                        .fontWeight(.regular)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
                 }
-                .padding(24)
-                .background(Color.black.opacity(0.7))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .zIndex(1)
+                .frame(maxWidth: .infinity)
+                .padding(.top)
+                
             }
         }
         .navigationTitle("Adicione ingredientes")
@@ -97,8 +94,8 @@ struct BarcodeAPIView: View {
         }
         .sheet(isPresented: $showSheet) {
             SearchSheetView(currentDetent: $sheetDetent)
-                .presentationDetents([.fraction(0.4), .medium, .large], selection: $sheetDetent)
-                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                .presentationDetents([.fraction(0.4), .medium, .fraction(0.92)], selection: $sheetDetent)
+                .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.92)))
                 .interactiveDismissDisabled()
                 .presentationBackground(.background)
         }

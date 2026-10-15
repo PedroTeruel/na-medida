@@ -13,11 +13,11 @@ struct CardRecipeIngredient: View {
     
     var productName: String?
     var imageURL: String?
-    //var brands: String?
     var isEditable: Bool
     @Binding var userQuantity: Double
     @Binding var unity: QntUnity
     var onRemove: (() -> Void)?
+    var defaultUnit: QntUnity?
     
     init(
         productName: String? = nil,
@@ -26,15 +26,31 @@ struct CardRecipeIngredient: View {
         isEditable: Bool = false,
         userQuantity: Binding<Double> = .constant(0.0),
         unity: Binding<QntUnity> = .constant(.g),
+        defaultUnit: QntUnity? = nil,
         onRemove: (() -> Void)? = nil
     ) {
         self.productName = productName
         self.imageURL = imageURL
-        //self.brands = brands
         self.isEditable = isEditable
         self._userQuantity = userQuantity
         self._unity = unity
+        self.defaultUnit = defaultUnit
         self.onRemove = onRemove
+    }
+    
+    private var allowedUnits: [QntUnity] {
+        guard let baseUnit = defaultUnit else {
+            return [.un, .mg, .g, .kg, .ml, .l]
+        }
+        
+        switch baseUnit {
+        case .mg, .g, .kg:
+            return [.un, .mg, .g, .kg]
+        case .ml, .l:
+            return [.un, .ml, .l]
+        case .un:
+            return [.un, .mg, .g, .kg, .ml, .l]
+        }
     }
     
     var body: some View {
@@ -47,7 +63,7 @@ struct CardRecipeIngredient: View {
             )
             
             VStack(alignment: .leading, spacing: 4) {
-                Text((productName ?? "produto sem nome"))
+                Text((productName ?? "produto sem nome").uppercased())
                     .foregroundStyle(.primary)
                     .font(.callout)
                     .fontWeight(.semibold)
@@ -61,7 +77,7 @@ struct CardRecipeIngredient: View {
                             .fixedSize()
                         
                         Picker("", selection: $unity) {
-                            ForEach([QntUnity.un, .g, .kg, .ml, .l], id: \.self) { unit in
+                            ForEach(allowedUnits, id: \.self) { unit in
                                 Text(unit.formatted).tag(unit)
                             }
                         }
@@ -72,7 +88,7 @@ struct CardRecipeIngredient: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(.blue)
                 } else {
-                    Text("\(userQuantity.formatted()) \(unity.formatted)")
+                    Text("Minha porção: \(userQuantity.formatted()) \(unity.formatted)")
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.secondary)
@@ -105,7 +121,6 @@ struct CardRecipeIngredient: View {
                     y: 4
                 )
         }
-        .padding(.horizontal)
     }
 }
 

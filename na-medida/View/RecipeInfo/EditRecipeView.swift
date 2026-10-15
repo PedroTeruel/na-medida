@@ -4,6 +4,7 @@
 //
 //  Created by Rebeca Emanuela Calmon de Andrade Alves on 06/10/26.
 //
+
 import SwiftUI
 import SwiftData
 
@@ -44,7 +45,6 @@ struct EditRecipeView: View {
                                 Capsule()
                                     .strokeBorder(
                                         tag.foregroundColor.opacity(0.5),
-//                                        style: StrokeStyle(dash: [4])
                                     )
                             }
                     } else {
@@ -75,23 +75,14 @@ struct EditRecipeView: View {
                 
                 Spacer()
                 
-//                Text("Informações nutricionais")
-//                    .font(.headline)
-//                    .foregroundStyle(.secondary)
-//                
-//                CarouselView(recipe: recipe)
-//                    .opacity(0.4)
-//                    .disabled(true)
-                
-                
-                
-                VStack (spacing: 16){
+                VStack (spacing: 16) {
                     
-                    Text("Adicione os ingredientes e as porções usadas na sua receita.")
-                        .multilineTextAlignment(.center)
+                    Text("Edite os ingredientes e as porções usadas na sua receita.")
                         .font(.subheadline)
+                        .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
+                        .padding()
                     
                     Button {
                         router.navigate(to: .scanner(recipe))
@@ -114,10 +105,12 @@ struct EditRecipeView: View {
                                     isEditable: true,
                                     userQuantity: $recipe.ingredients[index].userQuantity,
                                     unity: $recipe.ingredients[index].unity,
+                                    defaultUnit: recipe.ingredients[index].unity,
                                     onRemove: {
                                         removeIngredient(item)
                                     }
                                 )
+                                .padding(.horizontal)
                             }
                         }
                     }
@@ -125,12 +118,10 @@ struct EditRecipeView: View {
                 
                 Spacer()
                 
-                //texto de aviso
                 Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(.leading)
                     .foregroundStyle(.secondary)
                     .fontWeight(.thin)
-                    .padding(.top, 32)
                     .padding(.horizontal)
                     .font(.footnote)
             }

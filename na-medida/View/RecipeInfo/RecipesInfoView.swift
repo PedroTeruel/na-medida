@@ -19,70 +19,83 @@ struct RecipesInfoView: View {
     
     var body: some View {
         ScrollView {
-            VStack{
-            Text(recipe.name)
-                .font(.title)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-                .padding(.top)
-            
-            TagStatic(tag: recipe.tag)
-            
-            Text("Informações nutricionais totais")
-                .foregroundStyle(.secondary)
-                .padding(.top, 32)
-            
-            CarouselView(recipe: recipe)
-            
             VStack {
-                Text("Adicione os ingredientes e as porções usadas na sua receita.")
+                Text(recipe.name)
+                    .font(.title)
+                    .fontWeight(.bold)
                     .multilineTextAlignment(.center)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
+                    .padding(.top)
                 
-                Button {
-                    router.navigate(to: .scanner(recipe))
-                } label: {
-                    AddIngredientButton()
-                }
-                .buttonStyle(.plain)
-                .padding(.top)
+                TagStatic(tag: recipe.tag)
+                
+                Text("Informações nutricionais totais")
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 32)
+                
+                CarouselView(recipe: recipe)
                 
                 VStack {
+                    Text("Adicione os ingredientes e as porções usadas na sua receita.")
+                        .multilineTextAlignment(.center)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                    
+                    Button {
+                        router.navigate(to: .scanner(recipe))
+                    } label: {
+                        AddIngredientButton()
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top)
+                    
                     if recipe.ingredients.isEmpty {
                         Text("")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(recipe.ingredients.reversed()) { recipeIng in
-                            Button {
-                                if let ingredient = recipeIng.ingredient{
-                                    router.navigate(to: .savedIngredient(ingredient))
+                        List {
+                            ForEach(recipe.ingredients.reversed()) { recipeIng in
+                                Button {
+                                    if let ingredient = recipeIng.ingredient {
+                                        router.navigate(to: .savedIngredient(ingredient))
+                                    }
+                                } label: {
+                                    CardRecipeIngredient(
+                                        productName: recipeIng.ingredient?.name,
+                                        imageURL: recipeIng.ingredient?.photoURL,
+                                        brands: recipeIng.ingredient?.brand,
+                                        isEditable: false,
+                                        userQuantity: .constant(recipeIng.userQuantity),
+                                        unity: .constant(recipeIng.unity)
+                                    )
                                 }
-                            } label: {
-                                
-                                CardRecipeIngredient(
-                                    productName: recipeIng.ingredient?.name,
-                                    imageURL: recipeIng.ingredient?.photoURL,
-                                    brands: recipeIng.ingredient?.brand,
-                                    isEditable: false,
-                                    userQuantity: .constant(recipeIng.userQuantity),
-                                    unity: .constant(recipeIng.unity))
+                                .buttonStyle(.plain)
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        deleteIngredient(recipeIng)
+                                    } label: {
+                                        Label("Excluir", systemImage: "trash")
+                                    }
+                                }
                             }
-                            .buttonStyle(.plain)
                         }
+                        .padding(.horizontal)
+                        .listStyle(.plain)
+                        .scrollDisabled(true)
+                        .frame(height: CGFloat(recipe.ingredients.count) * 110)
                     }
                 }
-            }
-            .padding(.top, 32)
+                .padding(.top, 32)
             }
             
-            //texto de aviso
+            // texto de aviso
             Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
-                .multilineTextAlignment(.center)
+                .multilineTextAlignment(.leading)
                 .foregroundStyle(.secondary)
                 .fontWeight(.thin)
-                .padding(.top, 32)
                 .padding(.horizontal)
                 .font(.footnote)
         }
@@ -134,13 +147,24 @@ struct RecipesInfoView: View {
         mc.delete(recipe)
         dismiss()
     }
-}
-
-
-#Preview {
-    NavigationStack {
-        RecipesInfoView(recipe: Recipe(name: "Minha Receita", tag: .lunch))
+    
+    private func deleteIngredient(_ recipeIngredient: RecipeIngredient) {
+        withAnimation {
+            if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
+                recipe.ingredients.remove(at: index)
+                mc.delete(recipeIngredient)
+                try? mc.save()
+            }
+        }
     }
-    .environment(Router())
-    .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
 }
+    
+    #Preview {
+        NavigationStack {
+            RecipesInfoView(recipe: Recipe(name: "Minha Receita", tag: .lunch))
+            CardRecipeIngredient()
+            
+        }
+        .environment(Router())
+        .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
+    }

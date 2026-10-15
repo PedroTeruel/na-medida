@@ -51,7 +51,7 @@ struct SearchAPIView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .top) {
+        ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 SearchBarComponent(
                     searchText: $searchText,
@@ -126,7 +126,7 @@ struct SearchAPIView: View {
                                 Text("Resultado da pesquisa '\(searchText)'")
                                     .font(.headline)
                                 Spacer()
-                                Text("\(searchResults.count) produtos encontrados")
+                                Text("\(searchResults.count) resultados encontrados")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
@@ -196,7 +196,7 @@ struct SearchAPIView: View {
                                             draft.units[product] = newValue
                                         }
                                     ),
-
+                                    defaultUnit: product.defaultServing.unit,
                                     onRemove: {
                                         draft.removeIngredient(product)
                                         draft.quantities.removeValue(forKey: product)
@@ -204,7 +204,8 @@ struct SearchAPIView: View {
                                     }
                                 )
                                 .listRowSeparator(.hidden)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button(role: .destructive) {
                                         draft.removeIngredient(product)
@@ -231,13 +232,13 @@ struct SearchAPIView: View {
                     .clipShape(Capsule())
                     .shadow(radius: 5)
                     .padding(.top, 24)
-                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(1)
             }
         }
         .onChange(of: isSearchFocused) { _, isFocused in
             if isFocused {
-                currentDetent = .large
+                currentDetent = .fraction(0.92)
             }
         }
         .onChange(of: searchText) { _, _ in

@@ -26,10 +26,8 @@ struct SearchSheetView: View {
         searchTask?.cancel()
         
         searchTask = Task {
+            let tacoResults = tacoService.searchProducts(query: query)
             do {
-                
-                let tacoResults = tacoService.searchProducts(query: query)
-                
                 await MainActor.run {
                     self.searchResults = tacoResults
                 }
@@ -39,7 +37,7 @@ struct SearchSheetView: View {
                 if Task.isCancelled { return }
                 
                 await MainActor.run {
-                    self.searchResults = tacoResults + apiResults
+                    self.searchResults = apiResults + tacoResults
                     self.isLoading = false
                 }
             } catch {
@@ -47,6 +45,7 @@ struct SearchSheetView: View {
                 
                 print("Erro ao buscar produtos: \(error)")
                 await MainActor.run {
+                    self.searchResults = tacoResults
                     self.isLoading = false
                 }
             }

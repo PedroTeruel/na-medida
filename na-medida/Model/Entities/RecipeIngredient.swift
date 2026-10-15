@@ -25,12 +25,13 @@ final class RecipeIngredient {
 }
 
 enum QntUnity: String, Codable {
-    case un, g, kg, ml, l
+    case un, g, mg, kg, ml, l
     
     var formatted: String {
         switch self {
         case .un: return "Un"
         case .g: return "g"
+        case .mg: return "mg"
         case .kg: return "kg"
         case .ml: return "mL"
         case .l:  return "L"
@@ -43,6 +44,8 @@ extension RecipeIngredient {
     
     private var weightMultiplier: Double {
         switch unity {
+        case .mg:
+            return (userQuantity / 1000.0) / 100.0
         case .g, .ml:
             return userQuantity / 100.0
         case .kg, .l:
