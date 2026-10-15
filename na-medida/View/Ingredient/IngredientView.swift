@@ -99,7 +99,7 @@ struct IngredientView: View {
                             servingsPerContainer: servingsPerContainer,
                             servingSizeText: servingSizeText
                         )
-                        MeasureWarningCard(cardTitle: "As medidas são aproximadas", cardBody: "Os valores da tabela nutricional condizem a uma porção. Verifique a embalagem do produto para informações mais precisas.",wColor: .yellow)
+                        MeasureWarningCard(cardTitle: "ATENÇÃO: essa tabela pode estar desatualizada.", cardBody: "Os valores dessa tabela nutricional podem estar ausentes ou desatualizados. Sempre verifique a embalagem do seu produto para informações mais precisas.",wColor: .yellow)
                     }
                 } else {
                     CompositionIngredientCard(

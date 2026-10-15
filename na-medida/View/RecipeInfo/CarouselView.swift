@@ -22,11 +22,11 @@ struct CarouselView: View {
     let recipe: Recipe
     var baseData: [(Int, String, String)] {
         [
-            (1, "sodiumCarrossel", AnvisaNutritionFormatter.format(recipe.totalRecipeSodium, scale: .mg)),
-            (2, "proteinCarrossel", AnvisaNutritionFormatter.format(recipe.totalRecipeProteins, scale: .g)),
-            (3, "caloriesCarrossel", AnvisaNutritionFormatter.format(recipe.totalRecipeCalories, scale: .kcal)),
-            (4, "carbsCarrossel", AnvisaNutritionFormatter.format(recipe.totalRecipeCarbs, scale: .g)),
-            (5, "fatCarrossel", AnvisaNutritionFormatter.format(recipe.totalRecipeFats, scale: .g))
+            (1, "CarouselSodio", AnvisaNutritionFormatter.format(recipe.totalRecipeSodium, scale: .mg)),
+            (2, "CarouselProteinas", AnvisaNutritionFormatter.format(recipe.totalRecipeProteins, scale: .g)),
+            (3, "CarouselCalorias", AnvisaNutritionFormatter.format(recipe.totalRecipeCalories, scale: .kcal)),
+            (4, "CarouselCarbo", AnvisaNutritionFormatter.format(recipe.totalRecipeCarbs, scale: .g)),
+            (5, "CarouselGorduras", AnvisaNutritionFormatter.format(recipe.totalRecipeFats, scale: .g))
         ]
     }
     

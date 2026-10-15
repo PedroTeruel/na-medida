@@ -13,6 +13,10 @@ struct EditRecipeView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
     
+    private var repository: RecipeRepository {
+            RecipeRepository(mc: modelContext)
+        }
+    
     @State private var isShowingTagSheet = false
     
     @State private var isShowingCancelAlert = false
@@ -107,7 +111,7 @@ struct EditRecipeView: View {
                                     unity: $recipe.ingredients[index].unity,
                                     defaultUnit: recipe.ingredients[index].unity,
                                     onRemove: {
-                                        removeIngredient(item)
+                                        repository.removeIngredient(item, from: recipe)
                                     }
                                 )
                                 .padding(.horizontal)
@@ -131,7 +135,7 @@ struct EditRecipeView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
-                    cancelChanges()
+                    handleCancel()
                 } label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(.primary)
@@ -184,32 +188,23 @@ struct EditRecipeView: View {
     }
     
     private func saveChanges() {
-        do {
-            try modelContext.save()
-            router.pop()
-        } catch {
-            print("Erro ao salvar alterações da receita: \(error)")
+            do {
+                try repository.saveChanges()
+                router.pop()
+            } catch {
+                print("Erro ao salvar alterações da receita: \(error)")
+            }
+        }
+        
+        private func handleCancel() {
+            if modelContext.hasChanges {
+                isShowingCancelAlert = true
+            } else {
+                router.pop()
+            }
         }
     }
     
-    private func cancelChanges() {
-        if modelContext.hasChanges {
-            isShowingCancelAlert = true
-        } else {
-            router.pop()
-        }
-    }
-    
-    private func removeIngredient(_ recipeIngredient: RecipeIngredient) {
-        if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
-            recipe.ingredients.remove(at: index)
-            modelContext.delete(recipeIngredient)
-        }
-    }
-}
-
-
-
 #Preview("Editar Receita") {
     let container = try! ModelContainer(
         for:

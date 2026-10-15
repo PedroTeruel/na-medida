@@ -70,4 +70,25 @@ final class RecipeRepository {
         
         try? mc.save()
     }
+    
+    //funcs da editRecipe
+    func saveChanges() throws {
+        try mc.save()
+    }
+
+
+    func cancelChanges() {
+        mc.rollback()
+    }
+
+
+    func removeIngredient(_ recipeIngredient: RecipeIngredient, from recipe: Recipe) {
+        if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
+            recipe.ingredients.remove(at: index)
+            mc.delete(recipeIngredient)
+            try? mc.save()
+        }
+    }
+
 }
+
