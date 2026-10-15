@@ -75,11 +75,10 @@ struct NutrientView: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                         FlowLayout(spacing: 12, rowSpacing: 12){
-                            ForEach(nutrient.sources, id: \.self) { source in
-                                
+                            ForEach(nutrient.sources) { source in
                                 NutrientsSource(
-                                    sourceName: source,
-                                    sourceIcon: source
+                                    sourceName: source.text,
+                                    sourceIcon: source.icon
                                 )
                             }
                         }
@@ -94,12 +93,9 @@ struct NutrientView: View {
     }
 }
 
-#Preview{
-    
-    NavigationStack{
-        
-        NutrientView(
-            nutrient: nutrients[3]
-        )
-    }
+#Preview {
+    NutrientsSource(
+        sourceName: "PeixesGordurosos",
+        sourceIcon: "sourcePeixe"
+    )
 }
