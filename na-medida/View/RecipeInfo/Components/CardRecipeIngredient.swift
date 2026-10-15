@@ -47,7 +47,7 @@ struct CardRecipeIngredient: View {
             )
             
             VStack(alignment: .leading, spacing: 4) {
-                Text((productName ?? "produto sem nome"))
+                Text((productName ?? "produto sem nome").uppercased())
                     .foregroundStyle(.primary)
                     .font(.callout)
                     .fontWeight(.semibold)
@@ -72,7 +72,7 @@ struct CardRecipeIngredient: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(.blue)
                 } else {
-                    Text("\(userQuantity.formatted()) \(unity.formatted)")
+                    Text("Minha porção: \(userQuantity.formatted()) \(unity.formatted)")
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.secondary)
@@ -105,7 +105,6 @@ struct CardRecipeIngredient: View {
                     y: 4
                 )
         }
-        .padding(.horizontal)
     }
 }
 

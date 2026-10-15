@@ -126,7 +126,7 @@ final class OpenFoodFactsService {
             URLQueryItem(name: "tag_contains_1", value: "contains"),
             URLQueryItem(name: "tag_1", value: "en:nutrition-facts-completed"),
             
-            URLQueryItem(name: "page_size", value: "50"),
+            URLQueryItem(name: "page_size", value: "20"),
             URLQueryItem(name: "lc", value: "pt"),
             URLQueryItem(name: "sort_by", value: "unique_scans_n"),
             
