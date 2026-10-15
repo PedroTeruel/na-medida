@@ -21,13 +21,17 @@ struct Nutrient: Identifiable, Hashable {
     let generalColor: Color
 
     let functions: [NutrientFunction]
-    let sources: [String]
+    let sources: [NutrientFonts]
 }
 
 struct NutrientFunction: Identifiable, Hashable {
-
     let id = UUID()
+    let icon: String
+    let text: String
+}
 
+struct NutrientFonts: Identifiable, Hashable {
+    let id = UUID()
     let icon: String
     let text: String
 }

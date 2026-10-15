@@ -36,10 +36,9 @@ let nutrients: [Nutrient] = [
         ],
         
         sources: [
-            "Azeite de Oliva",
-            "Abacate",
-            "Oleaginosas",
-            "Peixes gordurosos"
+            NutrientFonts(icon: "sourceAzeite", text: "Azeite de Oliva"),
+            NutrientFonts(icon: "sourceAbacate", text: "Abacate"),
+            NutrientFonts(icon: "sourcePeixe", text: "Peixes gordurosos")            
         ]
     ),
     
@@ -69,10 +68,9 @@ let nutrients: [Nutrient] = [
         ],
         
         sources: [
-            "Arroz",
-            "Pães",
-            "Massas",
-            "Batata"
+            NutrientFonts(icon: "sourcePao", text: "Pães"),
+            NutrientFonts(icon: "sourceMassas", text: "Massas"),
+            NutrientFonts(icon: "sourceBatata", text: "Batata")
         ]
     ),
     
@@ -92,15 +90,15 @@ let nutrients: [Nutrient] = [
                 text: "Fornecimento de energia"
             ),
             NutrientFunction(
-                icon: "BodyIcon",
+                icon: "KeyIcon",
                 text: "Manutenção das funções do organismo"
             )
         ],
         
         sources: [
-            "Carboidratos",
-            "Proteínas",
-            "Gorduras"
+            NutrientFonts(icon: "sourceCarbo", text: "Carboidratos"),
+            NutrientFonts(icon: "sourceProteinas", text: "Proteínas"),
+            NutrientFonts(icon: "sourceGorduras", text: "Gorduras")
         ]
     ),
     
@@ -126,10 +124,9 @@ let nutrients: [Nutrient] = [
         ],
         
         sources: [
-            "Carnes",
-            "Ovos",
-            "Leite",
-            "Feijão"
+            NutrientFonts(icon: "sourceCarnes", text: "Carnes"),
+            NutrientFonts(icon: "sourceOvos", text: "Ovos"),
+            NutrientFonts(icon: "sourceLeite", text: "Leite"),
         ]
     ),
     
@@ -155,9 +152,9 @@ let nutrients: [Nutrient] = [
         ],
         
         sources: [
-            "Sal de cozinha",
-            "Queijos",
-            "Alimentos industrializados"
+            NutrientFonts(icon: "sourceSal", text: "Sal de cozinha"),
+            NutrientFonts(icon: "sourceQueijos", text: "Queijos"),
+            NutrientFonts(icon: "sourceIndustrial", text: "Alimentos industrializados")
         ]
     )
 ]
