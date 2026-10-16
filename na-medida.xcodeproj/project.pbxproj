@@ -261,7 +261,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "na-medida/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Precisamos de acesso à câmera para escanear o código de barras dos produtos";
+				INFOPLIST_KEY_NSCameraUsageDescription = "O Na Medida precisa de acesso à câmera para escanear o código de barras dos alimentos e exibir suas informações nutricionais.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -295,7 +295,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "na-medida/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Precisamos de acesso à câmera para escanear o código de barras dos produtos";
+				INFOPLIST_KEY_NSCameraUsageDescription = "O Na Medida precisa de acesso à câmera para escanear o código de barras dos alimentos e exibir suas informações nutricionais.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
