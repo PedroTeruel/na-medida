@@ -1,0 +1,71 @@
+{
+  "fill-specializations" : [
+    {
+      "value" : {
+        "solid" : "display-p3:0.98824,0.98039,0.96471,1.00000"
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "solid" : "display-p3:0.15686,0.15686,0.15686,1.00000"
+      }
+    }
+  ],
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "linear-gradient" : [
+                  "display-p3:0.94118,0.91373,0.58431,1.00000",
+                  "srgb:0.80784,0.61961,0.95294,1.00000"
+                ],
+                "orientation" : {
+                  "start" : {
+                    "x" : 0.5,
+                    "y" : 0.16063374485596713
+                  },
+                  "stop" : {
+                    "x" : 0.5,
+                    "y" : 1.0928996913580247
+                  }
+                }
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : "automatic"
+            }
+          ],
+          "glass" : false,
+          "image-name" : "Ativo 12.svg",
+          "name" : "Ativo 12",
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.3
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

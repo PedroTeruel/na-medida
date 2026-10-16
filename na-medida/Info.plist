@@ -2,11 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSCameraUsageDescription</key>
-    <string>O Na Medida precisa de acesso à câmera para escanear o código de barras dos alimentos e exibir suas informações nutricionais.</string>
-    <key>UIAppFonts</key>
-    <array>
-        <string>Atma-Bold.ttf</string>
-    </array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Atma-Bold.ttf</string>
+	</array>
 </dict>
 </plist>
