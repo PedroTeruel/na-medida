@@ -20,6 +20,7 @@ struct GuideTabView: View {
         
         NavigationStack(path: $routerBindable.settingsPath) {
             
+            
             VStack {
                 Text("""
                      Olá,
@@ -34,77 +35,87 @@ struct GuideTabView: View {
             }
             .padding()
             
-            VStack(alignment: .leading) {
-                Text("Sobre nutrientes")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-                    .padding(.bottom, 8)
-                    .padding(.top)
+            ScrollView {
                 
-                Button {
-                    router.navigate(to: .aboutNutrients)
-                } label: {
-                    AboutNutrientsCard(
-                        cardTitle: "Definição dos nutrientes",
-                        cardBody: "Entenda melhor sobre os ingredientes das suas receitas",
-                        cardImg: "book" )
-                }
-                .buttonStyle(.plain)
-                .padding(.bottom, 6)
-                
-                Button {
-                    router.navigate(to: .aboutMeasures)
-                } label: {
-                    AboutNutrientsCard(
-                        cardTitle: "Tabela de medidas",
-                        cardBody: "Veja como descobrir a medida das suas receitas",
-                        cardImg: "scalemass" )
-                }
-                .buttonStyle(.plain)
-            }
-            .padding()
-            
-            VStack(alignment: .leading) {
-                Text("Informações sobre o Na Medida")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-                    .padding(.bottom, 8)
-                
-                HStack {
-                    Button {
-                        router.navigate(to: .aboutUs)
-                    } label: {
-                        AboutAppCard(iconCard: "info.circle", aboutTitle: "Sobre nós")
-                    }
-                    .buttonStyle(.plain)
+                VStack(alignment: .leading) {
+                    Text("Sobre nutrientes")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                        .padding(.bottom, 8)
+                        .padding(.top)
                     
                     Button {
-                        router.navigate(to: .termsOfUse)
+                        router.navigate(to: .aboutNutrients)
                     } label: {
-                        AboutAppCard(iconCard: "clipboard", aboutTitle: "Termos de uso")
+                        AboutNutrientsCard(
+                            cardTitle: "Definição dos nutrientes",
+                            cardBody: "Entenda melhor sobre os ingredientes das suas receitas",
+                            cardImg: "book" )
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, 6)
+                    
+                    Button {
+                        router.navigate(to: .aboutMeasures)
+                    } label: {
+                        AboutNutrientsCard(
+                            cardTitle: "Tabela de medidas",
+                            cardBody: "Veja como descobrir a medida das suas receitas",
+                            cardImg: "scalemass" )
                     }
                     .buttonStyle(.plain)
                 }
-            }
-            .padding()
-            .navigationDestination(for: AppRoute.self) { route in
-                router.build(route: route)
+                .padding()
+                
+                VStack(alignment: .leading) {
+                    Text("Informações sobre o Na Medida")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                        .padding(.bottom, 8)
+                    
+                    VStack {
+                        Button {
+                            router.navigate(to: .termsOfUse)
+                        } label: {
+                            AboutAppCard(iconCard: "clipboard", aboutTitle: "Termos de uso")
+                        }
+                        .buttonStyle(.plain)
+                        Button {
+                            router.navigate(to: .privacyPolicy)
+                        } label: {
+                            AboutAppCard(iconCard: "lock.shield", aboutTitle: "Política de Privacidade")
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button {
+                            router.navigate(to: .aboutUs)
+                        } label: {
+                            AboutAppCard(iconCard: "info.circle", aboutTitle: "Sobre nós")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding()
+                .navigationDestination(for: AppRoute.self) { route in
+                    router.build(route: route)
+                }
             }
             
             Spacer()
         }
-        .sheet(isPresented: $showEditSheet) {
-            EditNameSheet { newUsername in
-                
-                let repository = UserRepository(mc: mc)
-                
-                repository.editUsername(
-                    user: user,
-                    newUsername: newUsername
-                )
-            }
-            .presentationDetents([.fraction(0.3)])
-            .presentationBackground(.background)
+            .sheet(isPresented: $showEditSheet) {
+                EditNameSheet { newUsername in
+                    
+                    let repository = UserRepository(mc: mc)
+                    
+                    repository.editUsername(
+                        user: user,
+                        newUsername: newUsername
+                    )
+                }
+                .presentationDetents([.fraction(0.3)])
+                .presentationBackground(.background)
+            
             
         }
     }

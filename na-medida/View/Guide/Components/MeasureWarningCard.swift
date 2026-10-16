@@ -15,10 +15,7 @@ struct MeasureWarningCard: View{
     
     var body: some View {
         HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
-                Image(systemName: "info.circle.fill")
-                    .foregroundStyle(wColor)
-            }
+ 
             VStack(alignment: .leading, spacing: 8){
                 Text(cardTitle)
                     .font(.headline)

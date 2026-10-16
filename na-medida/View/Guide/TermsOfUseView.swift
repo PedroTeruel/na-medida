@@ -272,7 +272,7 @@ struct TermsOfUseView: View {
                 
                 MeasureWarningCard(
                     cardTitle: "Privacidade e Armazenamento Local",
-                    cardBody: "Suas receitas ficam salvas apenas no seu próprio dispositivo.                    Vigência a partir de 14 de outubro de 2026."
+                    cardBody: "Suas receitas ficam salvas apenas no seu próprio dispositivo.\nVigência a partir de 14 de outubro de 2026."
                 )
                 
                 VStack(spacing: 16) {

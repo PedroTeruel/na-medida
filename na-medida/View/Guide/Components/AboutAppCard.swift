@@ -21,15 +21,18 @@ struct AboutAppCard: View {
                 .scaledToFit()
                 .foregroundStyle(.primary)
                 .frame(height: 26)
+                .multilineTextAlignment(.leading)
             
             Text(aboutTitle)
                 .foregroundStyle(.primary)
                 .font(.headline)
                 .lineLimit(1)
+            
+            Spacer()
+            
         }
+        .padding(26)
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 24)
         .background {
             RoundedRectangle(cornerRadius: 24)
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)

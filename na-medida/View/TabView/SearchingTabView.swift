@@ -63,7 +63,7 @@ struct SearchingTabView: View {
                         Image("iconeOnBoard")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 110)
+                            .frame(height: 120)
                         
                         Text("Busque por suas receitas ou por ingredientes usados nela.")
                             .font(.body)
