@@ -9,111 +9,50 @@ import Foundation
 import Observation
 
 @Observable
-
-//busca por código de barras
 final class OpenFoodFactsService {
     private let baseURL = "https://world.openfoodfacts.org/api/v3/product"
+    private let searchURL = "https://world.openfoodfacts.org/cgi/search.pl"
+    private let userAgent = "NaMedida - iOS - Version 1.0 - pedrohteruel@gmail.com"
+    private let fieldsList = "code,product_name,brands,ingredients_text,nutriments,image_front_url,image_url,image_small_url,serving_size,quantity,allergens,countries_tags"
     
     private let decoder = JSONDecoder()
     
+    // Busca por código de barras
     func fetchProd(barcode: String) async throws -> ProductOpenFoodFactsDTO {
-        var components = URLComponents(
-            string:"\(baseURL)/\(barcode)"
-        )
-        
-        components?.queryItems = [
-            URLQueryItem(
-                name: "fields",
-                value: "code,product_name,brands,ingredients_text,nutriments,image_front_url,image_url,image_small_url,serving_size,quantity,allergens,countries_tags"),
-            URLQueryItem(name: "lc", value: "pt")
-        ]
-        
-        guard let url = components?.url else {
+        let cleanBarcode = barcode.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleanBarcode.isEmpty,
+              var components = URLComponents(string: "\(baseURL)/\(cleanBarcode)") else {
             throw OpenFoodFactsError.invalidURL
         }
         
-        var request = URLRequest(url: url, timeoutInterval: 10.0)
+        components.queryItems = [
+            URLQueryItem(name: "fields", value: fieldsList),
+            URLQueryItem(name: "lc", value: "pt")
+        ]
         
-        request.setValue(
-            "NaMedida - IOS - Version 1.0 - pedrohteruel@gmail.com",
-            forHTTPHeaderField: "User-Agent"
-        )
-        
-        let maxRetries = 3
-        var currentAttempt = 0
-        
-        while currentAttempt < maxRetries {
-            
-            try Task.checkCancellation()
-            do
-            {
-                let (data, response) = try await URLSession.shared.data(for: request)
-                
-                if let jsonPuro = String(data: data, encoding: .utf8) {
-                    print("Dados da API (Tentativa \(currentAttempt + 1)): \(jsonPuro)")
-                }
-                
-                guard let webResponse = response as? HTTPURLResponse else {
-                    throw OpenFoodFactsError.invalidResponse
-                }
-                
-                switch webResponse.statusCode {
-                case 200:
-                    let responseDTO = try JSONDecoder().decode(
-                        BarcodeResponseDTO.self,
-                        from: data
-                    )
-                    
-                    guard let product = responseDTO.product else {
-                        throw OpenFoodFactsError.productNotFound
-                    }
-                    
-                    return product
-                    
-                case 404:
-                    throw OpenFoodFactsError.productNotFound
-                    
-                case 400...499:
-                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
-                    
-                default:
-                    throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
-                }
-                
-            } catch {
-                print("Erro na requisição/decodificação: \(error)")
-                currentAttempt += 1
-                let isNetworkError = (error as? URLError) != nil
-                let isServerError: Bool = {
-                    
-                    if case OpenFoodFactsError.serverError(let statusCode) = error {
-                        return statusCode >= 500
-                    }
-                    return false
-                }()
-                
-                
-                if currentAttempt >= maxRetries || (!isNetworkError && !isServerError) ||  Task.isCancelled {
-                    throw error
-                }
-                
-                let baseDelay = pow(2.0, Double(currentAttempt - 1))
-                let jitter = Double.random(in: 0...0.5)
-                let totalDelay = UInt64((baseDelay + jitter) * 1_000_000_000)
-                
-                try? await Task.sleep(nanoseconds: totalDelay)
-            }
+        guard let url = components.url else {
+            throw OpenFoodFactsError.invalidURL
         }
         
-        throw OpenFoodFactsError.invalidResponse
+        let responseDTO: BarcodeResponseDTO = try await performRequest(url: url, treat404AsNotFound: true)
+        
+        guard let product = responseDTO.product else {
+            throw OpenFoodFactsError.productNotFound
+        }
+        
+        return product
     }
     
-    //função de pesquisa por texto
+    // Função de pesquisa por texto
     func searchProducts(query: String) async throws -> [ProductOpenFoodFactsDTO] {
-        var components = URLComponents(string: "https://world.openfoodfacts.org/cgi/search.pl")
+        let cleanQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleanQuery.isEmpty,
+              var components = URLComponents(string: searchURL) else {
+            throw OpenFoodFactsError.invalidURL
+        }
         
-        components?.queryItems = [
-            URLQueryItem(name: "search_terms", value: query),
+        components.queryItems = [
+            URLQueryItem(name: "search_terms", value: cleanQuery),
             URLQueryItem(name: "search_simple", value: "1"),
             URLQueryItem(name: "action", value: "process"),
             URLQueryItem(name: "json", value: "1"),
@@ -129,19 +68,24 @@ final class OpenFoodFactsService {
             URLQueryItem(name: "page_size", value: "20"),
             URLQueryItem(name: "lc", value: "pt"),
             URLQueryItem(name: "sort_by", value: "unique_scans_n"),
-            
-            URLQueryItem(name: "fields", value: "product_name,brands,ingredients_text,nutriments,image_front_url,image_url,image_small_url,serving_size,quantity,allergens,countries_tags")
+            URLQueryItem(name: "fields", value: fieldsList)
         ]
         
-        guard let url = components?.url else {
+        guard let url = components.url else {
             throw OpenFoodFactsError.invalidURL
         }
         
+        do {
+            let responseDTO: SearchResponseDTO = try await performRequest(url: url, treat404AsNotFound: true)
+            return responseDTO.products ?? []
+        } catch OpenFoodFactsError.productNotFound {
+            return []
+        }
+    }
+    
+    private func performRequest<T: Decodable>(url: URL, treat404AsNotFound: Bool) async throws -> T {
         var request = URLRequest(url: url, timeoutInterval: 10.0)
-        request.setValue(
-            "Na-Medida - iOS - Version 1.0 - pedrohteruel@gmail.com",
-            forHTTPHeaderField: "User-Agent"
-        )
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         let maxRetries = 3
         var currentAttempt = 0
@@ -151,27 +95,20 @@ final class OpenFoodFactsService {
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
+                
                 guard let webResponse = response as? HTTPURLResponse else {
                     throw OpenFoodFactsError.invalidResponse
                 }
                 
                 switch webResponse.statusCode {
                 case 200:
-                    let responseDTO = try decoder.decode(SearchResponseDTO.self, from: data)
-                    
-                    if let primeiroProduto = responseDTO.products?.first {
-                        print("[VITAMINA E - BUSCA] 100g: \(String(describing: primeiroProduto.nutriments?.vitaminE100g))")
-                        print("[VITAMINA E - BUSCA] Porção: \(String(describing: primeiroProduto.nutriments?.vitaminEServing))")
-                    }
-                    
-                    return responseDTO.products ?? []
-                case 404:
-                    return []
+                    return try decoder.decode(T.self, from: data)
+                case 404 where treat404AsNotFound:
+                    throw OpenFoodFactsError.productNotFound
                 default:
                     throw OpenFoodFactsError.serverError(statusCode: webResponse.statusCode)
                 }
             } catch {
-                print("Erro na requisição/decodificação: \(error)")
                 currentAttempt += 1
                 let isNetworkError = (error as? URLError) != nil
                 let isServerError: Bool = {
@@ -189,16 +126,30 @@ final class OpenFoodFactsService {
                 let jitter = Double.random(in: 0...0.5)
                 let totalDelay = UInt64((baseDelay + jitter) * 1_000_000_000)
                 
-                try? await Task.sleep(nanoseconds: totalDelay)
+                try await Task.sleep(nanoseconds: totalDelay)
             }
         }
-        return []
+        
+        throw OpenFoodFactsError.invalidResponse
     }
 }
 
-enum OpenFoodFactsError: Error {
+enum OpenFoodFactsError: LocalizedError {
     case invalidURL
     case invalidResponse
     case productNotFound
     case serverError(statusCode: Int)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Endereço de busca inválido."
+        case .invalidResponse:
+            return "Não foi possível obter resposta do servidor."
+        case .productNotFound:
+            return "Produto não encontrado."
+        case .serverError(let statusCode):
+            return "Erro no servidor (código \(statusCode)). Tente novamente."
+        }
+    }
 }

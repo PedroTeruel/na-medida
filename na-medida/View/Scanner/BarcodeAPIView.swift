@@ -64,7 +64,6 @@ struct BarcodeAPIView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top)
-                
             }
         }
         .navigationTitle("Adicione ingredientes")
@@ -106,6 +105,9 @@ struct BarcodeAPIView: View {
     
     private func handleBackAction() {
         fetchTask?.cancel()
+        if recipe != nil {
+            draft.clear()
+        }
         if showSheet {
             showSheet = false
             Task {
@@ -121,44 +123,18 @@ struct BarcodeAPIView: View {
     
     private func saveRecipeNavigate() {
         let repository = RecipeRepository(mc: mc)
-
         let savedRecipe: Recipe
-        let isExisting = recipe != nil
-
+        let isExisting = (recipe != nil)
+        
         if let existingRecipe = recipe {
-            repository.addIngredients(
-                to: existingRecipe,
-                dtos: draft.ingredients
-            )
-
+            repository.addIngredients(to: existingRecipe, from: draft)
             savedRecipe = existingRecipe
         } else {
             savedRecipe = repository.saveRecipe(draft: draft)
         }
-
-        for product in draft.ingredients {
-
-            guard let recipeIngredient = savedRecipe.ingredients.first(where: {
-                $0.ingredient?.name == product.productName &&
-                $0.ingredient?.brand == product.brands
-            }) else {
-                print("Ingrediente não localizado:", product.productName ?? "")
-                continue
-            }
-
-            recipeIngredient.userQuantity = draft.quantities[product] ?? product.defaultServing.quantity
-            recipeIngredient.unity = draft.units[product] ?? product.defaultServing.unit
-        }
-
-        do {
-            try mc.save()
-        } catch {
-            print("Erro ao salvar receita:", error)
-            return
-        }
-
+        
         draft.clear()
-
+        
         handlePopTo(
             existing: isExisting,
             recipe: savedRecipe

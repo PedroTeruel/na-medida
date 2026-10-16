@@ -11,7 +11,6 @@ import SwiftData
 struct RecipesInfoView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
-    @Environment(\.dismiss) private var dismiss
     
     var recipe: Recipe
     
@@ -49,10 +48,7 @@ struct RecipesInfoView: View {
                     .buttonStyle(.plain)
                     .padding(.top)
                     
-                    if recipe.ingredients.isEmpty {
-                        Text("")
-                            .foregroundStyle(.secondary)
-                    } else {
+                    if !recipe.ingredients.isEmpty {
                         List {
                             ForEach(recipe.ingredients.reversed()) { recipeIng in
                                 Button {
@@ -91,7 +87,6 @@ struct RecipesInfoView: View {
                 .padding(.top, 32)
             }
             
-            // texto de aviso
             Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
                 .multilineTextAlignment(.leading)
                 .foregroundStyle(.secondary)
@@ -145,26 +140,23 @@ struct RecipesInfoView: View {
     
     private func deleteRecipe() {
         mc.delete(recipe)
-        dismiss()
+        try? mc.save()
+        router.popToRoot()
     }
     
     private func deleteIngredient(_ recipeIngredient: RecipeIngredient) {
+        let repository = RecipeRepository(mc: mc)
         withAnimation {
-            if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
-                recipe.ingredients.remove(at: index)
-                mc.delete(recipeIngredient)
-                try? mc.save()
-            }
+            repository.removeIngredient(recipeIngredient, from: recipe, saveImmediately: true)
         }
     }
 }
-    
-    #Preview {
-        NavigationStack {
-            RecipesInfoView(recipe: Recipe(name: "Minha Receita", tag: .lunch))
-            CardRecipeIngredient()
-            
-        }
-        .environment(Router())
-        .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
+
+#Preview {
+    NavigationStack {
+        RecipesInfoView(recipe: Recipe(name: "Minha Receita", tag: .lunch))
+        CardRecipeIngredient()
     }
+    .environment(Router())
+    .modelContainer(for: [Recipe.self, RecipeIngredient.self, Ingredient.self], inMemory: true)
+}

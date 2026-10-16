@@ -13,11 +13,12 @@ struct NewRecipeView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     @FocusState private var isTitleFocused: Bool
-    
     @State private var showDiscardAlert = false
     
     private var ifModifications: Bool {
-        !draft.title.trimmingCharacters(in: .whitespaces).isEmpty || !draft.ingredients.isEmpty || draft.tag != .breakfast
+        !draft.title.trimmingCharacters(in: .whitespaces).isEmpty ||
+        !draft.ingredients.isEmpty ||
+        draft.tag != nil
     }
     
     var body: some View {
@@ -54,8 +55,6 @@ struct NewRecipeView: View {
             FlowLayout(spacing: 12, rowSpacing: 12) {
                 ForEach(RecipeTag.allCases, id: \.self) { tag in
                     TagButton(tag: tag, title: tag.rawValue, isSelected: draft.tag == tag) {
-                        //draft.tag = tag
-                        
                         if draft.tag == tag {
                             draft.tag = nil
                         } else {
@@ -65,7 +64,6 @@ struct NewRecipeView: View {
                 }
             }
             .padding(.horizontal)
-            
             
             Spacer()
             
@@ -82,7 +80,6 @@ struct NewRecipeView: View {
             .tint(.button)
             .disabled(draft.title.trimmingCharacters(in: .whitespaces).isEmpty)
         }
-        
         .padding()
         .contentShape(Rectangle())
         .onTapGesture {
@@ -94,7 +91,7 @@ struct NewRecipeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: . topBarLeading) {
+            ToolbarItem(placement: .topBarLeading) {
                 Button {
                     if ifModifications {
                         showDiscardAlert = true
@@ -127,6 +124,9 @@ struct NewRecipeView: View {
                     return false
                 }
                 return true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                isTitleFocused = true
             }
         }
         .onDisappear {
