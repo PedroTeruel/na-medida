@@ -1,5 +1,5 @@
 //
-//  MacroTagView.swift
+//  MacroTag.swift
 //  na-medida
 //
 //  Created by Vitor Silva Souza on 02/10/26.

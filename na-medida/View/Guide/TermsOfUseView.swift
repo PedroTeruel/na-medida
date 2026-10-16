@@ -371,15 +371,15 @@ private struct TermsSectionCard: View {
     private func clauseText(for clause: TermsClause) -> Text {
         let numberText = Text("\(clause.number) ")
             .fontWeight(.semibold)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         
         if let title = clause.title {
             let titleText = Text("\(title): ")
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
-            return numberText + titleText + Text(clause.text)
+            return Text("\(numberText)\(titleText)\(clause.text)")
         } else {
-            return numberText + Text(clause.text)
+            return Text("\(numberText)\(clause.text)")
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  IngredientEntity.swift
+//  Ingredient.swift
 //  na-medida
 //
 //  Created by Rebeca Emanuela Calmon de Andrade Alves on 29/09/26.

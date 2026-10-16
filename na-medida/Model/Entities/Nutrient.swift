@@ -9,17 +9,17 @@ import Foundation
 import SwiftUI
 
 struct Nutrient: Identifiable, Hashable {
-
+    
     let id = UUID()
-
+    
     let name: String
     let image: String
     let description: String
-
+    
     let generalBody: String
     let generalCap: String
     let generalColor: Color
-
+    
     let functions: [NutrientFunction]
     let sources: [NutrientFonts]
 }

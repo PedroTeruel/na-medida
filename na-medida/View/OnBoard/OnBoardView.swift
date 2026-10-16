@@ -84,8 +84,8 @@ struct OnBoardView: View {
                                     .focused($isNameFieldFocused)
                                     .id("nameField")
                                     .onChange(of: username) { _, newValue in
-                                            username = String(newValue.prefix(20))
-                                        }
+                                        username = String(newValue.prefix(20))
+                                    }
                                     .padding()
                                     .background(Color(.systemBackground))
                                     .cornerRadius(25)

@@ -11,8 +11,6 @@ struct SearchAPIView: View {
     @Binding var currentDetent: PresentationDetent
     @Binding var searchText: String
     
-    
-    
     @Environment(Router.self) private var router
     @Environment(RecipeDraft.self) private var draft
     
@@ -134,7 +132,7 @@ struct SearchAPIView: View {
                             
                             ForEach(searchResults, id: \.self) { product in
                                 let isAlreadyAdd = draft.ingredients.contains(product)
-
+                                
                                 CardSheet(
                                     productName: product.productName ?? "Produto sem nome",
                                     brand: product.brands,
@@ -178,7 +176,7 @@ struct SearchAPIView: View {
                                     imageURL: product.photoProduct,
                                     brands: product.brands,
                                     isEditable: true,
-
+                                    
                                     userQuantity: Binding(
                                         get: {
                                             draft.quantities[product] ?? product.defaultServing.quantity
@@ -187,7 +185,7 @@ struct SearchAPIView: View {
                                             draft.quantities[product] = newValue
                                         }
                                     ),
-
+                                    
                                     unity: Binding(
                                         get: {
                                             draft.units[product] ?? product.defaultServing.unit
