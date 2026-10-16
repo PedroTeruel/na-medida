@@ -34,7 +34,7 @@ struct NutrientsCard: View {
                     .font(.body)
                     .fontWeight(.regular)
                     .foregroundStyle(.secondary)
-                    .lineLimit(nil)
+                    . lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer()

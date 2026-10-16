@@ -105,19 +105,19 @@ struct TagSheetView: View {
 
 #Preview {
     let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-
+    
     let container = try! ModelContainer(
         for: Recipe.self, RecipeIngredient.self, Ingredient.self,
         configurations: configuration
     )
-
+    
     let recipe = Recipe(
         name: "Bolo de chocolate",
         tag: .breakfast
     )
-
+    
     container.mainContext.insert(recipe)
-
+    
     return TagSheetView(
         recipe: recipe,
         cancelAction: {},

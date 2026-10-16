@@ -47,7 +47,6 @@ extension RecipeTag {
         }
     }
 
-    // Useful when you need readable text over the tag color
     var foregroundColor: Color {
         switch self {
         case .breakfast: return Color.tagTextOrange

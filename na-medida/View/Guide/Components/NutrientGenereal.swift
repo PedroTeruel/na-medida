@@ -51,7 +51,7 @@ struct NutrientGenereal: View {
                 .background {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(colorScheme == .dark ? .black.opacity(0.2) : .white.opacity(0.4))
-                        //.fill(.white.opacity(0.6))
+                    //.fill(.white.opacity(0.6))
                 }
             }
             .padding(20)

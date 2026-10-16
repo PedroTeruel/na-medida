@@ -19,7 +19,7 @@ struct AboutNutrientsView: View {
                     .fontWeight(.bold)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
-
+                
                 Text("Descubra para que servem os principais nutrientes")
                     .font(.body)
                     .foregroundStyle(.secondary)

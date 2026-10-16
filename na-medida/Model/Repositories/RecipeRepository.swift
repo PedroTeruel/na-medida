@@ -116,15 +116,15 @@ final class RecipeRepository {
         try? mc.save()
     }
     
-    //Funções da EditRecipeView
+    //funções da EditRecipeView
     func saveChanges() throws {
         try mc.save()
     }
-
+    
     func cancelChanges() {
         mc.rollback()
     }
-
+    
     func removeIngredient(_ recipeIngredient: RecipeIngredient, from recipe: Recipe, saveImmediately: Bool = true) {
         if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == recipeIngredient.persistentModelID }) {
             recipe.ingredients.remove(at: index)
