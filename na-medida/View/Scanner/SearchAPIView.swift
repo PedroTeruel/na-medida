@@ -65,7 +65,7 @@ struct SearchAPIView: View {
                         HStack {
                             Spacer()
                             
-                            VStack(spacing: 0) {
+                            VStack(spacing: 12) {
                                 
                                 Image("IconeSearch")
                                     .resizable()
@@ -75,13 +75,19 @@ struct SearchAPIView: View {
                                     .controlSize(.large)
                                     .scaleEffect(0.5)
                                     .tint(.primary)
-                                Text("Buscando")
-                                    .fontWeight(.regular)
+                                Text("Buscando...")
+                                    .fontWeight(.semibold)
                                     .foregroundStyle(.secondary)
                                     .multilineTextAlignment(.center)
                                     .lineLimit(3)
+                                Text("A busca pode levar alguns segundos devido à alta demanda.")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+                                    .multilineTextAlignment(.center)
+
+                                
                             }
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: 250)
                             
                             
                             Spacer()
@@ -124,9 +130,12 @@ struct SearchAPIView: View {
                                 Text("Resultado da pesquisa '\(searchText)'")
                                     .font(.headline)
                                 Spacer()
-                                Text("\(searchResults.count) resultados encontrados")
+                                Text("\(searchResults.count) resultados encontrados.")
                                     .font(.subheadline)
+                                    .foregroundStyle(.primary)
+                                Text("Caso não encontre o item desejado. Tente novamente.")
                                     .foregroundStyle(.secondary)
+                                    .font(.footnote)
                             }
                             .listRowSeparator(.hidden)
                             

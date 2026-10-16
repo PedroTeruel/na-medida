@@ -24,6 +24,9 @@ struct EditRecipeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
+                Text("Edite o título, categorias e porções da sua receita.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                 
                 TextField("Minha receita", text: $recipe.name)
                     .font(.title)
@@ -79,12 +82,12 @@ struct EditRecipeView: View {
                 Spacer()
                 
                 VStack(spacing: 16) {
-                    Text("Edite os ingredientes e as porções usadas na sua receita.")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity)
-                        .padding()
+//                    Text("Edite os ingredientes e as porções da sua receita.")
+//                        .font(.footnote)
+//                        .multilineTextAlignment(.center)
+//                        .foregroundStyle(.secondary)
+//                        .frame(maxWidth: .infinity)
+//                        .padding()
                     
                     Button {
                         router.navigate(to: .scanner(recipe))

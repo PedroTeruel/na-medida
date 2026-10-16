@@ -34,7 +34,7 @@ struct RecipesInfoView: View {
                 CarouselView(recipe: recipe)
                 
                 VStack {
-                    Text("Adicione os ingredientes e as porções usadas na sua receita.")
+                    Text("Adicione ingredientes e porções da receita.")
                         .multilineTextAlignment(.center)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -90,9 +90,10 @@ struct RecipesInfoView: View {
             Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
                 .multilineTextAlignment(.leading)
                 .foregroundStyle(.secondary)
+                .font(.footnote)
                 .fontWeight(.thin)
                 .padding(.horizontal)
-                .font(.footnote)
+                .padding(.top)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)

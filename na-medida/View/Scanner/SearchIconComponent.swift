@@ -20,7 +20,7 @@ struct SearchIconComponent: View {
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
             
-            Text("Para melhores resultados, digite o nome exato do produto e/ou da marca.")
+            Text("Para melhores resultados, digite o nome exato ou escaneie um código de barras.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

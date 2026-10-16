@@ -84,7 +84,7 @@ final class OpenFoodFactsService {
     }
     
     private func performRequest<T: Decodable>(url: URL, treat404AsNotFound: Bool) async throws -> T {
-        var request = URLRequest(url: url, timeoutInterval: 10.0)
+        var request = URLRequest(url: url, timeoutInterval: 15.0)
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         let maxRetries = 3
