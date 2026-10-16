@@ -30,12 +30,11 @@ enum QntUnity: String, Codable {
     var formatted: String {
         switch self {
         case .un: return "Un"
-        case .g: return "g"
+        case .g:  return "g"
         case .mg: return "mg"
         case .kg: return "kg"
         case .ml: return "mL"
         case .l:  return "L"
-        default:  return self.rawValue
         }
     }
 }

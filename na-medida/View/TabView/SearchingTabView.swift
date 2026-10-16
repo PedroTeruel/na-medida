@@ -155,6 +155,11 @@ struct SearchingTabView: View {
             .navigationDestination(for: AppRoute.self) { route in
                 router.build(route: route)
             }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isSearchFocused = true
+                }
+            }
         }
     }
 }

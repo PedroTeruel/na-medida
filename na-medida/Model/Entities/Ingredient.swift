@@ -44,7 +44,7 @@ final class Ingredient {
     var calciumServing: Double?
     var ironServing: Double?
     var zincServing: Double?
-
+    
     var vitaminC100g: Double?
     var vitaminE100g: Double?
     var vitaminB1100g: Double?
@@ -60,7 +60,7 @@ final class Ingredient {
     var vitaminB3Serving: Double?
     var vitaminB5Serving: Double?
     var vitaminB6Serving: Double?
-
+    
     var vitaminA100g: Double?
     var vitaminD100g: Double?
     var vitaminK100g: Double?
@@ -307,7 +307,7 @@ extension Ingredient {
                 items.append(NutritionalFactsItem(name: nome, value100g: AnvisaNutritionFormatter.format(v100g, scale: .mcg), valuePortion: AnvisaNutritionFormatter.format(vPortion, scale: .mcg), dailyValue: "", isBold: false))
             }
         }
-
+        
         if calcium100g != nil || calciumServing != nil {
             items.append(NutritionalFactsItem(
                 name: "Cálcio (mg)",
@@ -339,8 +339,18 @@ extension Ingredient {
     }
     
     convenience init(from dto: ProductOpenFoodFactsDTO) {
+        let resolvedBarcode: String? = {
+            if let code = dto.code, !code.isEmpty {
+                return code
+            }
+            if let tag = dto.countries_tags?.first, tag.hasPrefix("taco-") {
+                return tag
+            }
+            return nil
+        }()
+        
         self.init(
-            barcode: dto.countries_tags?.first,
+            barcode: resolvedBarcode,
             name: dto.productName ?? "Sem Nome",
             brand: dto.brands,
             photoURL: dto.photoProduct,

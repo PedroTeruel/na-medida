@@ -17,7 +17,9 @@ struct TacoDouble: Decodable, Hashable {
         } else if let intValue = try? container.decode(Int.self) {
             value = Double(intValue)
         } else if let stringValue = try? container.decode(String.self) {
-            let cleanStr = stringValue.replacingOccurrences(of: ",", with: ".").trimmingCharacters(in: .whitespaces)
+            let cleanStr = stringValue
+                .replacingOccurrences(of: ",", with: ".")
+                .trimmingCharacters(in: .whitespaces)
             value = Double(cleanStr)
         } else {
             value = nil
@@ -159,35 +161,51 @@ struct TacoItemDTO: Decodable, Hashable {
         }
     }
     
-    func toOpenFoodFactsDTO() -> ProductOpenFoodFactsDTO? {
-        var nutrimentsDict: [String: Double] = [:]
+    func toOpenFoodFactsDTO() -> ProductOpenFoodFactsDTO {
+        let sodiumG = sodium_mg?.value.map { $0 / 1_000.0 }
+        let calciumG = calcium_mg?.value.map { $0 / 1_000.0 }
+        let ironG = iron_mg?.value.map { $0 / 1_000.0 }
+        let zincG = zinc_mg?.value.map { $0 / 1_000.0 }
+        let vitaminCG = vitaminC_mg?.value.map { $0 / 1_000.0 }
         
-        if let val = energy_kcal?.value { nutrimentsDict["energy-kcal_100g"] = val }
-        if let val = protein_g?.value { nutrimentsDict["proteins_100g"] = val }
-        if let val = carbohydrate_g?.value { nutrimentsDict["carbohydrates_100g"] = val }
-        if let val = lipid_g?.value { nutrimentsDict["fat_100g"] = val }
-        if let val = fiber_g?.value { nutrimentsDict["fiber_100g"] = val }
-        if let val = sodium_mg?.value { nutrimentsDict["sodium_100g"] = val }
-        if let val = calcium_mg?.value { nutrimentsDict["calcium_100g"] = val }
-        if let val = iron_mg?.value { nutrimentsDict["iron_100g"] = val }
-        if let val = zinc_mg?.value { nutrimentsDict["zinc_100g"] = val }
-        if let val = vitaminC_mg?.value { nutrimentsDict["vitamin-c_100g"] = val }
+        let nutriments = NutrimentsDTO(
+            energyKcal100g: energy_kcal?.value,
+            proteins100g: protein_g?.value,
+            carbohydrates100g: carbohydrate_g?.value,
+            fat100g: lipid_g?.value,
+            fiber100g: fiber_g?.value,
+            sodium100g: sodiumG,
+            energyKcalServing: energy_kcal?.value,
+            proteinsServing: protein_g?.value,
+            carbohydratesServing: carbohydrate_g?.value,
+            fatServing: lipid_g?.value,
+            fiberServing: fiber_g?.value,
+            sodiumServing: sodiumG,
+            vitaminC100g: vitaminCG,
+            calcium100g: calciumG,
+            iron100g: ironG,
+            zinc100g: zincG,
+            vitaminCServing: vitaminCG,
+            calciumServing: calciumG,
+            ironServing: ironG,
+            zincServing: zincG
+        )
         
-        let productDict: [String: Any] = [
-            "product_name": description,
-            "brands": "TACO (\(category))",
-            "ingredients_text": "Informação baseada na Tabela Brasileira de Composição de Alimentos (TACO).",
-            "image_url": getEmoji(),
-            "serving_size": "100g",
-            "countries_tags": ["taco-\(id)"],
-            "nutriments": nutrimentsDict
-        ]
+        let tacoCode = "taco-\(id)"
         
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: productDict),
-              let dto = try? JSONDecoder().decode(ProductOpenFoodFactsDTO.self, from: jsonData) else {
-            return nil
-        }
-        
-        return dto
+        return ProductOpenFoodFactsDTO(
+            code: tacoCode,
+            productName: description,
+            brands: "TACO (\(category))",
+            nutriments: nutriments,
+            composicaoProduto: "Informação baseada na Tabela Brasileira de Composição de Alimentos (TACO).",
+            allergens: nil,
+            fotoProdutoURL: nil,
+            imageUrl: getEmoji(),
+            imageSmallUrl: nil,
+            servingSize: "100g",
+            quantity: "100g",
+            countries_tags: [tacoCode]
+        )
     }
 }

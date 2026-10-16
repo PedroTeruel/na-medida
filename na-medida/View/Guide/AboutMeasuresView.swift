@@ -9,13 +9,14 @@ import SwiftUI
 
 struct AboutMeasuresView: View {
     @State var segmentedControl = 0
+    
     var body: some View {
-        
-        ScrollView{
-            VStack(alignment: .leading, spacing: 22){
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
                 Text("Aprenda a converter a quantidade de ingredientes usando medidas caseiras.")
                     .font(.body)
                     .foregroundStyle(.secondary)
+                
                 Picker("Informações", selection: $segmentedControl) {
                     Text("Líquidos").tag(0)
                     Text("Sólidos").tag(1)
@@ -24,23 +25,24 @@ struct AboutMeasuresView: View {
                 .pickerStyle(.segmented)
                 
                 if segmentedControl == 0 {
-                    ThreeTable(version: 0)
-                } else if segmentedControl == 1 {
-                    ThreeTable(version: 1)
-                } else{
                     TwoTable()
+                } else if segmentedControl == 1 {
+                    ThreeTable(version: 0)
+                } else {
+                    ThreeTable(version: 1)
                 }
-                MeasureWarningCard()
                 
+                MeasureWarningCard()
             }
             .padding(.horizontal)
             .navigationTitle("Tabela de Medidas")
             .navigationBarTitleDisplayMode(.large)
         }
-        
     }
 }
 
 #Preview {
-    AboutMeasuresView()
+    NavigationStack {
+        AboutMeasuresView()
+    }
 }

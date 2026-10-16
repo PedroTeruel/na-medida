@@ -14,22 +14,22 @@ struct EditRecipeView: View {
     @Environment(Router.self) private var router
     
     private var repository: RecipeRepository {
-            RecipeRepository(mc: modelContext)
-        }
+        RecipeRepository(mc: modelContext)
+    }
     
     @State private var isShowingTagSheet = false
-    
     @State private var isShowingCancelAlert = false
+    @FocusState private var isTitleFocused: Bool
     
     var body: some View {
         ScrollView {
-            
             VStack(spacing: 24) {
                 
                 TextField("Minha receita", text: $recipe.name)
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
+                    .focused($isTitleFocused)
                 
                 Button {
                     isShowingTagSheet = true
@@ -48,11 +48,10 @@ struct EditRecipeView: View {
                             .overlay {
                                 Capsule()
                                     .strokeBorder(
-                                        tag.foregroundColor.opacity(0.5),
+                                        tag.foregroundColor.opacity(0.5)
                                     )
                             }
                     } else {
-                        
                         Label(
                             "Adicionar categoria",
                             systemImage: "plus"
@@ -79,8 +78,7 @@ struct EditRecipeView: View {
                 
                 Spacer()
                 
-                VStack (spacing: 16) {
-                    
+                VStack(spacing: 16) {
                     Text("Edite os ingredientes e as porções usadas na sua receita.")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
@@ -101,7 +99,7 @@ struct EditRecipeView: View {
                             .padding(.vertical, 12)
                     } else {
                         ForEach(recipe.ingredients) { item in
-                            if let index = recipe.ingredients.firstIndex(where: { $0.id == item.id }) {
+                            if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == item.persistentModelID }) {
                                 CardRecipeIngredient(
                                     productName: item.ingredient?.name,
                                     imageURL: item.ingredient?.photoURL,
@@ -111,7 +109,7 @@ struct EditRecipeView: View {
                                     unity: $recipe.ingredients[index].unity,
                                     defaultUnit: recipe.ingredients[index].unity,
                                     onRemove: {
-                                        repository.removeIngredient(item, from: recipe)
+                                        repository.removeIngredient(item, from: recipe, saveImmediately: false)
                                     }
                                 )
                                 .padding(.horizontal)
@@ -130,7 +128,12 @@ struct EditRecipeView: View {
                     .font(.footnote)
             }
             .padding(.top, 16)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isTitleFocused = false
+            }
         }
+        .scrollDismissesKeyboard(.interactively)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -152,7 +155,6 @@ struct EditRecipeView: View {
                 .tint(Color("buttonColor"))
             }
         }
-        
         .sheet(isPresented: $isShowingTagSheet) {
             TagSheetView(
                 recipe: recipe,
@@ -162,17 +164,15 @@ struct EditRecipeView: View {
             .presentationDetents([.medium])
             .presentationBackground(.background)
         }
-        
         .alert("Descartar alterações?", isPresented: $isShowingCancelAlert) {
             Button("Descartar", role: .destructive) {
-                modelContext.rollback()
+                repository.cancelChanges()
                 router.pop()
             }
             Button("Continuar Editando", role: .cancel) { }
         } message: {
             Text("Todas as alterações feitas nesta receita serão perdidas.")
         }
-        
         .onAppear {
             SwipeController.shared.swipeAction = {
                 if modelContext.hasChanges {
@@ -188,79 +188,41 @@ struct EditRecipeView: View {
     }
     
     private func saveChanges() {
-            do {
-                try repository.saveChanges()
-                router.pop()
-            } catch {
-                print("Erro ao salvar alterações da receita: \(error)")
-            }
+        let trimmed = recipe.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            recipe.name = "Minha Receita"
         }
-        
-        private func handleCancel() {
-            if modelContext.hasChanges {
-                isShowingCancelAlert = true
-            } else {
-                router.pop()
-            }
+        do {
+            try repository.saveChanges()
+            router.pop()
+        } catch {
+            print("Erro ao salvar alterações da receita: \(error)")
         }
     }
     
+    private func handleCancel() {
+        if modelContext.hasChanges {
+            isShowingCancelAlert = true
+        } else {
+            router.pop()
+        }
+    }
+}
+
 #Preview("Editar Receita") {
     let container = try! ModelContainer(
-        for:
-            Recipe.self,
-        RecipeIngredient.self,
-        Ingredient.self,
-        configurations: ModelConfiguration(
-            isStoredInMemoryOnly: true
-        )
+        for: Recipe.self, RecipeIngredient.self, Ingredient.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     
-    let recipe = Recipe(
-        name: "Macarrão à Bolonhesa",
-        tag: .dinner
-    )
+    let recipe = Recipe(name: "Macarrão à Bolonhesa", tag: .dinner)
+    let ingredient1 = Ingredient(barcode: nil, name: "Carne Moída", brand: "Friboi", photoURL: nil, caloriesPer100g: 250, proteinsPer100g: 26, carbsPer100g: 0, fatsPer100g: 17)
+    let ingredient2 = Ingredient(barcode: nil, name: "Molho de Tomate", brand: "Pomodoro", photoURL: nil, caloriesPer100g: 30, proteinsPer100g: 1.5, carbsPer100g: 5, fatsPer100g: 0.5)
     
-    let ingredient1 = Ingredient(
-        barcode: nil,
-        name: "Carne Moída",
-        brand: "Friboi",
-        photoURL: nil,
-        caloriesPer100g: 250,
-        proteinsPer100g: 26,
-        carbsPer100g: 0,
-        fatsPer100g: 17
-    )
+    let recipeIngredient1 = RecipeIngredient(userQuantity: 300, unity: .g, ingredient: ingredient1, recipe: recipe)
+    let recipeIngredient2 = RecipeIngredient(userQuantity: 500, unity: .ml, ingredient: ingredient2, recipe: recipe)
     
-    let ingredient2 = Ingredient(
-        barcode: nil,
-        name: "Molho de Tomate",
-        brand: "Pomodoro",
-        photoURL: nil,
-        caloriesPer100g: 30,
-        proteinsPer100g: 1.5,
-        carbsPer100g: 5,
-        fatsPer100g: 0.5
-    )
-    
-    let recipeIngredient1 = RecipeIngredient(
-        userQuantity: 300,
-        unity: .g,
-        ingredient: ingredient1,
-        recipe: recipe
-    )
-    
-    let recipeIngredient2 = RecipeIngredient(
-        userQuantity: 500,
-        unity: .ml,
-        ingredient: ingredient2,
-        recipe: recipe
-    )
-    
-    recipe.ingredients = [
-        recipeIngredient1,
-        recipeIngredient2
-    ]
+    recipe.ingredients = [recipeIngredient1, recipeIngredient2]
     
     container.mainContext.insert(recipe)
     container.mainContext.insert(ingredient1)

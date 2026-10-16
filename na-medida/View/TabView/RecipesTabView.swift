@@ -35,22 +35,19 @@ struct RecipesTabView: View {
         
         switch sortOrder {
         case .fromA:
-            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+            return filtered.sorted { recipe1, recipe2 in
                 recipe1.name.localizedStandardCompare(recipe2.name) == .orderedAscending
             }
-            
         case .fromZ:
-            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+            return filtered.sorted { recipe1, recipe2 in
                 recipe1.name.localizedStandardCompare(recipe2.name) == .orderedDescending
             }
-            
         case .newest:
-            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+            return filtered.sorted { recipe1, recipe2 in
                 recipe1.creationDate > recipe2.creationDate
             }
-            
         case .oldest:
-            return filtered.sorted { (recipe1: Recipe, recipe2: Recipe) -> Bool in
+            return filtered.sorted { recipe1, recipe2 in
                 recipe1.creationDate < recipe2.creationDate
             }
         }
@@ -62,16 +59,16 @@ struct RecipesTabView: View {
         @Bindable var routerBindable = router
         
         NavigationStack(path: $routerBindable.recipesPath) {
-            ScrollView{
-                VStack(alignment: .leading){
-                    VStack(alignment: .leading, spacing: 36){
+            ScrollView {
+                VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 36) {
                         Text("Pronto para registrar suas receitas?")
                             .font(.callout)
                             .foregroundStyle(.primary)
                         
-                        if recipes.isEmpty{
+                        if recipes.isEmpty {
                             Spacer()
-                        } else{
+                        } else {
                             Text("Suas Receitas")
                                 .foregroundStyle(.primary)
                                 .font(.title2)
@@ -81,27 +78,28 @@ struct RecipesTabView: View {
                     .padding(.horizontal, 16)
                     
                     if recipes.isEmpty {
-                        VStack(alignment: .center){
+                        VStack(alignment: .center, spacing: 12) {
+                            Image("iconeOnBoard")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 120)
                             
-                            Image("iconeOnBoard").resizable().scaledToFit()
-                                .frame( height: 120)
-                            
-                            Text(recipes.isEmpty ? "Ainda não há nenhuma receita registrada" : "Nenhuma receita nessa categoria")
+                            Text("Ainda não há nenhuma receita registrada")
                                 .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 400)
                         .padding()
                     } else {
-                        VStack(alignment: .leading){
-                            ScrollView(.horizontal, showsIndicators: false){
-                                HStack(spacing: 10){
-                                    ForEach(RecipeTag.allCases, id:\.self) { tag in
+                        VStack(alignment: .leading) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    ForEach(RecipeTag.allCases, id: \.self) { tag in
                                         TagButton(
                                             tag: tag,
                                             title: tag.rawValue,
                                             isSelected: selectedTag == tag
-                                        ){
+                                        ) {
                                             if selectedTag == tag {
                                                 selectedTag = nil
                                             } else {
@@ -114,29 +112,44 @@ struct RecipesTabView: View {
                                 .padding(.horizontal, 16)
                             }
                             
-                            List {
-                                ForEach(filteredRecipes) { recipe in
-                                    Button {
-                                        router.navigate(to: .recipesinfo(recipe))
-                                    } label: {
-                                        CardRecipe(recipe: recipe)
-                                    }
-                                    .buttonStyle(.plain)
-                                    .listRowSeparator(.hidden)
-                                    .listRowBackground(Color.clear)
-                                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                        Button(role: .destructive) {
-                                            deleteRecipe(recipe)
+                            if filteredRecipes.isEmpty {
+                                VStack(alignment: .center, spacing: 12) {
+                                    Image("iconeOnBoard")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 120)
+                                    
+                                    Text("Nenhuma receita nessa categoria")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 320)
+                                .padding()
+                            } else {
+                                List {
+                                    ForEach(filteredRecipes) { recipe in
+                                        Button {
+                                            router.navigate(to: .recipesinfo(recipe))
                                         } label: {
-                                            Label("Deletar", systemImage: "trash")
+                                            CardRecipe(recipe: recipe)
+                                        }
+                                        .buttonStyle(.plain)
+                                        .listRowSeparator(.hidden)
+                                        .listRowBackground(Color.clear)
+                                        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                            Button(role: .destructive) {
+                                                deleteRecipe(recipe)
+                                            } label: {
+                                                Label("Deletar", systemImage: "trash")
+                                            }
                                         }
                                     }
                                 }
+                                .listStyle(.plain)
+                                .scrollDisabled(true)
+                                .frame(height: CGFloat(filteredRecipes.count) * 220)
                             }
-                            .listStyle(.plain)
-                            .scrollDisabled(true)
-                            .frame(height: CGFloat(filteredRecipes.count) * 220)
                         }
                     }
                 }
@@ -147,10 +160,10 @@ struct RecipesTabView: View {
                     ToolbarItemGroup(placement: .topBarTrailing) {
                         Menu {
                             Picker("Ordenar por", selection: $sortOrder) {
-                                Text("Ordem Alfabetica Crescente (A-Z)")
+                                Text("Ordem Alfabética Crescente (A-Z)")
                                     .tag(SortOrder.fromA)
                                 
-                                Text("Ordem Alfabetica Decrescente (Z-A)")
+                                Text("Ordem Alfabética Decrescente (Z-A)")
                                     .tag(SortOrder.fromZ)
                                 
                                 Text("Mais recentes")
@@ -177,13 +190,14 @@ struct RecipesTabView: View {
             }
         }
     }
+    
     private func deleteRecipe(_ recipe: Recipe) {
         withAnimation {
             mc.delete(recipe)
+            try? mc.save()
         }
     }
 }
-
 
 #Preview {
     RecipesTabView(username: "Will")

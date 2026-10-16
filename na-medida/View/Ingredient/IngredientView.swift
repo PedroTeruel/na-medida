@@ -4,6 +4,7 @@
 //
 //  Created by Vitor Silva Souza on 30/09/26.
 //
+
 import SwiftUI
 
 struct IngredientView: View {
@@ -44,7 +45,7 @@ struct IngredientView: View {
         self.init(
             ingredientTitle: productDTO.productName ?? "Título Indisponível",
             ingredientBrands: productDTO.brands ?? "Marca não informada",
-            ingredientImageURL: productDTO.fotoProdutoURL,
+            ingredientImageURL: productDTO.photoProduct,
             items: productDTO.nutritionalItems,
             servingsPerContainer: nil,
             servingSizeText: productDTO.servingSize,
@@ -61,18 +62,16 @@ struct IngredientView: View {
             items: ingredient.nutritionalItems,
             servingsPerContainer: nil,
             servingSizeText: ingredient.servingSize,
-            ingredientsText: ingredient.ingredientsText ?? "Informação de composição",
+            ingredientsText: ingredient.ingredientsText ?? "",
             allergensText: ingredient.allergensText
         )
     }
     
     var body: some View {
         ScrollView {
-            
             Magnifyingglass(imageURL: ingredientImageURL)
             
             VStack(spacing: 16) {
-                
                 VStack(spacing: 6) {
                     Text(ingredientTitle.uppercased())
                         .font(.title)
@@ -93,13 +92,17 @@ struct IngredientView: View {
                 .padding(.top)
                 
                 if segmentedControl == 0 {
-                    VStack(spacing: 22){
+                    VStack(spacing: 22) {
                         NutritionFactsTable(
                             items: items,
                             servingsPerContainer: servingsPerContainer,
                             servingSizeText: servingSizeText
                         )
-                        MeasureWarningCard(cardTitle: "ATENÇÃO: essa tabela pode estar desatualizada.", cardBody: "Os valores dessa tabela nutricional podem estar ausentes ou desatualizados. Sempre verifique a embalagem do seu produto para informações mais precisas.",wColor: .yellow)
+                        MeasureWarningCard(
+                            cardTitle: "ATENÇÃO: essa tabela pode estar desatualizada.",
+                            cardBody: "Os valores dessa tabela nutricional podem estar ausentes ou desatualizados. Sempre verifique a embalagem do seu produto para informações mais precisas.",
+                            wColor: .yellow
+                        )
                     }
                 } else {
                     CompositionIngredientCard(
@@ -123,4 +126,3 @@ struct IngredientView: View {
     )
     .environment(Router())
 }
-

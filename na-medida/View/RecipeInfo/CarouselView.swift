@@ -20,6 +20,7 @@ struct CarouselView: View {
     @State private var items: [CarouselItem] = []
     
     let recipe: Recipe
+    
     var baseData: [(Int, String, String)] {
         [
             (1, "CarouselSodio", AnvisaNutritionFormatter.format(recipe.totalRecipeSodium, scale: .mg)),
@@ -28,6 +29,10 @@ struct CarouselView: View {
             (4, "CarouselCarbo", AnvisaNutritionFormatter.format(recipe.totalRecipeCarbs, scale: .g)),
             (5, "CarouselGorduras", AnvisaNutritionFormatter.format(recipe.totalRecipeFats, scale: .g))
         ]
+    }
+    
+    private var nutritionSignature: String {
+        baseData.map { $0.2 }.joined(separator: "|")
     }
     
     var body: some View {
@@ -76,7 +81,7 @@ struct CarouselView: View {
                 .onAppear {
                     setupInfiniteCarousel()
                 }
-                .onChange(of: recipe.ingredients.count) { _, _ in
+                .onChange(of: nutritionSignature) { _, _ in
                     setupInfiniteCarousel()
                 }
                 
@@ -102,19 +107,23 @@ struct CarouselView: View {
     private func setupInfiniteCarousel() {
         let numberOfRepeats = 100
         var newItems: [CarouselItem] = []
+        let currentBaseData = baseData
         
         for _ in 0..<numberOfRepeats {
-            for data in baseData {
+            for data in currentBaseData {
                 newItems.append(CarouselItem(originalId: data.0, imageName: data.1, value: data.2))
             }
         }
         items = newItems
         
         let middleChunkIndex = numberOfRepeats / 2
-        let startIndex = (middleChunkIndex * baseData.count) + (activeIndex - 1)
+        let safeActiveIndex = max(1, min(activeIndex, currentBaseData.count))
+        let startIndex = (middleChunkIndex * currentBaseData.count) + (safeActiveIndex - 1)
         
         DispatchQueue.main.async {
-            scrollPosition = newItems[startIndex].id
+            if newItems.indices.contains(startIndex) {
+                scrollPosition = newItems[startIndex].id
+            }
         }
     }
 }
