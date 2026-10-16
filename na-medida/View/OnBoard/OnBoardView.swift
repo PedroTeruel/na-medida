@@ -7,13 +7,36 @@
 
 import SwiftUI
 
+// Enum para controlar qual documento legal abrir na Sheet
+enum LegalDocument: Identifiable {
+    case terms
+    case privacy
+    
+    var id: String {
+        switch self {
+        case .terms: return "terms"
+        case .privacy: return "privacy"
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .terms: return "Termos de Uso"
+        case .privacy: return "Política de Privacidade"
+        }
+    }
+}
+
 struct OnBoardView: View {
     @State private var username = ""
     let onContinue: (String) -> Void
     @FocusState private var isNameFieldFocused: Bool
     
+    // Estado para controlar qual sheet abrir
+    @State private var selectedDocument: LegalDocument?
+    
     private var backgroundGradient: some View {
-        VStack{
+        VStack {
             LinearGradient(
                 stops: [
                     .init(color: Color.orange.opacity(0.20), location: 0.1),
@@ -39,9 +62,31 @@ struct OnBoardView: View {
         }
     }
     
+    // Texto inferior com links interativos para os Termos e Privacidade
+    private var legalAttributedString: AttributedString {
+        var fullText = AttributedString("Ao clicar em prosseguir ou \"Prefiro não informar\", o usuário está concordando com os Termos de Uso e Política de Privacidade.")
+        
+        fullText.font = .footnote
+        fullText.foregroundColor = .secondary
+        
+        if let termsRange = fullText.range(of: "Termos de Uso") {
+            fullText[termsRange].foregroundColor = .blue
+            fullText[termsRange].underlineStyle = .single
+            fullText[termsRange].link = URL(string: "customLink://terms")
+        }
+        
+        if let privacyRange = fullText.range(of: "Política de Privacidade") {
+            fullText[privacyRange].foregroundColor = .blue
+            fullText[privacyRange].underlineStyle = .single
+            fullText[privacyRange].link = URL(string: "customLink://privacy")
+        }
+        
+        return fullText
+    }
+    
     var body: some View {
         ScrollViewReader { proxy in
-            ZStack{
+            ZStack {
                 backgroundGradient
                     .ignoresSafeArea()
                 
@@ -56,7 +101,7 @@ struct OnBoardView: View {
                                     .foregroundColor(.primary)
                                     .fixedSize(horizontal: false, vertical: true)
                                 
-                                Text("Entender o que você consome não precisa ser complicado. Descubra a composição nutricional das suas receitas através dos produtos que você consome!")
+                                Text("Entender o que você consome não precisa ser complicado. Descubra a composição nutricional das suas receitas e dos produtos que você consome!")
                                     .font(.system(size: 17))
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(.primary)
@@ -71,7 +116,8 @@ struct OnBoardView: View {
                             Image("iconeOnBoard")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 180)
+                                .frame(height: 160)
+                                
                             
                             Spacer()
                             
@@ -94,11 +140,12 @@ struct OnBoardView: View {
                                             .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                                     )
                                     .autocorrectionDisabled()
-                                VStack(spacing: 36){
+                                
+                                VStack(spacing: 20) {
                                     Button(action: {
                                         onContinue(username)
                                     }) {
-                                        Text("Continuar")
+                                        Text("Prosseguir")
                                             .font(.system(size: 17, weight: .semibold))
                                             .foregroundColor(.white)
                                             .frame(maxWidth: .infinity)
@@ -114,12 +161,28 @@ struct OnBoardView: View {
                                     }) {
                                         Text("Prefiro não informar")
                                             .font(.system(size: 17, weight: .semibold))
-                                            .foregroundStyle(.primary)
+                                            .foregroundStyle(.blue)
+                                            .underline()
                                     }
+                                    
+                                    // Texto legal clicável integrado via AttributedString
+                                    Text(legalAttributedString)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.top, 8)
+                                        .environment(\.openURL, OpenURLAction { url in
+                                            if url.absoluteString == "customLink://terms" {
+                                                selectedDocument = .terms
+                                                return .handled
+                                            } else if url.absoluteString == "customLink://privacy" {
+                                                selectedDocument = .privacy
+                                                return .handled
+                                            }
+                                            return .systemAction
+                                        })
                                 }
                             }
-                            .padding(.horizontal, 42)
-                            .padding(.bottom, 60)
+                            .padding(.horizontal, 36)
+                            .padding(.bottom, 40)
                         }
                         .frame(minHeight: geometry.size.height)
                     }
@@ -132,6 +195,30 @@ struct OnBoardView: View {
                 if focused {
                     withAnimation {
                         proxy.scrollTo("nameField", anchor: .center)
+                    }
+                }
+            }
+            // Sheet nativa que renderiza o respetivo componente SwiftUI
+            .sheet(item: $selectedDocument) { doc in
+                NavigationStack {
+                    Group {
+                        switch doc {
+                        case .terms:
+                            TermsOfUseView() // O teu componente estruturado com cartões
+                        case .privacy:
+                            PrivacyPolicyView() // O componente equivalente para a política
+                        }
+                    }
+                    .toolbar {
+                                ToolbarItem(placement: .topBarTrailing) {
+                                    Button {
+                                        selectedDocument = nil
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .font(.title3)
+                                            .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
             }
