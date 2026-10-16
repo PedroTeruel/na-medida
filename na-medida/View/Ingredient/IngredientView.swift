@@ -1,0 +1,128 @@
+//
+//  IngredientView.swift
+//  na-medida
+//
+//  Created by Vitor Silva Souza on 30/09/26.
+//
+
+import SwiftUI
+
+struct IngredientView: View {
+    @Environment(Router.self) private var router
+    
+    @State private var segmentedControl = 0
+    var ingredientTitle: String
+    var ingredientBrands: String
+    var ingredientImageURL: String?
+    
+    var items: [NutritionalFactsItem]
+    var servingsPerContainer: String?
+    var servingSizeText: String?
+    var ingredientsText: String
+    var allergensText: String?
+    
+    init(
+        ingredientTitle: String = "Titulo do Ingrediente",
+        ingredientBrands: String = "Marca",
+        ingredientImageURL: String? = nil,
+        items: [NutritionalFactsItem] = [],
+        servingsPerContainer: String? = nil,
+        servingSizeText: String? = nil,
+        ingredientsText: String = "",
+        allergensText: String? = nil
+    ) {
+        self.ingredientTitle = ingredientTitle
+        self.ingredientBrands = ingredientBrands
+        self.ingredientImageURL = ingredientImageURL
+        self.items = items
+        self.servingsPerContainer = servingsPerContainer
+        self.servingSizeText = servingSizeText
+        self.ingredientsText = ingredientsText
+        self.allergensText = allergensText
+    }
+    
+    init(productDTO: ProductOpenFoodFactsDTO) {
+        self.init(
+            ingredientTitle: productDTO.productName ?? "Título Indisponível",
+            ingredientBrands: productDTO.brands ?? "Marca não informada",
+            ingredientImageURL: productDTO.photoProduct,
+            items: productDTO.nutritionalItems,
+            servingsPerContainer: nil,
+            servingSizeText: productDTO.servingSize,
+            ingredientsText: productDTO.composicaoProduto ?? "",
+            allergensText: productDTO.allergens
+        )
+    }
+    
+    init(ingredient: Ingredient) {
+        self.init(
+            ingredientTitle: ingredient.name,
+            ingredientBrands: ingredient.brand ?? "Marca não identificada",
+            ingredientImageURL: ingredient.photoURL,
+            items: ingredient.nutritionalItems,
+            servingsPerContainer: nil,
+            servingSizeText: ingredient.servingSize,
+            ingredientsText: ingredient.ingredientsText ?? "",
+            allergensText: ingredient.allergensText
+        )
+    }
+    
+    var body: some View {
+        ScrollView {
+            Magnifyingglass(imageURL: ingredientImageURL)
+            
+            VStack(spacing: 16) {
+                VStack(spacing: 6) {
+                    Text(ingredientTitle.uppercased())
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(ingredientBrands)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+                
+                Picker("Informações", selection: $segmentedControl) {
+                    Text("Informação nutricional").tag(0)
+                    Text("Composição").tag(1)
+                }
+                .pickerStyle(.segmented)
+                .padding(.top)
+                
+                if segmentedControl == 0 {
+                    VStack(spacing: 22) {
+                        NutritionFactsTable(
+                            items: items,
+                            servingsPerContainer: servingsPerContainer,
+                            servingSizeText: servingSizeText
+                        )
+                        MeasureWarningCard(
+                            cardTitle: "ATENÇÃO: essa tabela pode estar desatualizada.",
+                            cardBody: "Os valores dessa tabela nutricional podem estar ausentes ou desatualizados. Sempre verifique a embalagem do seu produto para informações mais precisas.",
+                            wColor: .yellow
+                        )
+                    }
+                } else {
+                    CompositionIngredientCard(
+                        ingredientsText: ingredientsText,
+                        allergensText: allergensText
+                    )
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 24)
+        }
+        .background(Color(.systemBackground))
+    }
+}
+
+#Preview {
+    IngredientView(
+        ingredientTitle: "Chocolate Nescau - 350g",
+        ingredientBrands: "Nestlé"
+    )
+    .environment(Router())
+}

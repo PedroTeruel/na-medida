@@ -1,0 +1,131 @@
+//
+//  GuideTabView.swift
+//  na-medida
+//
+//  Created by Vitor Silva Souza on 28/09/26.
+//
+
+import SwiftUI
+import SwiftData
+
+struct GuideTabView: View {
+    @Environment(Router.self) private var router
+    @Environment(\.modelContext) private var mc
+    @State private var showEditSheet = false
+    
+    let user: User
+    
+    var body: some View {
+        @Bindable var routerBindable = router
+        
+        NavigationStack(path: $routerBindable.settingsPath) {
+            
+            
+            VStack {
+                Text("""
+                     Olá,
+                     \(user.username)!
+                     """)
+                .multilineTextAlignment(.center)
+                .font(.largeTitle)
+                .fontWeight(.semibold)
+                Button("Alterar nome") {
+                    showEditSheet = true
+                }
+            }
+            .padding()
+            
+            ScrollView {
+                
+                VStack(alignment: .leading) {
+                    Text("Sobre nutrientes")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                        .padding(.bottom, 8)
+                        .padding(.top)
+                    
+                    Button {
+                        router.navigate(to: .aboutNutrients)
+                    } label: {
+                        AboutNutrientsCard(
+                            cardTitle: "Definição dos nutrientes",
+                            cardBody: "Entenda melhor sobre os ingredientes das suas receitas",
+                            cardImg: "book" )
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, 6)
+                    
+                    Button {
+                        router.navigate(to: .aboutMeasures)
+                    } label: {
+                        AboutNutrientsCard(
+                            cardTitle: "Tabela de medidas",
+                            cardBody: "Veja como descobrir a medida das suas receitas",
+                            cardImg: "scalemass" )
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding()
+                
+                VStack(alignment: .leading) {
+                    Text("Informações sobre o Na Medida")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                        .padding(.bottom, 8)
+                    
+                    VStack {
+                        Button {
+                            router.navigate(to: .termsOfUse)
+                        } label: {
+                            AboutAppCard(iconCard: "clipboard", aboutTitle: "Termos de uso")
+                        }
+                        .buttonStyle(.plain)
+                        Button {
+                            router.navigate(to: .privacyPolicy)
+                        } label: {
+                            AboutAppCard(iconCard: "lock.shield", aboutTitle: "Política de Privacidade")
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button {
+                            router.navigate(to: .aboutUs)
+                        } label: {
+                            AboutAppCard(iconCard: "info.circle", aboutTitle: "Sobre nós")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding()
+                .navigationDestination(for: AppRoute.self) { route in
+                    router.build(route: route)
+                }
+            }
+            
+            Spacer()
+        }
+            .sheet(isPresented: $showEditSheet) {
+                EditNameSheet { newUsername in
+                    
+                    let repository = UserRepository(mc: mc)
+                    
+                    repository.editUsername(
+                        user: user,
+                        newUsername: newUsername
+                    )
+                }
+                .presentationDetents([.fraction(0.3)])
+                .presentationBackground(.background)
+            
+            
+        }
+    }
+}
+
+#Preview {
+    GuideTabView(user: User(username: "William"))
+        .environment(Router())
+        .modelContainer(
+            for: User.self,
+            inMemory: true
+        )
+}

@@ -1,0 +1,239 @@
+//
+//  EditRecipeView.swift
+//  na-medida
+//
+//  Created by Rebeca Emanuela Calmon de Andrade Alves on 06/10/26.
+//
+
+import SwiftUI
+import SwiftData
+
+struct EditRecipeView: View {
+    @Bindable var recipe: Recipe
+    @Environment(\.modelContext) private var modelContext
+    @Environment(Router.self) private var router
+    
+    private var repository: RecipeRepository {
+        RecipeRepository(mc: modelContext)
+    }
+    
+    @State private var isShowingTagSheet = false
+    @State private var isShowingCancelAlert = false
+    @FocusState private var isTitleFocused: Bool
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                Text("Edite o título, categorias e porções da sua receita.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                
+                TextField("Minha receita", text: $recipe.name)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .focused($isTitleFocused)
+                
+                Button {
+                    isShowingTagSheet = true
+                } label: {
+                    if let tag = recipe.tag {
+                        Text(tag.rawValue)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(tag.foregroundColor)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(
+                                tag.color.opacity(0.3)
+                            )
+                            .clipShape(Capsule())
+                            .overlay {
+                                Capsule()
+                                    .strokeBorder(
+                                        tag.foregroundColor.opacity(0.5)
+                                    )
+                            }
+                    } else {
+                        Label(
+                            "Adicionar categoria",
+                            systemImage: "plus"
+                        )
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                        .background {
+                            Capsule()
+                                .fill(.quaternary.opacity(0.5))
+                        }
+                        .overlay {
+                            Capsule()
+                                .strokeBorder(
+                                    .secondary.opacity(0.4),
+                                    style: StrokeStyle(dash: [4])
+                                )
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                
+                Spacer()
+                
+                VStack(spacing: 16) {
+//                    Text("Edite os ingredientes e as porções da sua receita.")
+//                        .font(.footnote)
+//                        .multilineTextAlignment(.center)
+//                        .foregroundStyle(.secondary)
+//                        .frame(maxWidth: .infinity)
+//                        .padding()
+                    
+                    Button {
+                        router.navigate(to: .scanner(recipe))
+                    } label: {
+                        AddIngredientButton()
+                    }
+                    
+                    if recipe.ingredients.isEmpty {
+                        Text("Nenhum ingrediente adicionado.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .padding(.vertical, 12)
+                    } else {
+                        ForEach(recipe.ingredients) { item in
+                            if let index = recipe.ingredients.firstIndex(where: { $0.persistentModelID == item.persistentModelID }) {
+                                CardRecipeIngredient(
+                                    productName: item.ingredient?.name,
+                                    imageURL: item.ingredient?.photoURL,
+                                    brands: item.ingredient?.brand,
+                                    isEditable: true,
+                                    userQuantity: $recipe.ingredients[index].userQuantity,
+                                    unity: $recipe.ingredients[index].unity,
+                                    defaultUnit: recipe.ingredients[index].unity,
+                                    onRemove: {
+                                        repository.removeIngredient(item, from: recipe, saveImmediately: false)
+                                    }
+                                )
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+                Text("Lembre-se: as informações fornecidas pelo Na Medida são apenas uma estimativa e as fontes podem estar desatualizadas. ")
+                    .multilineTextAlignment(.leading)
+                    .foregroundStyle(.secondary)
+                    .fontWeight(.thin)
+                    .padding(.horizontal)
+                    .font(.footnote)
+            }
+            .padding(.top, 16)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isTitleFocused = false
+            }
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    handleCancel()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.primary)
+                }
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    saveChanges()
+                } label: {
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.glassProminent)
+                .tint(Color("buttonColor"))
+            }
+        }
+        .sheet(isPresented: $isShowingTagSheet) {
+            TagSheetView(
+                recipe: recipe,
+                cancelAction: { isShowingTagSheet = false },
+                confirmAction: { isShowingTagSheet = false }
+            )
+            .presentationDetents([.medium])
+            .presentationBackground(.background)
+        }
+        .alert("Descartar alterações?", isPresented: $isShowingCancelAlert) {
+            Button("Descartar", role: .destructive) {
+                repository.cancelChanges()
+                router.pop()
+            }
+            Button("Continuar Editando", role: .cancel) { }
+        } message: {
+            Text("Todas as alterações feitas nesta receita serão perdidas.")
+        }
+        .onAppear {
+            SwipeController.shared.swipeAction = {
+                if modelContext.hasChanges {
+                    isShowingCancelAlert = true
+                    return false
+                }
+                return true
+            }
+        }
+        .onDisappear {
+            SwipeController.shared.swipeAction = nil
+        }
+    }
+    
+    private func saveChanges() {
+        let trimmed = recipe.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            recipe.name = "Minha Receita"
+        }
+        do {
+            try repository.saveChanges()
+            router.pop()
+        } catch {
+            print("Erro ao salvar alterações da receita: \(error)")
+        }
+    }
+    
+    private func handleCancel() {
+        if modelContext.hasChanges {
+            isShowingCancelAlert = true
+        } else {
+            router.pop()
+        }
+    }
+}
+
+#Preview("Editar Receita") {
+    let container = try! ModelContainer(
+        for: Recipe.self, RecipeIngredient.self, Ingredient.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    let recipe = Recipe(name: "Macarrão à Bolonhesa", tag: .dinner)
+    let ingredient1 = Ingredient(barcode: nil, name: "Carne Moída", brand: "Friboi", photoURL: nil, caloriesPer100g: 250, proteinsPer100g: 26, carbsPer100g: 0, fatsPer100g: 17)
+    let ingredient2 = Ingredient(barcode: nil, name: "Molho de Tomate", brand: "Pomodoro", photoURL: nil, caloriesPer100g: 30, proteinsPer100g: 1.5, carbsPer100g: 5, fatsPer100g: 0.5)
+    
+    let recipeIngredient1 = RecipeIngredient(userQuantity: 300, unity: .g, ingredient: ingredient1, recipe: recipe)
+    let recipeIngredient2 = RecipeIngredient(userQuantity: 500, unity: .ml, ingredient: ingredient2, recipe: recipe)
+    
+    recipe.ingredients = [recipeIngredient1, recipeIngredient2]
+    
+    container.mainContext.insert(recipe)
+    container.mainContext.insert(ingredient1)
+    container.mainContext.insert(ingredient2)
+    
+    return NavigationStack {
+        EditRecipeView(recipe: recipe)
+    }
+    .environment(Router())
+    .modelContainer(container)
+}
