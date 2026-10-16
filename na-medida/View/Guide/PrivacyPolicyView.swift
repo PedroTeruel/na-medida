@@ -302,7 +302,7 @@ struct PrivacyPolicyView: View {
             clauses: [
                 PrivacyClause(
                     number: "13.1.",
-                    text: "Esta Política observa a legislação brasileira aplicável, especialmente a Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais) e a Lei nº 12.965/2014 (Marco Civil da Internet) ."
+                    text: "Esta Política observa a legislação brasileira aplicável, especialmente a Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais) e a Lei nº 12.965/2014 (Marco Civil da Internet) e, quando pertinente, a Lei nº 15.211/2025 (Estatuto Digital da Criança e do Adolescente)."
                 ),
                 PrivacyClause(
                     number: "13.2.",
