@@ -338,7 +338,7 @@ struct PrivacyPolicyView: View {
                 
                 PrivacyWarningCard(
                     cardTitle: "Privacidade e Transparência",
-                    cardBody: "Seus dados e receitas ficam armazenados exclusivamente no seu dispositivo. Vigência a partir de 16 de outubro de 2026."
+                    cardBody: "Seus dados e receitas ficam armazenados exclusivamente no seu dispositivo.\nVigência a partir de 16 de outubro de 2026."
                 )
                 
                 VStack(spacing: 16) {
@@ -468,9 +468,9 @@ private struct PrivacySectionCard: View {
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
             
-            return numberText + titleText + Text(clause.text)
+            return Text("\(numberText)\(titleText)\(clause.text)")
         } else {
-            return numberText + Text(clause.text)
+            return Text("\(numberText)\(clause.text)")
         }
     }
 }
