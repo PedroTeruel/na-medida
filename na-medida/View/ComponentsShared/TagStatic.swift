@@ -41,20 +41,6 @@ struct TagStatic: View {
     }
 }
 
-extension RecipeTag{
-    var carouselImageBaseName: String{
-        switch self{
-        case .breakfast: return "Wave1"
-        case .lunch: return "Wave3"
-        case .dinner: return "Wave2"
-        case .morningSnack: return "Wave6"
-        case .afternoonSnack: return "Wave5"
-        case .nightSnack: return "Wave7"
-        case .dessert: return "Wave4"
-        }
-    }
-}
-
 #Preview{
     TagStatic(tag: .morningSnack)
 }

@@ -8,46 +8,6 @@
 import SwiftUI
 
 struct FuncCard: View {
-    
-    struct NutrientS{
-        let funcIcon: String
-        let funcText: String
-    }
-    
-    private let fat: [NutrientS] = [
-        .init(
-            funcIcon: "RayIcon",
-            funcText: "Fonte de energia"
-        )
-    ]
-    
-    private let carb: [NutrientS] = [
-        .init(
-            funcIcon: "RayIcon",
-            funcText: "Fonte de energia"
-        )
-    ]
-    private let cal: [NutrientS] = [
-        .init(
-            funcIcon: "RayIcon",
-            funcText: "Fonte de energia"
-        )
-    ]
-    
-    private let prot: [NutrientS] = [
-        .init(
-            funcIcon: "RayIcon",
-            funcText: "Fonte de energia"
-        )
-    ]
-    
-    private let sod: [NutrientS] = [
-        .init(
-            funcIcon: "RayIcon",
-            funcText: "Fonte de energia"
-        )
-    ]
-    
     var funcIcon: String
     var funcText: String
     var body: some View {
@@ -67,7 +27,6 @@ struct FuncCard: View {
                 .fill(.quinary)
         )
     }
-    
 }
 
 #Preview {

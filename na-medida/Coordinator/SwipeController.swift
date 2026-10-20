@@ -1,5 +1,5 @@
 //
-//  SwipeGesture.swift
+//  SwipeController.swift
 //  na-medida
 //
 //  Created by Vitor Silva Souza on 29/09/26.

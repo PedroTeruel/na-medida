@@ -13,94 +13,16 @@ struct ThreeTable: View {
     
     var version: Int
     
-    private var selectedMeasures: [Measure] {
+    private var selectedMeasures: [SolidMeasure] {
         switch version {
         case 0:
-            return measureSolid
+            return MeasureData.solidMeasures
         case 1:
-            return measureSauce
+            return MeasureData.sauceMeasures
         default:
             return []
         }
     }
-    
-    struct Measure: Identifiable {
-        let id = UUID()
-        let name: String
-        let cup: String
-        let spoon: String
-    }
-    
-    private let measureSolid: [Measure] = [
-        .init(
-            name: "Farinha de Trigo",
-            cup: "120 g",
-            spoon: "8 g"
-        ),
-        .init(
-            name: "Açúcar Refinado",
-            cup: "200 g",
-            spoon: "12 g"
-        ),
-        .init(
-            name: "Açúcar Mascavo",
-            cup: "150 g",
-            spoon: "10 g"
-        ),
-        .init(
-            name: "Margarina",
-            cup: "200 g",
-            spoon: "15 g"
-        ),
-        .init(
-            name: "Cacau em Pó",
-            cup: "90 g",
-            spoon: "6 g"
-        ),
-        .init(
-            name: "Aveia em Flocos",
-            cup: "80 g",
-            spoon: "5 g"
-        ),
-        .init(
-            name: "Arroz Cru",
-            cup: "200 g",
-            spoon: "15 g"
-        )
-    ]
-    
-    private let measureSauce: [Measure] = [
-        .init(
-            name: "Sal Fino",
-            cup: "15 g",
-            spoon: "5 g"
-        ),
-        .init(
-            name: "Sal Grosso",
-            cup: "20 g",
-            spoon: "7 g"
-        ),
-        .init(
-            name: "Fermento",
-            cup: "12g",
-            spoon: "4 g"
-        ),
-        .init(
-            name: "Bicarbonato",
-            cup: "14 g",
-            spoon: "5 g"
-        ),
-        .init(
-            name: "Especiarias",
-            cup: "6 g",
-            spoon: "2 g"
-        ),
-        .init(
-            name: "Ervas",
-            cup: "3 g",
-            spoon: "1 g"
-        )
-    ]
     
     var body: some View {
         VStack(spacing: 20) {

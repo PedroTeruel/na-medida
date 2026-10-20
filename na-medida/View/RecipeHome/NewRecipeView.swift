@@ -10,7 +10,6 @@ import SwiftUI
 struct NewRecipeView: View {
     @Environment(Router.self) private var router
     @Environment(RecipeDraft.self) private var draft
-    @Environment(\.colorScheme) private var colorScheme
     
     @FocusState private var isTitleFocused: Bool
     @State private var showDiscardAlert = false

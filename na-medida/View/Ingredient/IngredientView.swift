@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct IngredientView: View {
-    @Environment(Router.self) private var router
     
     @State private var segmentedControl = 0
     var ingredientTitle: String

@@ -11,35 +11,6 @@ struct TwoTable: View {
     
     @Environment(\.colorScheme) private var colorScheme
     
-    struct Measure: Identifiable {
-        let id = UUID()
-        let name: String
-        let value: String
-    }
-    
-    private let measureLiquid: [Measure] = [
-        .init(
-            name: "1 Xícara de Chá",
-            value: "250"
-        ),
-        .init(
-            name: "1/2 Xícara de Chá",
-            value: "120"
-        ),
-        .init(
-            name: "1/4 Xícara de Chá",
-            value: "60"
-        ),
-        .init(
-            name: "1 Colher de Sopa",
-            value: "15"
-        ),
-        .init(
-            name: "1 Colher de Chá",
-            value: "5"
-        )
-    ]
-    
     var body: some View {
         VStack(spacing: 20) {
             
@@ -82,7 +53,7 @@ struct TwoTable: View {
                     Spacer()
                     
                     VStack(){
-                        Text("Mililítros")
+                        Text("Mililitros")
                             .font(.footnote)
                         Text("(mL)")
                             .font(.caption)
@@ -96,7 +67,7 @@ struct TwoTable: View {
                         .fill(.blue.opacity(0.07))
                 }
                 
-                ForEach(Array(measureLiquid.enumerated()), id: \.element.id) { index, measure in
+                ForEach(Array(MeasureData.liquidMeasures.enumerated()), id: \.element.id) { index, measure in
                     
                     HStack(spacing: 8) {
                         
@@ -126,7 +97,7 @@ struct TwoTable: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
                     
-                    if index != measureLiquid.count - 1 {
+                    if index != MeasureData.liquidMeasures.count - 1 {
                         Divider()
                             .padding(.horizontal)
                     }

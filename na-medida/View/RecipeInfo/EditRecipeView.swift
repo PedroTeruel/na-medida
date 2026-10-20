@@ -82,13 +82,7 @@ struct EditRecipeView: View {
                 Spacer()
                 
                 VStack(spacing: 16) {
-//                    Text("Edite os ingredientes e as porções da sua receita.")
-//                        .font(.footnote)
-//                        .multilineTextAlignment(.center)
-//                        .foregroundStyle(.secondary)
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-                    
+
                     Button {
                         router.navigate(to: .scanner(recipe))
                     } label: {
@@ -106,7 +100,6 @@ struct EditRecipeView: View {
                                 CardRecipeIngredient(
                                     productName: item.ingredient?.name,
                                     imageURL: item.ingredient?.photoURL,
-                                    brands: item.ingredient?.brand,
                                     isEditable: true,
                                     userQuantity: $recipe.ingredients[index].userQuantity,
                                     unity: $recipe.ingredients[index].unity,

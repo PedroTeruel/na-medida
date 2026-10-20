@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AboutNutrientsView: View {
     @Environment(Router.self) private var router
-    @State var segmentedControl = 0
     
     var body: some View {
         ScrollView {
@@ -25,7 +24,7 @@ struct AboutNutrientsView: View {
                     .foregroundStyle(.secondary)
                 
                 VStack(spacing: 16) {
-                    ForEach(nutrients) { nutrient in
+                    ForEach(Nutrient.all) { nutrient in
                         Button {
                             router.navigate(to: .nutrientInfo(nutrient))
                         } label: {

@@ -34,32 +34,6 @@ enum RecipeTag: String, Codable, CaseIterable{
     case dessert = "Sobremesa"
 }
 
-extension RecipeTag {
-    var color: Color {
-        switch self {
-        case .breakfast: return Color.tagCardOrange
-        case .lunch: return Color.tagCardGreen
-        case .dinner: return Color.tagCardPurple
-        case .morningSnack: return Color.tagCardRed
-        case .afternoonSnack: return Color.tagCardPink
-        case .nightSnack: return Color.tagCardBlue
-        case .dessert: return Color.tagCardYellow
-        }
-    }
-
-    var foregroundColor: Color {
-        switch self {
-        case .breakfast: return Color.tagTextOrange
-        case .lunch: return Color.tagTextGreen
-        case .dinner: return Color.tagTextPurple
-        case .morningSnack: return Color.tagTextRed
-        case .afternoonSnack: return Color.tagTextPink
-        case .nightSnack: return Color.tagTextBlue
-        case .dessert: return Color.tagTextYellow
-        }
-    }
-}
-
 extension Recipe {
     
     var totalRecipeCalories: Double {

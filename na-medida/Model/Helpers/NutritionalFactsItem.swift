@@ -17,8 +17,6 @@ struct NutritionalFactsItem: Identifiable {
     var isBold: Bool = false
 }
 
-import Foundation
-
 enum NutrientScale {
     case kcal
     case g

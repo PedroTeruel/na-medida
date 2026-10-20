@@ -98,24 +98,6 @@ final class RecipeRepository {
         try? mc.save()
     }
     
-    func addIngredients(to recipe: Recipe, dtos: [ProductOpenFoodFactsDTO]) {
-        for dto in dtos {
-            let newIngredient = getOrCreateIngredient(from: dto)
-            let serving = dto.defaultServing
-            
-            let recipeIngredient = RecipeIngredient(
-                userQuantity: serving.quantity,
-                unity: serving.unit,
-                ingredient: newIngredient,
-                recipe: recipe
-            )
-            
-            recipe.ingredients.append(recipeIngredient)
-        }
-        
-        try? mc.save()
-    }
-    
     //funções da EditRecipeView
     func saveChanges() throws {
         try mc.save()

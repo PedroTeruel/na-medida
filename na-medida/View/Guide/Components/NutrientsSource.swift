@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct NutrientsSource: View {
-    var cardTitle: String = "As medidas podem variar"
-    var cardBody: String = "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K)."
     var sourceName: String
     var sourceIcon: String
     
