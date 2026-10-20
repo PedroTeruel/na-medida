@@ -27,8 +27,14 @@ struct ContentView: View {
                     GuideTabView(user: currentUser)
                 }
                 
-                Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .prominent) {
-                    SearchingTabView()
+                if #available(iOS 27.0, *) {
+                    Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .prominent) {
+                        SearchingTabView()
+                    }
+                } else {
+                    Tab("Pesquisar", systemImage: "magnifyingglass", value: AppTab.tabsearchview, role: .search) {
+                        SearchingTabView()
+                    }
                 }
             }
             .environment(router)

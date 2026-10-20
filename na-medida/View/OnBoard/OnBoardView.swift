@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// Enum para controlar qual documento legal abrir na Sheet
 enum LegalDocument: Identifiable {
     case terms
     case privacy
@@ -32,7 +31,6 @@ struct OnBoardView: View {
     let onContinue: (String) -> Void
     @FocusState private var isNameFieldFocused: Bool
     
-    // Estado para controlar qual sheet abrir
     @State private var selectedDocument: LegalDocument?
     
     private var backgroundGradient: some View {
@@ -62,7 +60,6 @@ struct OnBoardView: View {
         }
     }
     
-    // Texto inferior com links interativos para os Termos e Privacidade
     private var legalAttributedString: AttributedString {
         var fullText = AttributedString("Ao clicar em prosseguir ou \"Prefiro não informar\", o usuário está concordando com os Termos de Uso e Política de Privacidade.")
         
@@ -117,7 +114,7 @@ struct OnBoardView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 160)
-                                
+                            
                             
                             Spacer()
                             
@@ -165,7 +162,6 @@ struct OnBoardView: View {
                                             .underline()
                                     }
                                     
-                                    // Texto legal clicável integrado via AttributedString
                                     Text(legalAttributedString)
                                         .multilineTextAlignment(.center)
                                         .padding(.top, 8)
@@ -198,25 +194,24 @@ struct OnBoardView: View {
                     }
                 }
             }
-            // Sheet nativa que renderiza o respetivo componente SwiftUI
             .sheet(item: $selectedDocument) { doc in
                 NavigationStack {
                     Group {
                         switch doc {
                         case .terms:
-                            TermsOfUseView() // O teu componente estruturado com cartões
+                            TermsOfUseView()
                         case .privacy:
-                            PrivacyPolicyView() // O componente equivalente para a política
+                            PrivacyPolicyView()
                         }
                     }
                     .toolbar {
-                                ToolbarItem(placement: .topBarTrailing) {
-                                    Button {
-                                        selectedDocument = nil
-                                    } label: {
-                                        Image(systemName: "xmark")
-                                            .font(.title3)
-                                            .foregroundStyle(.secondary)
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                selectedDocument = nil
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .font(.title3)
+                                    .foregroundStyle(.secondary)
                             }
                         }
                     }

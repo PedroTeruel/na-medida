@@ -19,8 +19,6 @@ struct GuideTabView: View {
         @Bindable var routerBindable = router
         
         NavigationStack(path: $routerBindable.settingsPath) {
-            
-            
             VStack {
                 Text("""
                      Olá,
@@ -53,7 +51,6 @@ struct GuideTabView: View {
                             cardImg: "book" )
                     }
                     .buttonStyle(.plain)
-                    .padding(.bottom, 6)
                     
                     Button {
                         router.navigate(to: .aboutMeasures)
