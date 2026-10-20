@@ -79,9 +79,15 @@ struct NutritionFactsTable: View {
             }
             
             HStack {
-                Text("* % Valores Diários com base em uma dieta de 2.000 kcal.")
-                    .font(.system(size: 14))
-                    .foregroundColor(.secondary)
+                VStack(alignment: .leading ,spacing: 12){
+                    
+                    Text("- Valores Ausentes.")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                    Text("* % Valores Diários com base em uma dieta de 2.000 kcal.")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
                 Spacer()
             }
             .padding(.top, 8)
