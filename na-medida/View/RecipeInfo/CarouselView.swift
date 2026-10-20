@@ -95,7 +95,7 @@ struct CarouselView: View {
                 }
             }
         }
-        .frame(height: 260)
+        .frame(height: 340)
         .background {
             Image(recipe.tag?.carouselImageBaseName ?? "WaveDefault")
                 .resizable()
