@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import SwiftUI
 
 @Model
 final class Recipe{
@@ -34,30 +33,11 @@ enum RecipeTag: String, Codable, CaseIterable{
     case dessert = "Sobremesa"
 }
 
-extension RecipeTag {
-    var color: Color {
-        switch self {
-        case .breakfast: return Color.tagCardOrange
-        case .lunch: return Color.tagCardGreen
-        case .dinner: return Color.tagCardPurple
-        case .morningSnack: return Color.tagCardRed
-        case .afternoonSnack: return Color.tagCardPink
-        case .nightSnack: return Color.tagCardBlue
-        case .dessert: return Color.tagCardYellow
-        }
-    }
-
-    var foregroundColor: Color {
-        switch self {
-        case .breakfast: return Color.tagTextOrange
-        case .lunch: return Color.tagTextGreen
-        case .dinner: return Color.tagTextPurple
-        case .morningSnack: return Color.tagTextRed
-        case .afternoonSnack: return Color.tagTextPink
-        case .nightSnack: return Color.tagTextBlue
-        case .dessert: return Color.tagTextYellow
-        }
-    }
+enum RecipeSortOrder {
+    case newest
+    case oldest
+    case fromA
+    case fromZ
 }
 
 extension Recipe {
@@ -80,5 +60,37 @@ extension Recipe {
     
     var totalRecipeSodium: Double {
         ingredients.reduce(0) { $0 + $1.totalIngredientsSodium}
+    }
+    
+    static func filterAndSort(
+        _ recipes: [Recipe],
+        by tag: RecipeTag?,
+        sortOrder: RecipeSortOrder
+    ) -> [Recipe] {
+        let filtered = tag == nil ? recipes : recipes.filter { $0.tag == tag }
+        
+        switch sortOrder {
+        case .fromA:
+            return filtered.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        case .fromZ:
+            return filtered.sorted { $0.name.localizedStandardCompare($1.name) == .orderedDescending }
+        case .newest:
+            return filtered.sorted { $0.creationDate > $1.creationDate }
+        case .oldest:
+            return filtered.sorted { $0.creationDate < $1.creationDate }
+        }
+    }
+    
+    static func search(_ recipes: [Recipe], query: String) -> [Recipe] {
+        guard !query.isEmpty else { return [] }
+        let lowerQuery = query.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+        
+        return recipes.filter { recipe in
+            guard !recipe.isDeleted else { return false }
+            return recipe.name
+                .folding(options: .diacriticInsensitive, locale: .current)
+                .lowercased()
+                .contains(lowerQuery)
+        }
     }
 }

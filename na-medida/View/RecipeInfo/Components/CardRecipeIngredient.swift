@@ -22,7 +22,6 @@ struct CardRecipeIngredient: View {
     init(
         productName: String? = nil,
         imageURL: String? = nil,
-        brands: String? = nil,
         isEditable: Bool = false,
         userQuantity: Binding<Double> = .constant(0.0),
         unity: Binding<QntUnity> = .constant(.g),
@@ -129,7 +128,6 @@ struct CardRecipeIngredient: View {
         CardRecipeIngredient(
             productName: "Achocolatado",
             imageURL: nil,
-            brands: "Nestlé",
             isEditable: true,
             userQuantity: .constant(100.0),
             unity: .constant(.g),
@@ -139,7 +137,6 @@ struct CardRecipeIngredient: View {
         CardRecipeIngredient(
             productName: "Leite Integral Integral Integral Integral",
             imageURL: nil,
-            brands: "Elegê",
             isEditable: false,
             userQuantity: .constant(200.0),
             unity: .constant(.ml)

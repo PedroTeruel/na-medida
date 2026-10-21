@@ -23,7 +23,7 @@ struct CarouselView: View {
     
     var baseData: [(Int, String, String)] {
         [
-            (1, "CarouselSodio", AnvisaNutritionFormatter.format(recipe.totalRecipeSodium, scale: .mg)),
+            (1, recipe.totalRecipeSodium > 1 ? "CarouselSodioGramas" : "CarouselSodio", AnvisaNutritionFormatter.format(recipe.totalRecipeSodium > 1 ? recipe.totalRecipeSodium : recipe.totalRecipeSodium, scale: recipe.totalRecipeSodium > 1 ? .g : .mg)),
             (2, "CarouselProteinas", AnvisaNutritionFormatter.format(recipe.totalRecipeProteins, scale: .g)),
             (3, "CarouselCalorias", AnvisaNutritionFormatter.format(recipe.totalRecipeCalories, scale: .kcal)),
             (4, "CarouselCarbo", AnvisaNutritionFormatter.format(recipe.totalRecipeCarbs, scale: .g)),
@@ -32,7 +32,10 @@ struct CarouselView: View {
     }
     
     private var nutritionSignature: String {
-        baseData.map { $0.2 }.joined(separator: "|")
+        baseData.map {
+            "\($0.0)|\($0.1)|\($0.2)"
+        }
+        .joined(separator: ";")
     }
     
     var body: some View {

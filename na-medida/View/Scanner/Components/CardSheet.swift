@@ -19,30 +19,10 @@ struct CardSheet: View {
     var onAdd: (() -> Void)?
     var onRemove: (() -> Void)?
     
-    private var formattedProductName: String {
-        let isTaco = brand?.uppercased().contains("TACO") ?? false
-        if isTaco {
-            return productName.trimmingCharacters(in: .whitespaces).uppercased()
-        }
-        
-        let separators = CharacterSet(charactersIn: "-–—")
-        let components = productName.components(separatedBy: separators)
-        let baseName = components.first?.trimmingCharacters(in: .whitespaces) ?? productName
-        return baseName.uppercased()
-    }
-    
-    private var displayBrand: String? {
-        guard let b = brand, !b.isEmpty else {
-            return nil
-        }
-        if b.uppercased().contains("TACO") {
-            return nil
-        }
-        return b
-    }
-    
     private var hasBrandOrQuantity: Bool {
-        return (brand != nil && !brand!.isEmpty) || (quantity != nil && !quantity!.isEmpty)
+        let hasBrand = (brand != nil && !brand!.isEmpty)
+        let hasQty = (quantity != nil && !quantity!.isEmpty)
+        return hasBrand || hasQty
     }
     
     init(
@@ -68,25 +48,24 @@ struct CardSheet: View {
             
             AsyncProductImage(urlString: imageURL, size: 64, cornerRadius: 16)
             
-            VStack (alignment: .leading) {
-                Text(formattedProductName)
+            VStack(alignment: .leading) {
+                Text(productName.uppercased())
                     .foregroundStyle(.primary)
                     .font(.callout)
                     .fontWeight(.regular)
                     .lineLimit(2)
-                //.minimumScaleFactor(0.8)
                 
                 if hasBrandOrQuantity {
                     HStack {
-                        if let brandToShow = displayBrand {
-                            Text(brandToShow)
+                        if let brand, !brand.isEmpty {
+                            Text(brand)
                         }
                         
-                        if displayBrand != nil, let quantity = quantity, !quantity.isEmpty {
+                        if let brand, !brand.isEmpty, let quantity, !quantity.isEmpty {
                             Text("•")
                         }
                         
-                        if let quantity = quantity, !quantity.isEmpty {
+                        if let quantity, !quantity.isEmpty {
                             Text(quantity)
                         }
                     }
@@ -126,30 +105,33 @@ struct CardSheet: View {
         }
         .padding(8)
         .frame(maxWidth: .infinity, minHeight: 60)
-        .background{
+        .background {
             RoundedRectangle(cornerRadius: 16)
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
         }
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(.black, lineWidth: 0.1))
+                .stroke(.black, lineWidth: 0.1)
+        )
     }
 }
 
 #Preview {
     VStack {
-        CardSheet(productName: "Cioccolato Fondente Deciso – Lindt – 100g")
+        CardSheet(productName: "Cioccolato Fondente Deciso")
         
         CardSheet(
-            productName: "Cioccolato Fondente Deciso – Lindt – 100g",
+            productName: "Cioccolato Fondente Deciso",
             brand: "Lindt",
             quantity: "100g",
-            onAdd: {})
+            onAdd: {}
+        )
         
         CardSheet(
-            productName: "Cioccolato Fondente Deciso – Lindt – 100g",
+            productName: "Cioccolato Fondente Deciso",
             brand: "Lindt",
             quantity: "100g",
-            onRemove: {})
+            onRemove: {}
+        )
     }
 }

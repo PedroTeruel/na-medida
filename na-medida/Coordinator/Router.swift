@@ -8,33 +8,15 @@
 import SwiftUI
 import Observation
 
-enum AppRoute: Hashable {
-    case recipesinfo(Recipe)
-    case newrecipe
-    case scanner(Recipe?)
-    case main(username: String)
-    case ingredientinfo(ProductOpenFoodFactsDTO)
-    case savedIngredient(Ingredient)
-    case aboutNutrients
-    case aboutMeasures
-    case aboutUs
-    case termsOfUse
-    case editrecipe(Recipe)
-    case nutrientInfo(Nutrient)
-    case privacyPolicy
-}
-
 @Observable
 class Router {
     var selectedTab: AppTab = .tabrecipesview
     
-    var onBoardPath = [AppRoute]()
     var recipesPath = [AppRoute]()
     var settingsPath = [AppRoute]()
     var searchPath = [AppRoute]()
     
     func navigate(to route: AppRoute) {
-        
         switch selectedTab {
             
         case .tabrecipesview:
@@ -71,7 +53,6 @@ class Router {
     }
     
     func popToRoot() {
-        
         switch selectedTab {
             
         case .tabrecipesview:
@@ -87,11 +68,7 @@ class Router {
     
     @ViewBuilder
     func build(route: AppRoute) -> some View {
-        
         switch route {
-            
-        case .main(let username):
-            RecipesTabView(username: username)
             
         case .recipesinfo(let recipe):
             RecipesInfoView(recipe: recipe)
@@ -101,9 +78,6 @@ class Router {
             
         case .scanner(let recipe):
             BarcodeAPIView(recipe: recipe)
-            
-        case .ingredientinfo(let product):
-            IngredientView(productDTO: product)
             
         case .savedIngredient(let ingredient):
             IngredientView(ingredient: ingredient)

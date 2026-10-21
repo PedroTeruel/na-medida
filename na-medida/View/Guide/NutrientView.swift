@@ -46,7 +46,7 @@ struct NutrientView: View {
                 .pickerStyle(.segmented)
                 if segmentedControl == 0{
                     VStack(alignment: .leading, spacing: 24){
-                        NutrientGenereal(
+                        NutrientGeneral(
                             generalBody: nutrient.generalBody,
                             generalCap: nutrient.generalCap,
                             generalColor: nutrient.generalColor
@@ -67,9 +67,7 @@ struct NutrientView: View {
                             }
                         }
                     }
-                } else{
-                    
-                    
+                } else {
                     VStack(alignment: .leading, spacing: 16){
                         Text("Principais Fontes")
                             .font(.title3)
@@ -94,8 +92,9 @@ struct NutrientView: View {
 }
 
 #Preview {
-    NutrientsSource(
-        sourceName: "PeixesGordurosos",
-        sourceIcon: "sourcePeixe"
-    )
+    NavigationStack {
+        if let sample = Nutrient.all.first {
+            NutrientView(nutrient: sample)
+        }
+    }
 }

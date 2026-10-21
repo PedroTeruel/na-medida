@@ -15,7 +15,7 @@ struct BarcodeAPIView: View {
     @Environment(OpenFoodFactsService.self) private var apiService
     
     @State private var showSheet = true
-    @State private var sheetDetent: PresentationDetent = .fraction(0.3)
+    @State private var sheetDetent: PresentationDetent = .fraction(0.4)
     @State private var scannerCode: String?
     @State private var isLoading = false
     @State private var errorMessage: String?
@@ -92,7 +92,7 @@ struct BarcodeAPIView: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            SearchSheetView(currentDetent: $sheetDetent)
+            SearchAPIView(currentDetent: $sheetDetent)
                 .presentationDetents([.fraction(0.4), .medium, .fraction(0.92)], selection: $sheetDetent)
                 .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.92)))
                 .interactiveDismissDisabled()
@@ -208,7 +208,7 @@ struct BarcodeAPIView: View {
             }
         }
         
-        if sheetDetent == .fraction(0.3) {
+        if sheetDetent == .fraction(0.4) {
             sheetDetent = .medium
         }
         

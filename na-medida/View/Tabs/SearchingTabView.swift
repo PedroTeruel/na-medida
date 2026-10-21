@@ -10,7 +10,6 @@ import SwiftData
 
 struct SearchingTabView: View {
     @Environment(Router.self) private var router
-    @Environment(\.modelContext) private var mc
     
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
     @Query(sort: \Ingredient.name) private var ingredients: [Ingredient]
@@ -19,28 +18,11 @@ struct SearchingTabView: View {
     @FocusState private var isSearchFocused: Bool
     
     private var filteredRecipes: [Recipe] {
-        guard !searchText.isEmpty else { return [] }
-        let lowerQuery = searchText.folding(options: .diacriticInsensitive, locale: .current).lowercased()
-        
-        return recipes.filter { recipe in
-            guard !recipe.isDeleted else { return false }
-            
-            return recipe.name.folding(options: .diacriticInsensitive, locale: .current).lowercased().contains(lowerQuery)
-        }
+        Recipe.search(recipes, query: searchText)
     }
     
     private var filteredIngredients: [Ingredient] {
-        guard !searchText.isEmpty else { return [] }
-        let lowerQuery = searchText.folding(options: .diacriticInsensitive, locale: .current).lowercased()
-        
-        return ingredients.filter { ingredient in
-            guard !ingredient.isDeleted else { return false }
-            
-            let matchName = ingredient.name.folding(options: .diacriticInsensitive, locale: .current).lowercased().contains(lowerQuery)
-            let matchBrand = ingredient.brand?.folding(options: .diacriticInsensitive, locale: .current).lowercased().contains(lowerQuery) ?? false
-            
-            return matchName || matchBrand
-        }
+        Ingredient.search(ingredients, query: searchText)
     }
     
     var body: some View {
@@ -133,8 +115,8 @@ struct SearchingTabView: View {
                                     router.navigate(to: .savedIngredient(ingredient))
                                 } label: {
                                     CardSheet(
-                                        productName: ingredient.name,
-                                        brand: ingredient.brand,
+                                        productName: ingredient.cleanName,
+                                        brand: ingredient.cleanBrand,
                                         quantity: ingredient.servingSize,
                                         imageURL: ingredient.photoURL
                                     )

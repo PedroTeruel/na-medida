@@ -387,6 +387,27 @@ struct NutrimentsDTO: Decodable, Hashable {
 
 extension ProductOpenFoodFactsDTO {
     
+    var isTacoProduct: Bool {
+        brands?.uppercased().contains("TACO") ?? false
+    }
+    
+    var cleanProductName: String {
+        let rawName = productName ?? "Produto sem nome"
+        if isTacoProduct {
+            return rawName.trimmingCharacters(in: .whitespaces)
+        }
+        let separators = CharacterSet(charactersIn: "-–—")
+        let baseName = rawName.components(separatedBy: separators).first?.trimmingCharacters(in: .whitespaces)
+        return (baseName?.isEmpty == false) ? baseName! : rawName
+    }
+    
+    var cleanBrand: String? {
+        guard let b = brands, !b.isEmpty, !isTacoProduct else {
+            return nil
+        }
+        return b
+    }
+    
     private static let measureRegex = try? NSRegularExpression(
         pattern: #"(\d+(?:[.,]\d+)?)\s*(ml|l|kg|g)\b"#,
         options: .caseInsensitive
@@ -444,123 +465,61 @@ extension ProductOpenFoodFactsDTO {
     }
     
     var nutritionalItems: [NutritionalFactsItem] {
-        guard let nutriments = self.nutriments else { return [] }
+        guard let n = self.nutriments else { return [] }
         
-        var items = [
-            NutritionalFactsItem(
-                name: "Valor energético (kcal)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.energyKcal100g, scale: .kcal),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.energyKcalServing, scale: .kcal),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.energyKcalServing, scale: .kcal, dailyReference: 2000),
-                isBold: true),
-            
-            NutritionalFactsItem(
-                name: "Carboidratos (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.carbohydrates100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.carbohydratesServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.carbohydratesServing, scale: .g, dailyReference: 300),
-                isBold: true),
-            
-            NutritionalFactsItem(
-                name: "Açúcares totais (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.sugars100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.sugarsServing, scale: .g),
-                dailyValue: "",
-                isIndent: true),
-            
-            NutritionalFactsItem(
-                name: "Açúcares adicionados (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.addedSugars100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.addedSugarsServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.addedSugarsServing, scale: .g, dailyReference: 50),
-                isIndent: true),
-            
-            NutritionalFactsItem(
-                name: "Proteínas (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.proteins100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.proteinsServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.proteinsServing, scale: .g, dailyReference: 50),
-                isBold: true),
-            
-            NutritionalFactsItem(
-                name: "Gorduras totais (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.fat100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.fatServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.fatServing, scale: .g, dailyReference: 55),
-                isBold: true),
-            
-            NutritionalFactsItem(
-                name: "Gorduras saturadas (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.saturatedFat100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.saturatedFatServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.saturatedFatServing, scale: .g, dailyReference: 20),
-                isIndent: true),
-            
-            NutritionalFactsItem(
-                name: "Gorduras trans (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.transFat100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.transFatServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.transFatServing, scale: .g, dailyReference: 2),
-                isIndent: true),
-            
-            NutritionalFactsItem(
-                name: "Fibras alimentares (g)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.fiber100g, scale: .g),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.fiberServing, scale: .g),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.fiberServing, scale: .g, dailyReference: 25),
-                isBold: true),
-            
-            NutritionalFactsItem(
-                name: "Sódio (mg)",
-                value100g: AnvisaNutritionFormatter.format(nutriments.sodium100g, scale: .mg),
-                valuePortion: AnvisaNutritionFormatter.format(nutriments.sodiumServing, scale: .mg),
-                dailyValue: AnvisaNutritionFormatter.formatDailyValue(apiValue: nutriments.sodiumServing, scale: .mg, dailyReference: 2000),
-                isBold: true)
-        ]
-        
-        let vitsMg = [
-            ("Vitamina C (mg)", nutriments.vitaminC100g, nutriments.vitaminCServing),
-            ("Vitamina E (mg)", nutriments.vitaminE100g, nutriments.vitaminEServing),
-            ("Vitamina B1 (mg)", nutriments.vitaminB1100g, nutriments.vitaminB1Serving),
-            ("Vitamina B2 (mg)", nutriments.vitaminB2100g, nutriments.vitaminB2Serving),
-            ("Vitamina B3 (mg)", nutriments.vitaminB3100g, nutriments.vitaminB3Serving),
-            ("Vitamina B5 (mg)", nutriments.vitaminB5100g, nutriments.vitaminB5Serving),
-            ("Vitamina B6 (mg)", nutriments.vitaminB6100g, nutriments.vitaminB6Serving)
-        ]
-        
-        for (nome, v100g, vPortion) in vitsMg {
-            if v100g != nil || vPortion != nil {
-                items.append(NutritionalFactsItem(name: nome, value100g: AnvisaNutritionFormatter.format(v100g, scale: .mg), valuePortion: AnvisaNutritionFormatter.format(vPortion, scale: .mg), dailyValue: "", isBold: false))
-            }
-        }
-        
-        let vitsMcg = [
-            ("Vitamina A (µg)", nutriments.vitaminA100g, nutriments.vitaminAServing),
-            ("Vitamina D (µg)", nutriments.vitaminD100g, nutriments.vitaminDServing),
-            ("Vitamina K (µg)", nutriments.vitaminK100g, nutriments.vitaminKServing),
-            ("Vitamina B7/H (µg)", nutriments.vitaminB7100g, nutriments.vitaminB7Serving),
-            ("Vitamina B9 (µg)", nutriments.vitaminB9100g, nutriments.vitaminB9Serving),
-            ("Vitamina B12 (µg)", nutriments.vitaminB12100g, nutriments.vitaminB12Serving)
-        ]
-        
-        for (nome, v100g, vPortion) in vitsMcg {
-            if v100g != nil || vPortion != nil {
-                items.append(NutritionalFactsItem(name: nome, value100g: AnvisaNutritionFormatter.format(v100g, scale: .mcg), valuePortion: AnvisaNutritionFormatter.format(vPortion, scale: .mcg), dailyValue: "", isBold: false))
-            }
-        }
-        
-        if nutriments.calcium100g != nil || nutriments.calciumServing != nil {
-            items.append(NutritionalFactsItem(name: "Cálcio (mg)", value100g: AnvisaNutritionFormatter.format(nutriments.calcium100g, scale: .mg), valuePortion: AnvisaNutritionFormatter.format(nutriments.calciumServing, scale: .mg), dailyValue: "", isBold: false))
-        }
-        
-        if nutriments.iron100g != nil || nutriments.ironServing != nil {
-            items.append(NutritionalFactsItem(name: "Ferro (mg)", value100g: AnvisaNutritionFormatter.format(nutriments.iron100g, scale: .mg), valuePortion: AnvisaNutritionFormatter.format(nutriments.ironServing, scale: .mg), dailyValue: "", isBold: false))
-        }
-        
-        if nutriments.zinc100g != nil || nutriments.zincServing != nil {
-            items.append(NutritionalFactsItem(name: "Zinco (mg)", value100g: AnvisaNutritionFormatter.format(nutriments.zinc100g, scale: .mg), valuePortion: AnvisaNutritionFormatter.format(nutriments.zincServing, scale: .mg), dailyValue: "", isBold: false))
-        }
-        
-        return items
+        return NutritionFactsBuilder.build(
+            energyKcal100g: n.energyKcal100g,
+            energyKcalServing: n.energyKcalServing,
+            carbohydrates100g: n.carbohydrates100g,
+            carbohydratesServing: n.carbohydratesServing,
+            sugars100g: n.sugars100g,
+            sugarsServing: n.sugarsServing,
+            addedSugars100g: n.addedSugars100g,
+            addedSugarsServing: n.addedSugarsServing,
+            proteins100g: n.proteins100g,
+            proteinsServing: n.proteinsServing,
+            fats100g: n.fat100g,
+            fatsServing: n.fatServing,
+            saturatedFats100g: n.saturatedFat100g,
+            saturatedFatsServing: n.saturatedFatServing,
+            transFats100g: n.transFat100g,
+            transFatsServing: n.transFatServing,
+            fiber100g: n.fiber100g,
+            fiberServing: n.fiberServing,
+            sodium100g: n.sodium100g,
+            sodiumServing: n.sodiumServing,
+            vitaminC100g: n.vitaminC100g,
+            vitaminCServing: n.vitaminCServing,
+            vitaminE100g: n.vitaminE100g,
+            vitaminEServing: n.vitaminEServing,
+            vitaminB1100g: n.vitaminB1100g,
+            vitaminB1Serving: n.vitaminB1Serving,
+            vitaminB2100g: n.vitaminB2100g,
+            vitaminB2Serving: n.vitaminB2Serving,
+            vitaminB3100g: n.vitaminB3100g,
+            vitaminB3Serving: n.vitaminB3Serving,
+            vitaminB5100g: n.vitaminB5100g,
+            vitaminB5Serving: n.vitaminB5Serving,
+            vitaminB6100g: n.vitaminB6100g,
+            vitaminB6Serving: n.vitaminB6Serving,
+            vitaminA100g: n.vitaminA100g,
+            vitaminAServing: n.vitaminAServing,
+            vitaminD100g: n.vitaminD100g,
+            vitaminDServing: n.vitaminDServing,
+            vitaminK100g: n.vitaminK100g,
+            vitaminKServing: n.vitaminKServing,
+            vitaminB7100g: n.vitaminB7100g,
+            vitaminB7Serving: n.vitaminB7Serving,
+            vitaminB9100g: n.vitaminB9100g,
+            vitaminB9Serving: n.vitaminB9Serving,
+            vitaminB12100g: n.vitaminB12100g,
+            vitaminB12Serving: n.vitaminB12Serving,
+            calcium100g: n.calcium100g,
+            calciumServing: n.calciumServing,
+            iron100g: n.iron100g,
+            ironServing: n.ironServing,
+            zinc100g: n.zinc100g,
+            zincServing: n.zincServing
+        )
     }
 }

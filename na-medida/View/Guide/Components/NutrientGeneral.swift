@@ -1,5 +1,5 @@
 //
-//  NutrientGenereal.swift
+//  NutrientGeneral.swift
 //  na-medida
 //
 //  Created by Pedro Henrique Hossaka Teruel on 08/10/26.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct NutrientGenereal: View {
+struct NutrientGeneral: View {
     
     @Environment(\.colorScheme) private var colorScheme
     
     var generalBody: String = "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K)."
     var generalCap:String
-    var generalColor: Color
+    var generalColor: AppColor
     
     var body: some View {
         VStack(alignment: .leading, spacing: 26){
@@ -51,14 +51,13 @@ struct NutrientGenereal: View {
                 .background {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(colorScheme == .dark ? .black.opacity(0.2) : .white.opacity(0.4))
-                    //.fill(.white.opacity(0.6))
                 }
             }
             .padding(20)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(generalColor.opacity(0.1))
+                    .fill(generalColor.color.opacity(0.1))
             }
         }
         
@@ -66,5 +65,5 @@ struct NutrientGenereal: View {
 }
 
 #Preview {
-    NutrientGenereal(generalBody: "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K).", generalCap: "Fornecem 9 calorias por grama, sendo o nutriente mais calórico", generalColor: .yellow)
+    NutrientGeneral(generalBody: "As gorduras (lipídios) são um grupo de nutrientes que fornecem energia, participam da produção de hormônios e ajudam na absorção de vitaminas lipossolúveis (A, D, E e K).", generalCap: "Fornecem 9 calorias por grama, sendo o nutriente mais calórico", generalColor: .yellow)
 }
