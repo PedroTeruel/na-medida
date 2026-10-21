@@ -98,6 +98,11 @@ final class RecipeRepository {
         try? mc.save()
     }
     
+    func deleteRecipe(_ recipe: Recipe) {
+        mc.delete(recipe)
+        try? mc.save()
+    }
+    
     //funções da EditRecipeView
     func saveChanges() throws {
         try mc.save()

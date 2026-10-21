@@ -114,7 +114,7 @@ struct RecipesInfoView: View {
     private var toolbarActions: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button {
-                router.popToRoot()
+                router.pop()
             } label: {
                 HStack {
                     Image(systemName: "chevron.left")
@@ -142,8 +142,8 @@ struct RecipesInfoView: View {
     }
         
     private func deleteRecipe() {
-        mc.delete(recipe)
-        try? mc.save()
+        let repository = RecipeRepository(mc: mc)
+        repository.deleteRecipe(recipe)
         router.popToRoot()
     }
     

@@ -92,7 +92,7 @@ struct BarcodeAPIView: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            SearchSheetView(currentDetent: $sheetDetent)
+            SearchAPIView(currentDetent: $sheetDetent)
                 .presentationDetents([.fraction(0.4), .medium, .fraction(0.92)], selection: $sheetDetent)
                 .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.92)))
                 .interactiveDismissDisabled()

@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import SwiftUI
 
 @Model
 final class Recipe{
@@ -34,6 +33,13 @@ enum RecipeTag: String, Codable, CaseIterable{
     case dessert = "Sobremesa"
 }
 
+enum RecipeSortOrder {
+    case newest
+    case oldest
+    case fromA
+    case fromZ
+}
+
 extension Recipe {
     
     var totalRecipeCalories: Double {
@@ -54,5 +60,37 @@ extension Recipe {
     
     var totalRecipeSodium: Double {
         ingredients.reduce(0) { $0 + $1.totalIngredientsSodium}
+    }
+    
+    static func filterAndSort(
+        _ recipes: [Recipe],
+        by tag: RecipeTag?,
+        sortOrder: RecipeSortOrder
+    ) -> [Recipe] {
+        let filtered = tag == nil ? recipes : recipes.filter { $0.tag == tag }
+        
+        switch sortOrder {
+        case .fromA:
+            return filtered.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        case .fromZ:
+            return filtered.sorted { $0.name.localizedStandardCompare($1.name) == .orderedDescending }
+        case .newest:
+            return filtered.sorted { $0.creationDate > $1.creationDate }
+        case .oldest:
+            return filtered.sorted { $0.creationDate < $1.creationDate }
+        }
+    }
+    
+    static func search(_ recipes: [Recipe], query: String) -> [Recipe] {
+        guard !query.isEmpty else { return [] }
+        let lowerQuery = query.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+        
+        return recipes.filter { recipe in
+            guard !recipe.isDeleted else { return false }
+            return recipe.name
+                .folding(options: .diacriticInsensitive, locale: .current)
+                .lowercased()
+                .contains(lowerQuery)
+        }
     }
 }

@@ -8,49 +8,15 @@
 import SwiftData
 import SwiftUI
 
-enum SortOrder {
-    case newest
-    case oldest
-    case fromA
-    case fromZ
-}
-
 struct RecipesTabView: View {
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var mc
     @Query private var recipes: [Recipe]
     @State private var selectedTag: RecipeTag? = nil
-    @State private var sortOrder: SortOrder = .newest
+    @State private var sortOrder: RecipeSortOrder = .newest
     
     private var filteredRecipes: [Recipe] {
-        let filtered: [Recipe]
-        
-        if let selectedTag {
-            filtered = recipes.filter { recipe in
-                recipe.tag == selectedTag
-            }
-        } else {
-            filtered = recipes
-        }
-        
-        switch sortOrder {
-        case .fromA:
-            return filtered.sorted { recipe1, recipe2 in
-                recipe1.name.localizedStandardCompare(recipe2.name) == .orderedAscending
-            }
-        case .fromZ:
-            return filtered.sorted { recipe1, recipe2 in
-                recipe1.name.localizedStandardCompare(recipe2.name) == .orderedDescending
-            }
-        case .newest:
-            return filtered.sorted { recipe1, recipe2 in
-                recipe1.creationDate > recipe2.creationDate
-            }
-        case .oldest:
-            return filtered.sorted { recipe1, recipe2 in
-                recipe1.creationDate < recipe2.creationDate
-            }
-        }
+        Recipe.filterAndSort(recipes, by: selectedTag, sortOrder: sortOrder)
     }
     
     let username: String
@@ -161,16 +127,16 @@ struct RecipesTabView: View {
                         Menu {
                             Picker("Ordenar por", selection: $sortOrder) {
                                 Text("Ordem Alfabética Crescente (A-Z)")
-                                    .tag(SortOrder.fromA)
+                                    .tag(RecipeSortOrder.fromA)
                                 
                                 Text("Ordem Alfabética Decrescente (Z-A)")
-                                    .tag(SortOrder.fromZ)
+                                    .tag(RecipeSortOrder.fromZ)
                                 
                                 Text("Mais recentes")
-                                    .tag(SortOrder.newest)
+                                    .tag(RecipeSortOrder.newest)
                                 
                                 Text("Mais antigas")
-                                    .tag(SortOrder.oldest)
+                                    .tag(RecipeSortOrder.oldest)
                             }
                         } label: {
                             Image(systemName: "line.3.horizontal.decrease")
@@ -192,9 +158,9 @@ struct RecipesTabView: View {
     }
     
     private func deleteRecipe(_ recipe: Recipe) {
+        let repository = RecipeRepository(mc: mc)
         withAnimation {
-            mc.delete(recipe)
-            try? mc.save()
+            repository.deleteRecipe(recipe)
         }
     }
 }

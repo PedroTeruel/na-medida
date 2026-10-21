@@ -5,7 +5,7 @@
 //  Created by Vitor Silva Souza on 20/10/26.
 //
 
-import SwiftUI
+import Foundation
 
 struct LegalClause: Identifiable {
     let id = UUID()
@@ -20,7 +20,7 @@ struct LegalSection: Identifiable {
     let number: String
     let title: String
     let icon: String
-    let tintColor: Color
+    let tintColor: AppColor
     let clauses: [LegalClause]
 }
 

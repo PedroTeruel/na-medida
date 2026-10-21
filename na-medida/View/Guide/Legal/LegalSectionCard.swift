@@ -16,11 +16,11 @@ struct LegalSectionCard: View {
             HStack(spacing: 14) {
                 Image(systemName: section.icon)
                     .font(.title3)
-                    .foregroundStyle(section.tintColor)
+                    .foregroundStyle(section.tintColor.color)
                     .frame(width: 46, height: 46)
                     .background {
                         RoundedRectangle(cornerRadius: 14)
-                            .fill(section.tintColor.opacity(0.12))
+                            .fill(section.tintColor.color.opacity(0.12))
                     }
                 
                 Text("\(section.number). \(section.title)")
@@ -47,7 +47,7 @@ struct LegalSectionCard: View {
                                 ForEach(clause.bullets, id: \.self) { bullet in
                                     HStack(alignment: .top, spacing: 10) {
                                         Circle()
-                                            .fill(section.tintColor)
+                                            .fill(section.tintColor.color)
                                             .frame(width: 6, height: 6)
                                             .padding(.top, 6)
                                         

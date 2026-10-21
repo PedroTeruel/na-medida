@@ -9,20 +9,20 @@ import SwiftUI
 
 struct SearchAPIView: View {
     @Binding var currentDetent: PresentationDetent
-    @Binding var searchText: String
     
-    @Environment(Router.self) private var router
     @Environment(RecipeDraft.self) private var draft
+    @Environment(OpenFoodFactsService.self) private var apiService
+    @Environment(TacoService.self) private var tacoService
     
     @FocusState private var isSearchFocused: Bool
+    @State private var searchText: String = ""
+    @State private var searchResults: [ProductOpenFoodFactsDTO] = []
+    @State private var isLoading: Bool = false
     @State private var hasSearched: Bool = false
+    @State private var searchTask: Task<Void, Never>?
     
     @State private var showFeedback: Bool = false
     @State private var feedbackMessage: String = ""
-    
-    var searchResults: [ProductOpenFoodFactsDTO]
-    var isLoading: Bool
-    var onSearchSubmit: (String) -> Void
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -32,7 +32,7 @@ struct SearchAPIView: View {
                     isSearchFocused: $isSearchFocused,
                     onSearchSubmit: { query in
                         hasSearched = true
-                        onSearchSubmit(query)
+                        performSearch(query: query)
                     }
                 )
                 
@@ -64,8 +64,49 @@ struct SearchAPIView: View {
                 currentDetent = .fraction(0.92)
             }
         }
-        .onChange(of: searchText) { _, _ in
+        .onChange(of: searchText) { _, newValue in
             hasSearched = false
+            if newValue.isEmpty {
+                searchTask?.cancel()
+                searchResults.removeAll()
+                isLoading = false
+            }
+        }
+        .onDisappear {
+            searchTask?.cancel()
+        }
+    }
+    
+    private func performSearch(query: String) {
+        guard !query.isEmpty else { return }
+        
+        isLoading = true
+        searchTask?.cancel()
+        
+        searchTask = Task {
+            let tacoResults = tacoService.searchProducts(query: query)
+            do {
+                await MainActor.run {
+                    self.searchResults = tacoResults
+                }
+                
+                let apiResults = try await apiService.searchProducts(query: query)
+                
+                if Task.isCancelled { return }
+                
+                await MainActor.run {
+                    self.searchResults = apiResults + tacoResults
+                    self.isLoading = false
+                }
+            } catch {
+                if Task.isCancelled { return }
+                
+                print("Erro ao buscar produtos: \(error)")
+                await MainActor.run {
+                    self.searchResults = tacoResults
+                    self.isLoading = false
+                }
+            }
         }
     }
         
@@ -143,8 +184,8 @@ struct SearchAPIView: View {
             let isAlreadyAdd = draft.ingredients.contains(product)
             
             CardSheet(
-                productName: product.productName ?? "Produto sem nome",
-                brand: product.brands,
+                productName: product.cleanProductName,
+                brand: product.cleanBrand,
                 quantity: product.quantity ?? product.servingSize,
                 imageURL: product.photoProduct,
                 isAdded: isAlreadyAdd,
@@ -181,7 +222,7 @@ struct SearchAPIView: View {
             
             ForEach(draft.ingredients, id: \.self) { product in
                 CardRecipeIngredient(
-                    productName: product.productName ?? "Produto sem nome",
+                    productName: product.cleanProductName,
                     imageURL: product.photoProduct,
                     isEditable: true,
                     userQuantity: quantityBinding(for: product),
@@ -220,19 +261,8 @@ struct SearchAPIView: View {
             .zIndex(1)
     }
     
-    
     private func showFeedbackToast(product: ProductOpenFoodFactsDTO) {
-        let name = product.productName ?? "Ingrediente"
-        let isTaco = product.brands?.uppercased().contains("TACO") ?? false
-        
-        let firstName: String
-        if isTaco {
-            firstName = name.trimmingCharacters(in: .whitespaces)
-        } else {
-            firstName = name.components(separatedBy: ["-", "–", "—"]).first?.trimmingCharacters(in: .whitespaces) ?? name
-        }
-        
-        feedbackMessage = "\(firstName) adicionado!"
+        feedbackMessage = "\(product.cleanProductName) adicionado!"
         
         withAnimation(.spring()) {
             showFeedback = true
@@ -263,18 +293,12 @@ struct SearchAPIView: View {
 #Preview {
     struct PreviewWrapper: View {
         @State private var detent: PresentationDetent = .medium
-        @State private var search = "Chocolate"
         
         var body: some View {
-            SearchAPIView(
-                currentDetent: $detent,
-                searchText: $search,
-                searchResults: [],
-                isLoading: true,
-                onSearchSubmit: { _ in }
-            )
-            .environment(Router())
-            .environment(RecipeDraft())
+            SearchAPIView(currentDetent: $detent)
+                .environment(RecipeDraft())
+                .environment(OpenFoodFactsService())
+                .environment(TacoService())
         }
     }
     return PreviewWrapper()

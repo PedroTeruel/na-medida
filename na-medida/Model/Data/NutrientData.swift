@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 struct Nutrient: Identifiable, Hashable {
     
@@ -18,7 +17,7 @@ struct Nutrient: Identifiable, Hashable {
     
     let generalBody: String
     let generalCap: String
-    let generalColor: Color
+    let generalColor: AppColor
     
     let functions: [NutrientFunction]
     let sources: [NutrientFonts]

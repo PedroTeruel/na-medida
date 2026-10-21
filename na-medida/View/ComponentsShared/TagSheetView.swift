@@ -10,8 +10,6 @@ import SwiftData
 
 struct TagSheetView: View {
     
-    @Environment(\.modelContext) private var mc
-    
     let recipe: Recipe
     
     @State private var selectedTag: RecipeTag?
@@ -93,13 +91,7 @@ struct TagSheetView: View {
     
     private func saveTag() {
         recipe.tag = selectedTag
-        
-        do {
-            try mc.save()
-            confirmAction()
-        } catch {
-            print("Erro ao alterar categoria: \(error)")
-        }
+        confirmAction()
     }
 }
 

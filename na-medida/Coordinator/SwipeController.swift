@@ -10,12 +10,12 @@ import SwiftUI
 class SwipeController: NSObject, UIGestureRecognizerDelegate {
     static let shared = SwipeController()
     var swipeAction: (() -> Bool)?
-    weak var navigationController: UINavigationController?
     
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let n = navigationController, n.viewControllers.count <= 1 {
+        if let nav = gestureRecognizer.view?.next as? UINavigationController, nav.viewControllers.count <= 1 {
             return false
         }
+        
         if let action = swipeAction {
             return action()
         }
@@ -26,9 +26,6 @@ class SwipeController: NSObject, UIGestureRecognizerDelegate {
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
     open override func viewDidLoad() {
         super.viewDidLoad()
-        SwipeController.shared.navigationController = self
         interactivePopGestureRecognizer?.delegate = SwipeController.shared
-        
     }
-    
 }
