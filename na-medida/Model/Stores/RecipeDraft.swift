@@ -16,7 +16,7 @@ final class RecipeDraft {
     var ingredients: [ProductOpenFoodFactsDTO] = []
     var quantities: [ProductOpenFoodFactsDTO: Double] = [:]
     var units: [ProductOpenFoodFactsDTO: QntUnity] = [:]
-        
+    
     func addIngredient(_ dto: ProductOpenFoodFactsDTO) {
         if !ingredients.contains(dto) {
             ingredients.insert(dto, at: 0)

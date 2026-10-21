@@ -114,7 +114,7 @@ struct RecipesInfoView: View {
     private var toolbarActions: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button {
-                router.pop()
+                router.popToRoot()
             } label: {
                 HStack {
                     Image(systemName: "chevron.left")

@@ -31,9 +31,7 @@ struct NutrientsSource: View {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(.quinary)
                 )
-                
             }
-            
         }
     }
 }

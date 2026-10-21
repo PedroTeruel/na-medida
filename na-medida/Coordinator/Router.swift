@@ -20,6 +20,10 @@ class Router {
         switch selectedTab {
             
         case .tabrecipesview:
+            if case .recipesinfo = route {
+                recipesPath = [route]
+                return
+            }
             guard recipesPath.last != route else { return }
             recipesPath.append(route)
             
